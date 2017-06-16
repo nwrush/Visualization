@@ -28,6 +28,9 @@
     <Compile Include="Picking.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SelectionBox.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="venv\">
