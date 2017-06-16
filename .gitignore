@@ -1,0 +1,25 @@
+# Nikko Rush
+# 6/16/2017
+# Created by https://www.gitignore.io/api/python
+
+## Python
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv
+.venv
+venv/
+ENV/
+
+## Visual Studio
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Custom
+
+output/
