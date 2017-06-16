@@ -1,0 +1,3 @@
+[submodule "idea_relations"]
+	path = idea_relations
+	url = git@github.com:nwrush/idea_relations.git

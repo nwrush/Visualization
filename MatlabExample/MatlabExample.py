@@ -2,14 +2,14 @@
 # 6/14/2017
 
 import matplotlib
-# matplotlib.use("TkAgg")
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
-#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-#from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.figure import Figure
 import numpy as np
 
-#import tkinter as tk
-#from tkinter import ttk
+import tkinter as tk
+from tkinter import ttk
 
 class DraggableRectangle:
     def __init__(self, rect):
@@ -18,12 +18,9 @@ class DraggableRectangle:
 
     def connect(self):
         'connect to all the events we need'
-        self.cidpress = self.rect.figure.canvas.mpl_connect(
-            'button_press_event', self.on_press)
-        self.cidrelease = self.rect.figure.canvas.mpl_connect(
-            'button_release_event', self.on_release)
-        self.cidmotion = self.rect.figure.canvas.mpl_connect(
-            'motion_notify_event', self.on_motion)
+        self.cidpress = self.rect.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        self.cidrelease = self.rect.figure.canvas.mpl_connect('button_release_event', self.on_release)
+        self.cidmotion = self.rect.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
     def on_press(self, event):
         'on button press we will see if the mouse is over us and store some data'
@@ -44,8 +41,8 @@ class DraggableRectangle:
         dy = event.ydata - ypress
         #print('x0=%f, xpress=%f, event.xdata=%f, dx=%f, x0+dx=%f' %
         #      (x0, xpress, event.xdata, dx, x0+dx))
-        self.rect.set_x(x0+dx)
-        self.rect.set_y(y0+dy)
+        self.rect.set_x(x0 + dx)
+        self.rect.set_y(y0 + dy)
 
         self.rect.figure.canvas.draw()
 
@@ -65,6 +62,8 @@ colors = ["blue"] * 10
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
+root = tk.Tk()
+root.wm_title("Banana")
 
 
 x = np.random.rand(10)
@@ -85,8 +84,8 @@ def change_colors(index):
      
 
 class MouseInteract:
-    def __init__(self, figure, plot):
-        self.figure = figure
+    def __init__(self, canvas, plot):
+        self.canvas = canvas
         self.plot = plot
 
         self.connect()
@@ -94,10 +93,10 @@ class MouseInteract:
         self.press = None
         
     def connect(self):
-        self.figure.canvas.mpl_connect('button_press_event', self.on_click)
-        self.figure.canvas.mpl_connect('button_release_event', self.on_release)
-        self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
-        self.figure.canvas.mpl_connect('pick_event', self.on_select)
+        self.canvas.mpl_connect('button_press_event', self.on_click)
+        self.canvas.mpl_connect('button_release_event', self.on_release)
+        self.canvas.mpl_connect('motion_notify_event', self.on_motion)
+        self.canvas.mpl_connect('pick_event', self.on_select)
 
     def on_click(self, event):
         self.press = event.xdata, event.ydata
@@ -114,10 +113,19 @@ class MouseInteract:
         
         self.plot._facecolors[ind] = (1,0,0,1)
 
-        self.figure.canvas.draw()
+        self.canvas.draw()
 
 
-colors  = ["blue"] * 10
-interaction = MouseInteract(fig, scatter)
+colors = ["blue"] * 10
 
-plt.show()
+canvas = FigureCanvasTkAgg(fig, master=root)
+canvas.show()
+canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+toolbar = NavigationToolbar2TkAgg(canvas, root)
+toolbar.update()
+canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+interaction = MouseInteract(canvas, scatter)
+
+tk.mainloop()
