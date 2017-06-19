@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MatlabExample", "MatlabExample\MatlabExample.pyproj", "{A012BA67-01CD-41AC-9392-51882B977D1E}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "idea_relations", "idea_relations\idea_relations.pyproj", "{E86390E0-2744-4F2E-A67F-0EB081BA82DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A012BA67-01CD-41AC-9392-51882B977D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A012BA67-01CD-41AC-9392-51882B977D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E86390E0-2744-4F2E-A67F-0EB081BA82DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E86390E0-2744-4F2E-A67F-0EB081BA82DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
