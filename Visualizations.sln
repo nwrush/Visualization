@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MatlabExample", "MatlabExample\MatlabExample.pyproj", "{A012BA67-01CD-41AC-9392-51882B977D1E}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "idea_relations", "idea_relations\idea_relations.pyproj", "{E86390E0-2744-4F2E-A67F-0EB081BA82DF}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Visualizer", "Visualizer\Visualizer.pyproj", "{BB4051A4-DB57-4B6B-BF5B-2257D5049C49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,8 @@ Global
 		{A012BA67-01CD-41AC-9392-51882B977D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E86390E0-2744-4F2E-A67F-0EB081BA82DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E86390E0-2744-4F2E-A67F-0EB081BA82DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4051A4-DB57-4B6B-BF5B-2257D5049C49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4051A4-DB57-4B6B-BF5B-2257D5049C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
