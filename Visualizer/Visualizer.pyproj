@@ -24,6 +24,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="MouseInteraction.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Visualizer.py" />
   </ItemGroup>
   <ItemGroup>
