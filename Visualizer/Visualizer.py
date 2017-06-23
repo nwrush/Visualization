@@ -1,13 +1,15 @@
 # Nikko Rush
 # 6/21/2017
 
+import functools
+import pickle
+
 import matplotlib
 matplotlib.use("TKAgg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
-import pickle
 import tkinter as tk
 from tkinter import ttk
 
@@ -29,8 +31,12 @@ def reverse_dict(input):
 def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
     num_ideas = pmi.shape[0]
     xs, ys = [], []
+    tmp = np.zeros((100,100))
+    cnt = 1
     for i in range(num_ideas):
         for j in range(i + 1, num_ideas):
+            tmp[i, j] = cnt
+            cnt += 1
             if np.isnan(pmi[i, j]) or np.isnan(ts_correlation[i, j]):
                 print("NaN")
                 continue
@@ -51,11 +57,12 @@ def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
         plot_x = np.random.choice(xs, sample, replace=False)
         plot_y = np.random.choice(ys, sample, replace=False)
         
-    
-    plot = axes.scatter(plot_x, plot_y)
+    c = [(0,1,1,1)] * len(plot_x)
+
+    plot = axes.scatter(plot_x, plot_y, color=c, picker=True)
     return (plot, (plot_x, plot_y))
     
-
+### Plot the Time Series for the given idea
 def plot_idea_timeseries(idea_name, idea_numbers, ts_matrix):
     ts_data = ts_matrix[idea_numbers[idea_name]]
 
@@ -85,23 +92,46 @@ def show_time_series(idea_numbers, ts_matrix):
 
 def display_help():
     print("Enter an idea name to view the time series, l to list ideas, q to quit, or h to view this help message")
-        
+
+"""
+First of the real Visualizations.
+View the time series for the selected point in the PMI vs. TS Correlation plot
+"""
+def select_callback(event, axes, data):
+    print(event)
+    axes.plot(data)
 
 def draw(pmi, ts_correlation, ts_matrix, idea_names):
-    fig = plt.figure()
-    axes = fig.gca()
-    
+    pmi_corr_fig = plt.figure()
+    pmi_corr_axes = pmi_corr_fig.gca()
+
+    ts_fig = plt.figure(2)
+    ts_axes = ts_fig.gca()
+
+    ts_axes.scatter(0.5, 0.5)
+
     root = tk.Tk()
 
-    canvas = FigureCanvasTkAgg(fig, master=root)
-    canvas.show()
-    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+    def delete_window_callback():
+        root.quit()
 
-    pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, axes)
+    pmi_corr_canvas = FigureCanvasTkAgg(pmi_corr_fig, master=root)
+    #pmi_corr_canvas.show() This isn't needed and I don't know why
+    pmi_corr_canvas.get_tk_widget().pack(side=tk.TOP, expand=1) # This is apparently the line you need to display the canvas
 
-    interaction = MouseInteract(canvas, pmi_plot)
+    ts_canvas = FigureCanvasTkAgg(ts_fig, master=root)
+    #ts_canvas.show()
+    ts_canvas.get_tk_widget().pack(side=tk.TOP, expand=1) # This is apparently the line you need to display the canvas
 
+    pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)
+
+    partial_select_callback = functools.partial(select_callback, axes=ts_axes, data=ts_matrix[0])
+
+    interaction = MouseInteract(pmi_corr_canvas, pmi_plot, partial_select_callback)
+
+    root.protocol("WM_DELETE_WINDOW", delete_window_callback)
     tk.mainloop()
+    print("Goodbye")
 
 def main():
     pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))

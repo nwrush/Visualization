@@ -1,11 +1,13 @@
 class MouseInteract:
-    def __init__(self, canvas, plot):
+    def __init__(self, canvas, plot, select_callback=None):
         self.canvas = canvas
         self.plot = plot
 
         self.connect()
 
         self.press = None
+
+        self._select_callback = select_callback
         
     def connect(self):
         self.canvas.mpl_connect('button_press_event', self.on_click)
@@ -14,6 +16,7 @@ class MouseInteract:
         self.canvas.mpl_connect('pick_event', self.on_select)
 
     def on_click(self, event):
+        print("ouch")
         self.press = event.xdata, event.ydata
 
     def on_release(self, event):
@@ -26,7 +29,10 @@ class MouseInteract:
     def on_select(self, event):
         print("Selected something")
         ind = event.ind[0]
-        
+
         self.plot._facecolors[ind] = (1,0,0,1)
+
+        if self._select_callback is not None:
+            self._select_callback(event)
 
         self.canvas.draw()
