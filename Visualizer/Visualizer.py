@@ -2,10 +2,12 @@
 # 6/21/2017
 
 import functools
+import math
 import pickle
 
 import matplotlib
 matplotlib.use("TKAgg")
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -14,7 +16,6 @@ import tkinter as tk
 from tkinter import ttk
 
 from MouseInteraction import MouseInteract
-
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -31,12 +32,8 @@ def reverse_dict(input):
 def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
     num_ideas = pmi.shape[0]
     xs, ys = [], []
-    tmp = np.zeros((100,100))
-    cnt = 1
     for i in range(num_ideas):
         for j in range(i + 1, num_ideas):
-            tmp[i, j] = cnt
-            cnt += 1
             if np.isnan(pmi[i, j]) or np.isnan(ts_correlation[i, j]):
                 print("NaN")
                 continue
@@ -57,10 +54,26 @@ def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
         plot_x = np.random.choice(xs, sample, replace=False)
         plot_y = np.random.choice(ys, sample, replace=False)
         
-    c = [(0,1,1,1)] * len(plot_x)
+    c = ["Pink"] * len(plot_x)
 
     plot = axes.scatter(plot_x, plot_y, color=c, picker=True)
     return (plot, (plot_x, plot_y))
+
+def get_row_col(n, i):
+    """
+    Given the index of a data point of an nxn strictly upper triangular matrix (a_ij = 0 for i>=j),
+    this will calculate the row and column indexes in the nxn matrix
+    """
+    row = n - 2 - math.floor(math.sqrt(-8 * i + 4 * n * (n - 1) - 7) / 2 - 0.5)
+    col = i + row + 1 - n * (n - 1) / 2 + (n - row) * ((n - row) - 1) / 2
+    return (int(row), int(col))
+
+def get_index(n, i, j):
+    """
+    Does the reverse of get_row_col
+    """
+    return (n * (n - 1) / 2) - (n - i) * ((n - i) - 1) / 2 + j - i - 1
+
     
 ### Plot the Time Series for the given idea
 def plot_idea_timeseries(idea_name, idea_numbers, ts_matrix):
@@ -97,19 +110,36 @@ def display_help():
 First of the real Visualizations.
 View the time series for the selected point in the PMI vs. TS Correlation plot
 """
-def select_callback(event, axes, data):
-    print(event)
-    axes.plot(data)
+def select_callback(event, axes, idea_ts, idea_names):
+    index = event.ind[0]
+    row, col = get_row_col(idea_ts.shape[0], index)
+    
+    axes.lines = []  # Clear the old lines from the plot
+    
+    x_values = [i for i in range(1980, 2015)]
+
+    axes.plot(x_values, idea_ts[row])
+    axes.plot(x_values, idea_ts[col])
+    
+
+    axes.legend([idea_names[row], idea_names[col]])
+
+    axes.figure.canvas.draw()
 
 def draw(pmi, ts_correlation, ts_matrix, idea_names):
     pmi_corr_fig = plt.figure()
     pmi_corr_axes = pmi_corr_fig.gca()
+    pmi_corr_axes.set_title("PMI vs. Correlation")
 
     ts_fig = plt.figure(2)
     ts_axes = ts_fig.gca()
-
-    ts_axes.scatter(0.5, 0.5)
-
+    ts_axes.set_title("Time Series")
+    ts_axes.set_xlabel("Year")
+    ts_axes.set_ylabel("Frequency")
+    
+    #ts_axes.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    #ts_axes.xaxis.xticks
+    
     root = tk.Tk()
 
     def delete_window_callback():
@@ -125,7 +155,7 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
 
     pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)
 
-    partial_select_callback = functools.partial(select_callback, axes=ts_axes, data=ts_matrix[0])
+    partial_select_callback = functools.partial(select_callback, axes=ts_axes, idea_ts=ts_matrix, idea_names=idea_names)
 
     interaction = MouseInteract(pmi_corr_canvas, pmi_plot, partial_select_callback)
 
