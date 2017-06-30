@@ -35,10 +35,8 @@ def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
     for i in range(num_ideas):
         for j in range(i + 1, num_ideas):
             if np.isnan(pmi[i, j]) or np.isnan(ts_correlation[i, j]):
-                print("NaN")
                 continue
             if np.isinf(pmi[i, j]) or np.isinf(ts_correlation[i, j]):
-                print("Inf")
                 continue
             xs.append(ts_correlation[i, j])
             ys.append(pmi[i, j])
@@ -110,7 +108,7 @@ def display_help():
 First of the real Visualizations.
 View the time series for the selected point in the PMI vs. TS Correlation plot
 """
-def select_callback(event, axes, idea_ts, idea_names):
+def select_callback(event, axes, idea_ts, idea_names, correlation_matrix):
     index = event.ind[0]
     row, col = get_row_col(idea_ts.shape[0], index)
     
@@ -120,9 +118,12 @@ def select_callback(event, axes, idea_ts, idea_names):
 
     axes.plot(x_values, idea_ts[row])
     axes.plot(x_values, idea_ts[col])
-    
 
+    title = "Time Series\nCorrelation = {0:.5f}".format(correlation_matrix[row][col])
+    axes.set_title(title)
     axes.legend([idea_names[row], idea_names[col]])
+    #text = "Correlation= {0}"
+    #axes.annotate(s=text, xy=(0.9, 0.1), xycoords='axes fraction')
 
     axes.figure.canvas.draw()
 
@@ -130,24 +131,24 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
     pmi_corr_fig = plt.figure()
     pmi_corr_axes = pmi_corr_fig.gca()
     pmi_corr_axes.set_title("PMI vs. Correlation")
+    pmi_corr_axes.set_xlabel("Prevalence Correlation")
+    pmi_corr_axes.set_ylabel("Cooccurrence")
+    pmi_corr_axes.set_xlim([-1.0, 1.0])
 
     ts_fig = plt.figure(2)
     ts_axes = ts_fig.gca()
     ts_axes.set_title("Time Series")
     ts_axes.set_xlabel("Year")
     ts_axes.set_ylabel("Frequency")
-    
-    #ts_axes.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    #ts_axes.xaxis.xticks
-    
+
     root = tk.Tk()
 
     def delete_window_callback():
         root.quit()
 
     pmi_corr_canvas = FigureCanvasTkAgg(pmi_corr_fig, master=root)
-    #pmi_corr_canvas.show() This isn't needed and I don't know why
-    pmi_corr_canvas.get_tk_widget().pack(side=tk.TOP, expand=1) # This is apparently the line you need to display the canvas
+    #pmi_corr_canvas.show()
+    pmi_corr_canvas.get_tk_widget().pack(side=tk.LEFT, expand=1) # This is apparently the line you need to display the canvas
 
     ts_canvas = FigureCanvasTkAgg(ts_fig, master=root)
     #ts_canvas.show()
@@ -155,7 +156,8 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
 
     pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)
 
-    partial_select_callback = functools.partial(select_callback, axes=ts_axes, idea_ts=ts_matrix, idea_names=idea_names)
+    partial_select_callback = functools.partial(
+            select_callback, axes=ts_axes, idea_ts=ts_matrix, idea_names=idea_names, correlation_matrix=ts_correlation)
 
     interaction = MouseInteract(pmi_corr_canvas, pmi_plot, partial_select_callback)
 

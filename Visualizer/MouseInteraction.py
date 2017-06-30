@@ -31,7 +31,7 @@ class MouseInteract:
         print("Selected something")
         ind = event.ind[0]
 
-        self.plot._facecolors[self.prev_selected_ind] = (0,0,1,1)
+        self.plot._facecolors[self.prev_selected_ind] = (0, 0, 1, 1)
 
         self.plot._facecolors[ind] = (1,0,0,1)
 
