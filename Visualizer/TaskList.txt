@@ -1,0 +1,15 @@
+--Priority
+
+
+--TODO
+Layout all six frames in the tk full screen widget
+Test multiple screen sizes
+
+
+--Bugfix
+
+
+--Wishlist
+Find a better way to layout the time series plot correlation number
+
+--Done (please mention the commit name here too)
