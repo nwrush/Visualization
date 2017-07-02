@@ -119,11 +119,9 @@ def select_callback(event, axes, idea_ts, idea_names, correlation_matrix):
     axes.plot(x_values, idea_ts[row])
     axes.plot(x_values, idea_ts[col])
 
-    title = "Time Series\nCorrelation = {0:.5f}".format(correlation_matrix[row][col])
-    axes.set_title(title)
-    axes.legend([idea_names[row], idea_names[col]])
-    #text = "Correlation= {0}"
-    #axes.annotate(s=text, xy=(0.9, 0.1), xycoords='axes fraction')
+    text_box_prop = {'pad':5, 'facecolor':"none"}
+    tmp = axes.text(1.05, 0.5, "Correlation\n{0:.5f}".format(correlation_matrix[row][col]), transform=axes.transAxes, bbox=text_box_prop)
+    legend = axes.legend([idea_names[row], idea_names[col]], loc='center left', bbox_to_anchor=(1, 0.7))
 
     axes.figure.canvas.draw()
 
@@ -141,6 +139,9 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
     ts_axes.set_xlabel("Year")
     ts_axes.set_ylabel("Frequency")
 
+    ts_axes_box = ts_axes.get_position()
+    ts_axes.set_position([ts_axes_box.x0, ts_axes_box.y0, ts_axes_box.width * 0.85, ts_axes_box.height])
+
     root = tk.Tk()
 
     def delete_window_callback():
@@ -156,8 +157,7 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
 
     pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)
 
-    partial_select_callback = functools.partial(
-            select_callback, axes=ts_axes, idea_ts=ts_matrix, idea_names=idea_names, correlation_matrix=ts_correlation)
+    partial_select_callback = functools.partial(select_callback, axes=ts_axes, idea_ts=ts_matrix, idea_names=idea_names, correlation_matrix=ts_correlation)
 
     interaction = MouseInteract(pmi_corr_canvas, pmi_plot, partial_select_callback)
 
