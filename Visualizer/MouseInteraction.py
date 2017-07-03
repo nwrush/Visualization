@@ -6,7 +6,7 @@ class MouseInteract:
         self.connect()
 
         self.press = None
-        self.prev_selected_ind = 0
+        self.prev_selected_ind = None
 
         self._select_callback = select_callback
         
@@ -31,9 +31,12 @@ class MouseInteract:
         print("Selected something")
         ind = event.ind[0]
 
-        self.plot._facecolors[self.prev_selected_ind] = (0, 0, 1, 1)
+        if self.prev_selected_ind is not None:
+            self.plot._facecolors[self.prev_selected_ind] = (0, 0, 1, 1)
+            self.plot._edgecolors[self.prev_selected_ind] = (0, 0, 1, 1)
 
         self.plot._facecolors[ind] = (1,0,0,1)
+        self.plot._edgecolors[ind] = (1,0,0,1)
 
         if self._select_callback is not None:
             self._select_callback(event)
