@@ -2,7 +2,7 @@
 # 6/21/2017
 
 import functools
-import math
+import visualizer_math
 import pickle
 
 import matplotlib
@@ -16,6 +16,8 @@ import tkinter as tk
 from tkinter import ttk
 
 from MouseInteraction import MouseInteract
+from TimeSeriesFrame import TimeSeriesFrame
+from PMIPlot import PMIPlot
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -40,7 +42,7 @@ def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
                 continue
             xs.append(ts_correlation[i, j])
             ys.append(pmi[i, j])
-    
+
     if sample is None or not isinstance(sample, int):
         # Don't sample from the points
         plot_x = xs
@@ -51,7 +53,7 @@ def pmi_vs_corr_plot(pmi, ts_correlation, axes, sample=None):
             sample = num_ideas
         plot_x = np.random.choice(xs, sample, replace=False)
         plot_y = np.random.choice(ys, sample, replace=False)
-        
+
     c = ["Pink"] * len(plot_x)
 
     plot = axes.scatter(plot_x, plot_y, color=c, picker=True)
@@ -62,7 +64,7 @@ def get_row_col(n, i):
     Given the index of a data point of an nxn strictly upper triangular matrix (a_ij = 0 for i>=j),
     this will calculate the row and column indexes in the nxn matrix
     """
-    row = n - 2 - math.floor(math.sqrt(-8 * i + 4 * n * (n - 1) - 7) / 2 - 0.5)
+    row = n - 2 - visualizer_math.floor(visualizer_math.sqrt(-8 * i + 4 * n * (n - 1) - 7) / 2 - 0.5)
     col = i + row + 1 - n * (n - 1) / 2 + (n - row) * ((n - row) - 1) / 2
     return (int(row), int(col))
 
@@ -128,7 +130,7 @@ def select_callback(event, axes, idea_ts, idea_names, correlation_matrix):
 def draw(pmi, ts_correlation, ts_matrix, idea_names):
     pmi_corr_fig = plt.figure()
     pmi_corr_axes = pmi_corr_fig.gca()
-    pmi_corr_axes.set_title("PMI vs. Correlation")
+    pmi_corr_axes.set_title("PMI vs. Cooccurrence")
     pmi_corr_axes.set_xlabel("Prevalence Correlation")
     pmi_corr_axes.set_ylabel("Cooccurrence")
     pmi_corr_axes.set_xlim([-1.0, 1.0])
@@ -148,10 +150,10 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
         root.quit()
 
     pmi_corr_canvas = FigureCanvasTkAgg(pmi_corr_fig, master=root)
-    pmi_corr_canvas.get_tk_widget().pack(side=tk.LEFT, expand=1) # This is apparently the line you need to display the canvas
+    pmi_corr_canvas.get_tk_widget().pack(side=tk.LEFT, expand=tk.YES)
 
     ts_canvas = FigureCanvasTkAgg(ts_fig, master=root)
-    ts_canvas.get_tk_widget().pack(side=tk.TOP, expand=1) # This is apparently the line you need to display the canvas
+    ts_canvas.get_tk_widget().pack(side=tk.LEFT, expand=tk.YES)
 
     pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)
 
@@ -163,8 +165,27 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
     tk.mainloop()
     print("Goodbye")
 
+def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
+    root = tk.Tk()
+
+    def exit_callback():
+        root.quit()
+
+    root.protocol("WM_DELETE_WINDOW", exit_callback)
+
+    x_vals = [i for i in range(1980, 2015)]
+
+    ts = TimeSeriesFrame(master=root, x_vals=x_vals)
+    pmi = PMIPlot(master=root, time_series_plot=ts, idea_names=idea_names, ts_matrix=ts_matrix)
+
+    pmi.plot(pmi_matrix, ts_correlation, sample=1000)
+
+    tk.mainloop()
+    print("Boo")
+
 def main():
-    pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
+    # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
+    pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("keywords_data.p", 'rb'))
     assert is_square_matrix(pmi)
     assert is_square_matrix(ts_correlation)
 
@@ -176,7 +197,8 @@ def main():
     ## pmi_vs_corr_plot(pmi, ts_correlation)
     #plot_idea_timeseries("web", idea_numbers, ts_matrix)
     #show_time_series(idea_numbers, ts_matrix)
-    draw(pmi, ts_correlation, ts_matrix, idea_names)
+    #draw(pmi, ts_correlation, ts_matrix, idea_names)
+    gui(pmi, ts_correlation, ts_matrix, idea_names)
 
 if __name__ == "__main__":
     main()
