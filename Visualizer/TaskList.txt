@@ -7,8 +7,7 @@
 
 
 --Bugfix
-7/2/17: Fix the correlation text overwriting when you select a new point (part of refactoring code into classes)
-7/2/17: MouseInteraction should know what color to change points too
+
 
 --Wishlist
 7/2/17: Find a better way to layout the time series plot correlation number
@@ -20,3 +19,4 @@
 --Done (please mention the commit name here too)
 7/2/17: Refactor code to make it easier to work with | 7/5/2017 (abf2d55)
 7/2/17: MouseInteraction should know what color to change points too | 7/5/2017 (abf2d55) MouseInteraction is obsolete
+7/2/17: Fix the correlation text overwriting when you select a new point (part of refactoring code into classes) | 7/5/2017 (4b85354) Sure, that "works"

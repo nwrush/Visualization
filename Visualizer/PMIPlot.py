@@ -100,11 +100,9 @@ class PMIPlot(MatplotlibFrame):
         row, col = get_row_col(self.ts_matrix.shape[0], index)
 
         self.time_series_plot.clear()
+        self.time_series_plot.plot_series2(self.ts_matrix[row], self.ts_matrix[col], (self.idea_names[row], self.idea_names[col]))
 
-        self.time_series_plot.plot_series(self.ts_matrix[row])
-        self.time_series_plot.plot_series(self.ts_matrix[col])
-
-        self.time_series_plot.plot_series2(self.ts_matrix[row], self.ts_matrix[col])
+        self.time_series_plot.get_correlation()
 
 
 def get_row_col(n, i):
