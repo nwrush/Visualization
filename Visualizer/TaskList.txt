@@ -1,9 +1,9 @@
 --Priority
-7/2/17: Refactor code to make it easier to work with
 
 --TODO
 7/2/17: Layout all six frames in the tk full screen widget
 7/2/17: Test multiple screen sizes
+7/5/17: Don't assume with the datestamps and step sizes
 
 
 --Bugfix
@@ -13,5 +13,10 @@
 --Wishlist
 7/2/17: Find a better way to layout the time series plot correlation number
 7/2/17: Better looking frames
+7/5/17: More logical way to decide which element was picked in case of conflict
+7/5/17: Drag box selection of points with zooming?
+7/5/17: Parameter object that can be passed to frames to specify format (visual styles)
 
 --Done (please mention the commit name here too)
+7/2/17: Refactor code to make it easier to work with | 7/5/2017 (abf2d55)
+7/2/17: MouseInteraction should know what color to change points too | 7/5/2017 (abf2d55) MouseInteraction is obsolete
