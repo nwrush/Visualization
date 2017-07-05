@@ -148,11 +148,9 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
         root.quit()
 
     pmi_corr_canvas = FigureCanvasTkAgg(pmi_corr_fig, master=root)
-    #pmi_corr_canvas.show()
     pmi_corr_canvas.get_tk_widget().pack(side=tk.LEFT, expand=1) # This is apparently the line you need to display the canvas
 
     ts_canvas = FigureCanvasTkAgg(ts_fig, master=root)
-    #ts_canvas.show()
     ts_canvas.get_tk_widget().pack(side=tk.TOP, expand=1) # This is apparently the line you need to display the canvas
 
     pmi_plot, points = pmi_vs_corr_plot(pmi, ts_correlation, pmi_corr_axes, sample=1000)

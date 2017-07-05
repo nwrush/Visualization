@@ -1,15 +1,17 @@
 --Priority
-
+7/2/17: Refactor code to make it easier to work with
 
 --TODO
-Layout all six frames in the tk full screen widget
-Test multiple screen sizes
+7/2/17: Layout all six frames in the tk full screen widget
+7/2/17: Test multiple screen sizes
 
 
 --Bugfix
-
+7/2/17: Fix the correlation text overwriting when you select a new point (part of refactoring code into classes)
+7/2/17: MouseInteraction should know what color to change points too
 
 --Wishlist
-Find a better way to layout the time series plot correlation number
+7/2/17: Find a better way to layout the time series plot correlation number
+7/2/17: Better looking frames
 
 --Done (please mention the commit name here too)

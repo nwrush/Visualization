@@ -24,10 +24,19 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Frame.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MatplotlibFrame.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MouseInteraction.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualizer.py" />
+    <Compile Include="Window.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="venv\">
@@ -41,6 +50,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>Amd64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TaskList.txt" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
