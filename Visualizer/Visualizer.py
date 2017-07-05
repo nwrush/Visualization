@@ -2,7 +2,7 @@
 # 6/21/2017
 
 import functools
-import visualizer_math
+import math
 import pickle
 
 import matplotlib
@@ -64,7 +64,7 @@ def get_row_col(n, i):
     Given the index of a data point of an nxn strictly upper triangular matrix (a_ij = 0 for i>=j),
     this will calculate the row and column indexes in the nxn matrix
     """
-    row = n - 2 - visualizer_math.floor(visualizer_math.sqrt(-8 * i + 4 * n * (n - 1) - 7) / 2 - 0.5)
+    row = n - 2 - math.floor(math.sqrt(-8 * i + 4 * n * (n - 1) - 7) / 2 - 0.5)
     col = i + row + 1 - n * (n - 1) / 2 + (n - row) * ((n - row) - 1) / 2
     return (int(row), int(col))
 
