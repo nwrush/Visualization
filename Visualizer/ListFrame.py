@@ -27,11 +27,19 @@ class ListFrame(VisualizerFrame):
         self.onselect_listeners = set()
         self.list.bind("<<ListboxSelect>>", self._on_select)
 
-    def add_item(self, item, position=tk.END):
-        self.list.insert(position, item)
+    def add_item(self, item):
+        all_items = list(self.list.get(0, tk.END))
+        all_items.append(str(item))
+        self._add_items(sorted(all_items))
 
-    def add_items(self, items, position=tk.END):
-        self.list.insert(position, *items)
+    def add_items(self, items):
+        all_items = list(self.list.get(0, tk.END))
+        all_items.extend(map(str, items))
+        self._add_items(sorted(all_items))
+
+    def _add_items(self, items):
+        self.clear_list()
+        self.list.insert(0, *items)
 
     def remove_item(self, position):
         self.list.delete(position)
