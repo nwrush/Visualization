@@ -4,9 +4,9 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 
-from Frame import Frame
+from VisualizerFrame import VisualizerFrame
 
-class MatplotlibFrame(Frame):
+class MatplotlibFrame(VisualizerFrame):
     """Frame specifically for displaying matplotlib graphs"""
 
     def __init__(self, figure, master=None):

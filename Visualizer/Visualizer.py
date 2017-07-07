@@ -177,11 +177,15 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     x_vals = [i for i in range(1980, 2015)]
 
     ts = TimeSeriesFrame(master=root, x_vals=x_vals)
-    pmi = PMIPlot(master=root, time_series_plot=ts, idea_names=idea_names, ts_matrix=ts_matrix)
+    pmi = PMIPlot(master=root, time_series_plot=ts, pmi=pmi_matrix, ts_correlation=ts_correlation, idea_names=idea_names, ts_matrix=ts_matrix)
 
-    list = ListFrame(master=root)
+    idea_list = ListFrame(master=root)
+    idea_list.add_items(idea_names.values())
+    idea_list.update_width()
 
-    pmi.plot(pmi_matrix, ts_correlation, sample=1000)
+    idea_list.add_select_listener(functools.partial(pmi.filter_by_selected, idea_numbers=reverse_dict(idea_names)))
+
+    pmi.plot(sample=1000)
 
     tk.mainloop()
     print("Boo")

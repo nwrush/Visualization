@@ -3,7 +3,7 @@
 
 import tkinter as tk
 
-class Frame(object):
+class VisualizerFrame(object):
     """Abstract class, please don't instantiate"""
     def __init__(self, master=None):
         self.frame = tk.Frame(master=master)

@@ -3,9 +3,9 @@
 
 import tkinter as tk
 
-from Frame import Frame
+from VisualizerFrame import VisualizerFrame
 
-class ListFrame(Frame):
+class ListFrame(VisualizerFrame):
     """description of class"""
     def __init__(self, master):
         super(ListFrame, self).__init__(master)
