@@ -18,6 +18,7 @@ from tkinter import ttk
 from MouseInteraction import MouseInteract
 from TimeSeriesFrame import TimeSeriesFrame
 from PMIPlot import PMIPlot
+from ListFrame import ListFrame
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -177,6 +178,8 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     ts = TimeSeriesFrame(master=root, x_vals=x_vals)
     pmi = PMIPlot(master=root, time_series_plot=ts, idea_names=idea_names, ts_matrix=ts_matrix)
+
+    list = ListFrame(master=root)
 
     pmi.plot(pmi_matrix, ts_correlation, sample=1000)
 

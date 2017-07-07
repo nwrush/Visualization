@@ -24,7 +24,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ColoredBox.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Frame.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ListFrame.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MatplotlibFrame.py">
@@ -33,6 +39,8 @@
     <Compile Include="MouseInteraction.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PMIPlot.py" />
+    <Compile Include="TimeSeriesFrame.py" />
     <Compile Include="Visualizer.py" />
     <Compile Include="Window.py">
       <SubType>Code</SubType>

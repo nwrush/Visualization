@@ -12,12 +12,17 @@ class TimeSeriesFrame(MatplotlibFrame):
     def __init__(self, master, x_vals=None):
         super(TimeSeriesFrame, self).__init__(Figure(), master=master)
 
-        self.pack_canvas()
-        self.pack_frame(side=tk.LEFT, expand=1)
+        # The canvas is the matplotlib stuff
+        #self.pack_canvas()
+        self.grid_canvas(row=0, column=0)
+        # The frame is the root of the "widget" everything else gets placed inside of it
+        #self.pack_frame(side=tk.LEFT, expand=1)
+        self.grid_frame(row=1, column=1, pady=(5, 0))
 
-        self.correlation_label = tk.Label(master=self.frame)
-        self.correlation_label.pack(side=tk.LEFT)
+        self.correlation_label = tk.Label(master=self.frame, background="red")
+        self.correlation_label.grid(row=0, column=1)
         self.correlation = tk.StringVar()
+        self.correlation.set(str(float(0)))
         self.correlation_label['textvariable'] = self.correlation
 
         self._x_values = x_vals
@@ -25,6 +30,11 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.__init_plot__()
 
         self.series = None
+
+        def test(event):
+            self.correlation_label.grid_forget()
+
+        self.frame.bind("<Button-1>", test)
 
     def __init_plot__(self):
         self.axes.set_title("Time Series")
@@ -63,7 +73,7 @@ class TimeSeriesFrame(MatplotlibFrame):
 
     def get_correlation(self):
         correlation = np.corrcoef(self.series, rowvar=False)
-        self.correlation.set("Correlation is: {0:.5f}".format(correlation[0,1]))
+        self.correlation.set("Correlation = {0:.5f}".format(correlation[0,1]))
 
     def clear(self):
         self.series = None

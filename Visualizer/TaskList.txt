@@ -4,7 +4,7 @@
 7/2/17: Layout all six frames in the tk full screen widget
 7/2/17: Test multiple screen sizes
 7/5/17: Don't assume with the datestamps and step sizes
-
+7/6/2017: Run in a profiler to see what's taking time on start
 
 --Bugfix
 

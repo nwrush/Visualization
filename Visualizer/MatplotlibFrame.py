@@ -4,11 +4,14 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 
-class MatplotlibFrame(object):
+from Frame import Frame
+
+class MatplotlibFrame(Frame):
     """Frame specifically for displaying matplotlib graphs"""
 
     def __init__(self, figure, master=None):
-        self.frame = tk.Frame(master=master)
+        super(MatplotlibFrame, self).__init__(master=master)
+
         """Creates a canvas that can contains the given matplotlib figure, rooted to the given master or a new root if None"""
         self.canvas = FigureCanvasTkAgg(figure, master=self.frame)
 
@@ -17,9 +20,8 @@ class MatplotlibFrame(object):
 
     def pack_canvas(self, **kwargs):
         self.canvas.get_tk_widget().pack(**kwargs)
-
-    def pack_frame(self, **kwargs):
-        self.frame.pack(**kwargs)
+    def grid_canvas(self, **kwargs):
+        self.canvas.get_tk_widget().grid(**kwargs)
 
     def redraw(self):
         self.canvas.draw()

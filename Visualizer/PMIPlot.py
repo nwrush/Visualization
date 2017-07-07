@@ -15,8 +15,9 @@ class PMIPlot(MatplotlibFrame):
     def __init__(self, master, time_series_plot, idea_names, ts_matrix):
         super(PMIPlot, self).__init__(Figure(), master=master)
 
-        self.pack_canvas()
-        self.pack_frame(side=tk.LEFT, expand=1)
+        self.pack_canvas(side=tk.LEFT)
+        #self.pack_frame(side=tk.LEFT, expand=1)
+        self.grid_frame(row=0, column=1, sticky="WE")
 
         self.time_series_plot = time_series_plot
         self.idea_names = idea_names
