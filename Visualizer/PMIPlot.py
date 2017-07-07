@@ -31,7 +31,7 @@ class PMIPlot(MatplotlibFrame):
         self.x_values = None
         self.y_values = None
 
-        # Allow these to be set dynamically
+        # TODO: Allow these to be set dynamically
         self.point_color = "Pink"
         self.selected_color = "Red"
 
@@ -98,18 +98,25 @@ class PMIPlot(MatplotlibFrame):
             self.plot_data._facecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
             self.plot_data._edgecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
 
-        self.plot_data._facecolors[ind] = colors.to_rgba(self.selected_color)
-        self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
+        if self._prev_selected_ind == ind:
+            self.plot_data._facecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
+            self.plot_data._edgecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
+            self._prev_selected_ind = None
 
-        self.set_time_series(ind)
+            self.time_series_plot.clear()
+        else:
+            self.plot_data._facecolors[ind] = colors.to_rgba(self.selected_color)
+            self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
+            self._prev_selected_ind = ind
+
+            self.set_time_series(ind)
 
         self.redraw()
 
-        self._prev_selected_ind = ind
 
     def set_time_series(self, index):
         i, j = self.idea_indexes[index]
-        #row, col = get_row_col(self.ts_matrix.shape[0], index)
+        #row, col = get_row_col(self.ts_matrix.shape[0], index) TODO: Remove this if the correlation coef is correct
         row =i
         col =j
 

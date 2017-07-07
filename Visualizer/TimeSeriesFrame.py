@@ -22,21 +22,16 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.correlation_label = tk.Label(master=self.frame, background="red")
         self.correlation_label.grid(row=0, column=1)
         self.correlation = tk.StringVar()
-        self.correlation.set(str(float(0)))
         self.correlation_label['textvariable'] = self.correlation
 
         self._x_values = x_vals
 
-        self.__init_plot__()
+        self._init_plot()
 
         self.series = None
 
-        def test(event):
-            self.correlation_label.grid_forget()
-
-        self.frame.bind("<Button-1>", test)
-
-    def __init_plot__(self):
+    def _init_plot(self):
+        self.axes.clear()
         self.axes.set_title("Time Series")
         self.axes.set_xlabel("Year")
         self.axes.set_ylabel("Frequency")
@@ -77,4 +72,7 @@ class TimeSeriesFrame(MatplotlibFrame):
 
     def clear(self):
         self.series = None
-        self.axes.lines = []
+        self._init_plot()
+        self.redraw()
+
+        self.correlation.set("")

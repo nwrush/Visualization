@@ -1,10 +1,13 @@
 --Priority
+7/7/2017: Verify correlation coefficients (NOCOMMIT)
 
 --TODO
 7/2/17: Layout all six frames in the tk full screen widget
 7/2/17: Test multiple screen sizes
 7/5/17: Don't assume with the datestamps and step sizes
-7/6/2017: Run in a profiler to see what's taking time on start
+7/6/17: Run in a profiler to see what's taking time on start
+7/7/17: Refactor TimeSeriesFrame so it controls the graphing of plots instead of the PMI graph
+7/7/17: Allow dynamically set (user defined) colors for plots
 
 --Bugfix
 
