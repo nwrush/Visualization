@@ -15,7 +15,7 @@ class ListFrame(VisualizerFrame):
         self.title = tk.Label(master=self.frame, text="Topics")
         self.title.pack(side=tk.TOP, fill=tk.X)
 
-        self.list = tk.Listbox(master=self.frame, selectmode=tk.MULTIPLE)
+        self.list = tk.Listbox(master=self.frame, selectmode=tk.EXTENDED)
         self.list.pack(side=tk.LEFT, fill=tk.Y, expand=1)
 
         self.scrollbar = tk.Scrollbar(master=self.frame)
@@ -24,7 +24,7 @@ class ListFrame(VisualizerFrame):
         self.list.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.list.yview)
 
-        self.onselect_listeners = set()
+        self._onselect_listeners = set()
         self.list.bind("<<ListboxSelect>>", self._on_select)
 
     def add_item(self, item):
@@ -56,16 +56,16 @@ class ListFrame(VisualizerFrame):
         self.list.config(width=max_width)
 
     def add_select_listener(self, func):
-        self.onselect_listeners.add(func)
+        self._onselect_listeners.add(func)
 
     def has_select_listener(self, func):
-        return func in self.onselect_listeners
+        return func in self._onselect_listeners
 
     def remove_select_listener(self, func):
-        self.onselect_listeners.discard(func)
+        self._onselect_listeners.discard(func)
 
     def _on_select(self, event):
-        for listener in self.onselect_listeners:
+        for listener in self._onselect_listeners:
             listener(event)
 
 

@@ -19,6 +19,7 @@ from MouseInteraction import MouseInteract
 from TimeSeriesFrame import TimeSeriesFrame
 from PMIPlot import PMIPlot
 from ListFrame import ListFrame
+from RelationTypeFrame import RelationTypeFrame
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -167,6 +168,8 @@ def draw(pmi, ts_correlation, ts_matrix, idea_names):
     print("Goodbye")
 
 def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
+    idea_numbers = reverse_dict(idea_names)
+
     root = tk.Tk()
 
     def exit_callback():
@@ -183,7 +186,10 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     idea_list.add_items(idea_names.values())
     idea_list.update_width()
 
-    idea_list.add_select_listener(functools.partial(pmi.filter_by_selected, idea_numbers=reverse_dict(idea_names)))
+    relation_types = RelationTypeFrame(master=root, pmi=pmi_matrix, ts_correlation=ts_correlation, idea_names=idea_names)
+
+    idea_list.add_select_listener(functools.partial(pmi.filter_by_selected, idea_numbers=idea_numbers))
+    relation_types.add_select_listener((functools.partial(pmi.filter_relation, idea_numbers=idea_numbers)))
 
     pmi.plot(sample=1000)
 
