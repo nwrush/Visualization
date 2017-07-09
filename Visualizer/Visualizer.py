@@ -20,6 +20,7 @@ from TimeSeriesFrame import TimeSeriesFrame
 from PMIPlot import PMIPlot
 from ListFrame import ListFrame
 from RelationTypeFrame import RelationTypeFrame
+from ListBoxColumn import ListBoxColumn
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -190,6 +191,12 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     idea_list.add_select_listener(functools.partial(pmi.filter_by_selected, idea_numbers=idea_numbers))
     relation_types.add_select_listener((functools.partial(pmi.filter_relation, idea_numbers=idea_numbers)))
+
+    #columns = ListBoxColumn(ncolumns=2, master=root)
+    #columns.grid(row=3, column=0)
+
+    #numbers = [[a,a*2] for a in range(0, 20)]
+    #columns.insert(tk.END, *numbers)
 
     pmi.plot(sample=1000)
 

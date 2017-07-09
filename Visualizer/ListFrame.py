@@ -19,7 +19,7 @@ class ListFrame(VisualizerFrame):
         self.list.pack(side=tk.LEFT, fill=tk.Y, expand=1)
 
         self.scrollbar = tk.Scrollbar(master=self.frame)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.scrollbar.pack(side=tk.LEFT, fill=tk.Y)
 
         self.list.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.list.yview)

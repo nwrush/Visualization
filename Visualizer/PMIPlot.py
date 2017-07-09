@@ -160,12 +160,11 @@ class PMIPlot(MatplotlibFrame):
         widget = event.widget
         selecteditems = widget.curselection()
 
-        tmp = [widget.get(index) for index in selecteditems]
+        tmp = [event.data[index] for index in selecteditems]
         idea_indexes = []
         for item in tmp:
-            parts = item.split('|')
-            idea_indexes.append(idea_numbers[parts[1].strip()])
-            idea_indexes.append(idea_numbers[parts[2].strip()])
+            idea_indexes.append(item[0])
+            idea_indexes.append(item[1])
 
         old_point = None
         if self._prev_selected_ind is not None:

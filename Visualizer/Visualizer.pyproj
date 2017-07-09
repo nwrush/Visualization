@@ -27,7 +27,7 @@
     <Compile Include="ColoredBox.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Frame.py">
+    <Compile Include="ListBoxColumn.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ListFrame.py">
@@ -40,8 +40,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PMIPlot.py" />
+    <Compile Include="RelationTypeFrame.py" />
     <Compile Include="TimeSeriesFrame.py" />
     <Compile Include="Visualizer.py" />
+    <Compile Include="VisualizerFrame.py" />
     <Compile Include="Window.py">
       <SubType>Code</SubType>
     </Compile>

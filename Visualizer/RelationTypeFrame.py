@@ -5,6 +5,7 @@ import numpy as np
 import tkinter as tk
 
 from VisualizerFrame import VisualizerFrame
+from ListBoxColumn import ListBoxColumn
 
 class RelationTypeFrame(VisualizerFrame):
 
@@ -19,26 +20,31 @@ class RelationTypeFrame(VisualizerFrame):
 
         self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
 
-        self.tryst_list = tk.Listbox(master=self.frame, selectmode=tk.EXTENDED)
+        self.tryst_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        self.tryst_list.add_yscrollbar()
         self.tryst_list.grid(row=1, column=0)
-        self.tryst_list.bind("<<ListboxSelect>>", self._on_select)
+        self.tryst_list.add_select_handler(self._on_select)
 
-        self.friends_list = tk.Listbox(master=self.frame, selectmode=tk.EXTENDED)
+        self.friends_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        self.friends_list.add_yscrollbar()
         self.friends_list.grid(row=1, column=1)
-        self.friends_list.bind("<<ListboxSelect>>", self._on_select)
+        self.friends_list.add_select_handler(self._on_select)
 
-        self.head_list = tk.Listbox(master=self.frame, selectmode=tk.EXTENDED)
+        self.head_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        self.head_list.add_yscrollbar()
         self.head_list.grid(row=2, column=0)
-        self.head_list.bind("<<ListboxSelect>>", self._on_select)
+        self.head_list.add_select_handler(self._on_select)
 
-        self.arms_list = tk.Listbox(master=self.frame, selectmode=tk.EXTENDED)
+        self.arms_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        self.arms_list.add_yscrollbar()
         self.arms_list.grid(row=2, column=1)
-        self.arms_list.bind("<<ListboxSelect>>", self._on_select)
+        self.arms_list.add_select_handler(self._on_select)
+
+        self.data_mappings = {self.tryst_list: self.tryst_data, self.friends_list: self.friends_data, self.head_list: self.head_data, self.arms_list: self.arms_data}
 
         self._onselect_listeners = set()
 
         self._determine_relations(pmi, ts_correlation)
-
 
 
     def _determine_relations(self, pmi, ts_correlation):
@@ -72,28 +78,45 @@ class RelationTypeFrame(VisualizerFrame):
         self.add_head(head)
         self.add_arms(arms)
 
-    def add_trysts(self, items):
+    def add_trysts(self, items, sort=True):
+        if sort:
+            items = self._sort_by_strength(items)
+
         self.tryst_data.extend(items)
-        self.tryst_list.insert(tk.END, *self._get_string_repr(items))
+        self.tryst_list.insert(tk.END, *self._get_output_repr(items))
 
-    def add_friends(self, items):
+    def add_friends(self, items, sort=True):
+        if sort:
+            items = self._sort_by_strength(items)
+
         self.friends_data.extend(items)
-        self.friends_list.insert(tk.END, *self._get_string_repr(items))
+        self.friends_list.insert(tk.END, *self._get_output_repr(items))
 
-    def add_head(self, items):
+    def add_head(self, items, sort=True):
+        if sort:
+            items = self._sort_by_strength(items)
+
         self.head_data.extend(items)
-        self.head_list.insert(tk.END, *self._get_string_repr(items))
+        self.head_list.insert(tk.END, *self._get_output_repr(items))
 
-    def add_arms(self, items):
+    def add_arms(self, items, sort=True):
+        if sort:
+            items = self._sort_by_strength(items)
+
         self.arms_data.extend(items)
-        self.arms_list.insert(tk.END, *self._get_string_repr(items))
+        self.arms_list.insert(tk.END, *self._get_output_repr(items))
 
-    def _get_string_repr(self, items):
-        strings = []
+    def _get_output_repr(self, items):
+        outputs = []
         for item in items:
-            s = "{0:.4f} | {1} | {2}".format(item[2], self.idea_names[item[0]], self.idea_names[item[1]])
-            strings.append(s)
-        return strings
+            output = (round(item[2],4), self.idea_names[item[0]], self.idea_names[item[1]])
+            outputs.append(output)
+        return outputs
+
+    def _sort_by_strength(self, data, strength_index=2):
+        sorted_list = sorted(data, key=lambda item: abs(item[strength_index]))
+        sorted_list.reverse()
+        return sorted_list
 
     def clear_lists(self):
         self.tryst_list.delete(0, tk.END)
@@ -112,4 +135,6 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _on_select(self, event):
         for listener in self._onselect_listeners:
+            data = self.data_mappings[event.ListBoxColumn]
+            event.data = data
             listener(event)
