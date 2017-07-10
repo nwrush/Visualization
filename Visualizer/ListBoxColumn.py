@@ -169,3 +169,15 @@ class ListBoxColumn(tk.Frame):
         self.select_clear(0, tk.END)
         for index in selected:
             self.select_set(index)
+
+    def set_width(self):
+        for listBox in self.lists:
+            self._update_width(listBox)
+
+    def _update_width(self, listBox):
+        max_width = -1
+        for item in listBox.get(0, tk.END):
+            if len(str(item)) > max_width:
+                max_width = len(str(item))
+
+        listBox.config(width=max_width)

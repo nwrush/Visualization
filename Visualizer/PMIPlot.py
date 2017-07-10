@@ -157,10 +157,7 @@ class PMIPlot(MatplotlibFrame):
         self.redraw()
 
     def filter_relation(self, event, idea_numbers):
-        widget = event.widget
-        selecteditems = widget.curselection()
-
-        tmp = [event.data[index] for index in selecteditems]
+        tmp = event.selected_data
         idea_indexes = []
         for item in tmp:
             idea_indexes.append(item[0])

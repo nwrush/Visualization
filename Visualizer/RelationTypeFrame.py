@@ -1,6 +1,8 @@
 # Nikko Rush
 # 7/6/2017
 
+import functools
+
 import numpy as np
 import tkinter as tk
 
@@ -15,37 +17,71 @@ class RelationTypeFrame(VisualizerFrame):
 
         self.idea_names = idea_names
 
-        self.title = tk.Label(master=self.frame, text="Strongest Relations")
-        self.title.grid(row=0, columnspan=2, sticky="we")
+        self.header = tk.Frame(master=self.frame)
+        # self.header.grid(row=0, columnspan=2, sticky="nsew")
+        self.header.pack(side=tk.TOP, expand=1)
+
+        self.title = tk.Label(master=self.header, text="Strongest Relations")
+        self.title.grid(row=0, columnspan=4, sticky="we")
+
+        self.types = ["Tryst", "Friends", "Head-To-Head", "Arms-Race"]
+
+        self.buttons = self._create_buttons()
 
         self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
+        self.data = [[] for i in self.types]
 
-        self.tryst_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        self.tryst_list.add_yscrollbar()
-        self.tryst_list.grid(row=1, column=0)
-        self.tryst_list.add_select_handler(self._on_select)
+        self.lists = self._create_lists()
 
-        self.friends_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        self.friends_list.add_yscrollbar()
-        self.friends_list.grid(row=1, column=1)
-        self.friends_list.add_select_handler(self._on_select)
+        self.active_index = None
 
-        self.head_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        self.head_list.add_yscrollbar()
-        self.head_list.grid(row=2, column=0)
-        self.head_list.add_select_handler(self._on_select)
+        # self.tryst_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        # self.tryst_list.add_yscrollbar()
+        # self.tryst_list.set_width()
+        # self.tryst_list.grid(row=1, column=0)
+        # self.tryst_list.add_select_handler(self._on_select)
+        #
+        # self.friends_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        # self.friends_list.add_yscrollbar()
+        # self.friends_list.set_width()
+        # self.friends_list.grid(row=1, column=1)
+        # self.friends_list.add_select_handler(self._on_select)
+        #
+        # self.head_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        # self.head_list.add_yscrollbar()
+        # self.head_list.set_width()
+        # self.head_list.grid(row=2, column=0)
+        # self.head_list.add_select_handler(self._on_select)
+        #
+        # self.arms_list = ListBoxColumn(master=self.frame, ncolumns=3)
+        # self.arms_list.add_yscrollbar()
+        # self.arms_list.set_width()
+        # self.arms_list.grid(row=2, column=1)
+        # self.arms_list.add_select_handler(self._on_select)
 
-        self.arms_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        self.arms_list.add_yscrollbar()
-        self.arms_list.grid(row=2, column=1)
-        self.arms_list.add_select_handler(self._on_select)
-
-        self.data_mappings = {self.tryst_list: self.tryst_data, self.friends_list: self.friends_data, self.head_list: self.head_data, self.arms_list: self.arms_data}
+        # self.data_mappings = {self.tryst_list: self.tryst_data, self.friends_list: self.friends_data, self.head_list: self.head_data, self.arms_list: self.arms_data}
 
         self._onselect_listeners = set()
 
         self._determine_relations(pmi, ts_correlation)
 
+    def _create_buttons(self):
+        buttons = []
+        for i, name in enumerate(self.types):
+            btn = tk.Button(master=self.header, text=name, command=functools.partial(self._set_active, name))
+            btn.grid(row=1, column=i, sticky="we")
+            buttons.append(btn)
+        return buttons
+
+    def _create_lists(self):
+        lists = []
+        for i, name in enumerate(self.types):
+            listbox = ListBoxColumn(master=self.frame, ncolumns=3)
+            listbox.add_yscrollbar()
+            listbox.set_width()
+            listbox.add_select_handler(self._on_select)
+            lists.append(listbox)
+        return lists
 
     def _determine_relations(self, pmi, ts_correlation):
         trysts, friends, head, arms = [], [], [], []
@@ -73,10 +109,22 @@ class RelationTypeFrame(VisualizerFrame):
 
         assert len(trysts) + len(friends) + len(head) + len(arms) == cnt
 
-        self.add_trysts(trysts)
-        self.add_friends(friends)
-        self.add_head(head)
-        self.add_arms(arms)
+        self._add_to_list(trysts, 0, sort=True, top=25)
+        self._add_to_list(friends, 1, sort=True, top=25)
+        self._add_to_list(head, 2, sort=True, top=25)
+        self._add_to_list(arms, 3, sort=True, top=25)
+
+    def _add_to_list(self, items, index, sort=True, top=None):
+        data = self.data[index]
+        listbox = self.lists[index]
+        if sort:
+            items = self._sort_by_strength(items)
+
+        if top is not None:
+            items = items[:top]
+
+        data.extend(items)
+        listbox.insert(tk.END, *self._get_output_repr(items))
 
     def add_trysts(self, items, sort=True):
         if sort:
@@ -119,6 +167,8 @@ class RelationTypeFrame(VisualizerFrame):
         return sorted_list
 
     def clear_lists(self):
+        for listbox in self.lists:
+            listbox.delete(0, tk.END)
         self.tryst_list.delete(0, tk.END)
         self.friends_list.delete(0, tk.END)
         self.head_list.delete(0, tk.END)
@@ -135,6 +185,20 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _on_select(self, event):
         for listener in self._onselect_listeners:
-            data = self.data_mappings[event.ListBoxColumn]
-            event.data = data
+            data = self.data[self.active_index]
+            selected = []
+            for index in event.ListBoxColumn.curselection():
+                selected.append(data[index])
+            event.selected_data = selected
             listener(event)
+
+    def _set_active(self, name):
+        index = self.types.index(name)
+        return self._set_active_index(index)
+
+    def _set_active_index(self, index):
+        if self.active_index is not None:
+            self.lists[self.active_index].pack_forget()
+
+        self.lists[index].pack()
+        self.active_index = index
