@@ -12,19 +12,20 @@ from MatplotlibFrame import MatplotlibFrame
 
 class PMIPlot(MatplotlibFrame):
 
-    def __init__(self, master, time_series_plot, pmi, ts_correlation, idea_names, ts_matrix):
+    def __init__(self, master, time_series_plot, data):
         super(PMIPlot, self).__init__(Figure(), master=master)
 
         self.pack_canvas(side=tk.LEFT)
         #self.pack_frame(side=tk.LEFT, expand=1)
         self.grid_frame(row=0, column=1, sticky="WE")
 
-        self.pmi = pmi
-        self.ts_correlation = ts_correlation
+        self.data = data
+        # self.pmi = pmi
+        # self.ts_correlation = ts_correlation
         self.time_series_plot = time_series_plot
-        self.idea_names = idea_names
-        self.ts_matrix = ts_matrix
-        self.num_ideas = len(idea_names)
+        # self.idea_names = idea_names
+        # self.ts_matrix = ts_matrix
+        # self.num_ideas = len(idea_names)
 
         self.plot_data = None
         self.idea_indexes = None
@@ -50,8 +51,8 @@ class PMIPlot(MatplotlibFrame):
     def plot(self, sample=None):
         # Generate a list of all strictly upper triangular indexes
         points = []
-        for i in range(0, self.num_ideas):
-            for j in range(i+1, self.num_ideas):
+        for i in range(0, self.data.num_ideas):
+            for j in range(i+1, self.data.num_ideas):
                 points.append((i,j))
 
         self._plot(points, sample)
@@ -66,13 +67,13 @@ class PMIPlot(MatplotlibFrame):
 
         xs, ys = [], []
         for i, j in points:
-            if np.isnan(self.pmi[i, j]) or np.isnan(self.ts_correlation[i, j]):
+            if np.isnan(self.data.pmi[i, j]) or np.isnan(self.data.ts_correlation[i, j]):
                 continue
-            if np.isinf(self.pmi[i, j]) or np.isinf(self.ts_correlation[i, j]):
+            if np.isinf(self.data.pmi[i, j]) or np.isinf(self.data.ts_correlation[i, j]):
                 continue
 
-            xs.append(self.ts_correlation[i, j])
-            ys.append(self.pmi[i, j])
+            xs.append(self.data.ts_correlation[i, j])
+            ys.append(self.data.pmi[i, j])
 
         c = [self.point_color] * len(xs)
 
@@ -121,16 +122,16 @@ class PMIPlot(MatplotlibFrame):
         col = j
 
         self.time_series_plot.clear()
-        self.time_series_plot.plot_series2(self.ts_matrix[row], self.ts_matrix[col], (self.idea_names[row], self.idea_names[col]))
+        self.time_series_plot.plot_series2(self.data.ts_matrix[row], self.data.ts_matrix[col], (self.data.idea_names[row], self.data.idea_names[col]))
 
         self.time_series_plot.get_correlation()
 
-    def filter_by_selected(self, event, idea_numbers):
+    def filter_by_selected(self, event):
         widget = event.widget
         selecteditems = widget.curselection()
 
         selected_names = [widget.get(index) for index in selecteditems]
-        idea_indexes = [idea_numbers[name] for name in selected_names]
+        idea_indexes = [self.data.idea_numbers[name] for name in selected_names]
 
         old_point = None
         if self._prev_selected_ind is not None:
@@ -139,7 +140,7 @@ class PMIPlot(MatplotlibFrame):
         # Take two passes over the matrixes
         points = set()
         for i in idea_indexes: # Row
-            for j in range(i+1, self.num_ideas): # Col
+            for j in range(i+1, self.data.num_ideas): # Col
                 points.add((i,j))
 
         for j in idea_indexes:
@@ -156,7 +157,7 @@ class PMIPlot(MatplotlibFrame):
 
         self.redraw()
 
-    def filter_relation(self, event, idea_numbers):
+    def filter_relation(self, event):
         tmp = event.selected_data
         idea_indexes = []
         for item in tmp:
@@ -170,7 +171,7 @@ class PMIPlot(MatplotlibFrame):
         # Take two passes over the matrixes
         points = set()
         for i in idea_indexes:  # Row
-            for j in range(i + 1, self.num_ideas):  # Col
+            for j in range(i + 1, self.data.num_ideas):  # Col
                 points.add((i, j))
 
         for j in idea_indexes:

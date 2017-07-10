@@ -9,7 +9,7 @@ from MatplotlibFrame import MatplotlibFrame
 
 class TimeSeriesFrame(MatplotlibFrame):
 
-    def __init__(self, master, ts_matrix, x_vals=None):
+    def __init__(self, master, data):
         super(TimeSeriesFrame, self).__init__(Figure(), master=master)
 
         # The canvas is the matplotlib stuff
@@ -24,8 +24,7 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.correlation = tk.StringVar()
         self.correlation_label['textvariable'] = self.correlation
 
-        self.ts_matrix = ts_matrix
-        self._x_values = x_vals
+        self.data = data
 
         self._init_plot()
 
@@ -38,13 +37,13 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.axes.set_ylabel("Frequency")
 
     def set_x_values(self, values):
-        self._x_values = values
+        self.data.x_values = values
     def get_x_values(self):
-        return self._x_values
+        return self.data.x_values
 
     def plot_series(self, y, name=None):
         self._add_series(y)
-        self.axes.plot(self._x_values, y)
+        self.axes.plot(self.data.x_values, y)
         if name is not None:
             self.axes.legend([name], loc="best")
         self.redraw()
@@ -52,8 +51,8 @@ class TimeSeriesFrame(MatplotlibFrame):
     def plot_series2(self, y1, y2, name=None):
         self._add_series(y1)
         self._add_series(y2)
-        self.axes.plot(self._x_values, y1)
-        self.axes.plot(self._x_values, y2)
+        self.axes.plot(self.data.x_values, y1)
+        self.axes.plot(self.data.x_values, y2)
 
         if name is not None:
             assert len(name) >= 2
@@ -71,7 +70,7 @@ class TimeSeriesFrame(MatplotlibFrame):
 
     def plot_idea_indexes(self, indexes, names=None):
         for index in indexes:
-            self.plot_series(self.ts_matrix[index])
+            self.plot_series(self.data.ts_matrix[index])
 
         if names is not None:
             self.axes.legend(names, loc="best")

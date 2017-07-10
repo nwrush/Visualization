@@ -11,25 +11,23 @@ from ListBoxColumn import ListBoxColumn
 
 class RelationTypeFrame(VisualizerFrame):
 
-    def __init__(self, master, pmi, ts_correlation, idea_names):
+    def __init__(self, master, data):
         super(RelationTypeFrame, self).__init__(master=master)
         self.grid_frame(row=1, column=0, sticky="NWSE", padx=(0, 10))
 
-        self.idea_names = idea_names
-
         self.header = tk.Frame(master=self.frame)
-        # self.header.grid(row=0, columnspan=2, sticky="nsew")
         self.header.pack(side=tk.TOP, expand=1)
 
         self.title = tk.Label(master=self.header, text="Strongest Relations")
         self.title.grid(row=0, columnspan=4, sticky="we")
 
-        self.types = ["Tryst", "Friends", "Head-To-Head", "Arms-Race"]
+        self.data = data
 
+        self.types = ["Tryst", "Friends", "Head-To-Head", "Arms-Race"]
         self.buttons = self._create_buttons()
 
         self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
-        self.data = [[] for i in self.types]
+        self.list_data = [[] for i in self.types]
 
         self.lists = self._create_lists()
 
@@ -63,7 +61,7 @@ class RelationTypeFrame(VisualizerFrame):
 
         self._onselect_listeners = set()
 
-        self._determine_relations(pmi, ts_correlation)
+        self._determine_relations()
 
     def _create_buttons(self):
         buttons = []
@@ -83,9 +81,11 @@ class RelationTypeFrame(VisualizerFrame):
             lists.append(listbox)
         return lists
 
-    def _determine_relations(self, pmi, ts_correlation):
+    def _determine_relations(self):
+        pmi = self.data.pmi
+        ts_correlation = self.data.ts_correlation
         trysts, friends, head, arms = [], [], [], []
-        num_ideas = pmi.shape[0]
+        num_ideas = self.data.num_ideas
         cnt = 0
         for i in range(0, num_ideas):
             for j in range(i+1, num_ideas):
@@ -115,7 +115,7 @@ class RelationTypeFrame(VisualizerFrame):
         self._add_to_list(arms, 3, sort=True, top=25)
 
     def _add_to_list(self, items, index, sort=True, top=None):
-        data = self.data[index]
+        data = self.list_data[index]
         listbox = self.lists[index]
         if sort:
             items = self._sort_by_strength(items)
@@ -126,38 +126,10 @@ class RelationTypeFrame(VisualizerFrame):
         data.extend(items)
         listbox.insert(tk.END, *self._get_output_repr(items))
 
-    def add_trysts(self, items, sort=True):
-        if sort:
-            items = self._sort_by_strength(items)
-
-        self.tryst_data.extend(items)
-        self.tryst_list.insert(tk.END, *self._get_output_repr(items))
-
-    def add_friends(self, items, sort=True):
-        if sort:
-            items = self._sort_by_strength(items)
-
-        self.friends_data.extend(items)
-        self.friends_list.insert(tk.END, *self._get_output_repr(items))
-
-    def add_head(self, items, sort=True):
-        if sort:
-            items = self._sort_by_strength(items)
-
-        self.head_data.extend(items)
-        self.head_list.insert(tk.END, *self._get_output_repr(items))
-
-    def add_arms(self, items, sort=True):
-        if sort:
-            items = self._sort_by_strength(items)
-
-        self.arms_data.extend(items)
-        self.arms_list.insert(tk.END, *self._get_output_repr(items))
-
     def _get_output_repr(self, items):
         outputs = []
         for item in items:
-            output = (round(item[2],4), self.idea_names[item[0]], self.idea_names[item[1]])
+            output = (round(item[2],4), self.data.idea_names[item[0]], self.data.idea_names[item[1]])
             outputs.append(output)
         return outputs
 
@@ -169,10 +141,6 @@ class RelationTypeFrame(VisualizerFrame):
     def clear_lists(self):
         for listbox in self.lists:
             listbox.delete(0, tk.END)
-        self.tryst_list.delete(0, tk.END)
-        self.friends_list.delete(0, tk.END)
-        self.head_list.delete(0, tk.END)
-        self.arms_list.delete(0, tk.END)
 
     def add_select_listener(self, func):
         self._onselect_listeners.add(func)
@@ -185,7 +153,7 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _on_select(self, event):
         for listener in self._onselect_listeners:
-            data = self.data[self.active_index]
+            data = self.list_data[self.active_index]
             selected = []
             for index in event.ListBoxColumn.curselection():
                 selected.append(data[index])

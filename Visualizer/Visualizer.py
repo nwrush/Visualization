@@ -20,7 +20,7 @@ from TimeSeriesFrame import TimeSeriesFrame
 from PMIPlot import PMIPlot
 from ListFrame import ListFrame
 from RelationTypeFrame import RelationTypeFrame
-from ListBoxColumn import ListBoxColumn
+from data import Data
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -180,17 +180,19 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     x_vals = [i for i in range(1980, 2015)]
 
-    ts = TimeSeriesFrame(master=root, ts_matrix=ts_matrix, x_vals=x_vals)
-    pmi = PMIPlot(master=root, time_series_plot=ts, pmi=pmi_matrix, ts_correlation=ts_correlation, idea_names=idea_names, ts_matrix=ts_matrix)
+    data_manager = Data(pmi_matrix, ts_correlation, ts_matrix, idea_names, x_vals)
+
+    ts = TimeSeriesFrame(master=root, data=data_manager)
+    pmi = PMIPlot(master=root, time_series_plot=ts, data=data_manager)
 
     idea_list = ListFrame(master=root)
     idea_list.add_items(idea_names.values())
     idea_list.update_width()
 
-    relation_types = RelationTypeFrame(master=root, pmi=pmi_matrix, ts_correlation=ts_correlation, idea_names=idea_names)
+    relation_types = RelationTypeFrame(master=root, data=data_manager)
 
-    idea_list.add_select_listener(functools.partial(pmi.filter_by_selected, idea_numbers=idea_numbers))
-    relation_types.add_select_listener((functools.partial(pmi.filter_relation, idea_numbers=idea_numbers)))
+    idea_list.add_select_listener(pmi.filter_by_selected)
+    relation_types.add_select_listener(pmi.filter_relation)
     relation_types.add_select_listener(ts.select_relation_type)
 
     pmi.plot(sample=1000)
