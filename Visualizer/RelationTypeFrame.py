@@ -12,7 +12,7 @@ from ListBoxColumn import ListBoxColumn
 class RelationTypeFrame(VisualizerFrame):
 
     def __init__(self, master, data):
-        super(RelationTypeFrame, self).__init__(master=master)
+        super(RelationTypeFrame, self).__init__(master=master, data_manager=data)
         self.grid_frame(row=1, column=0, sticky="NWSE", padx=(0, 10))
 
         self.header = tk.Frame(master=self.frame)
@@ -35,6 +35,8 @@ class RelationTypeFrame(VisualizerFrame):
         self._onselect_listeners = set()
 
         self._determine_relations()
+
+        self._set_active_index(0)
 
     def _create_buttons(self):
         buttons = []

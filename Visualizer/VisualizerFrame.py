@@ -5,8 +5,9 @@ import tkinter as tk
 
 class VisualizerFrame(object):
     """Abstract class, please don't instantiate"""
-    def __init__(self, master=None):
+    def __init__(self, master=None, data_manager=None):
         self.frame = tk.Frame(master=master)
+        self.data = data_manager
 
     def pack_frame(self, **kwargs):
         self.frame.pack(**kwargs)

@@ -13,19 +13,13 @@ from MatplotlibFrame import MatplotlibFrame
 class PMIPlot(MatplotlibFrame):
 
     def __init__(self, master, time_series_plot, data):
-        super(PMIPlot, self).__init__(Figure(), master=master)
+        super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
 
         self.pack_canvas(side=tk.LEFT)
         #self.pack_frame(side=tk.LEFT, expand=1)
         self.grid_frame(row=0, column=1, sticky="WE")
 
-        self.data = data
-        # self.pmi = pmi
-        # self.ts_correlation = ts_correlation
         self.time_series_plot = time_series_plot
-        # self.idea_names = idea_names
-        # self.ts_matrix = ts_matrix
-        # self.num_ideas = len(idea_names)
 
         self.plot_data = None
         self.idea_indexes = None

@@ -87,10 +87,10 @@ class ListBoxColumn(tk.Frame):
     def itemcget(self, index, option):
         return self.lists[0].itemcget(index, option)
 
-    def nearest(y):
+    def nearest(self, y):
         return self.lists[0].nearest(y)
 
-    def scan_dragto(x, y):
+    def scan_dragto(self, x, y):
         raise NotImplementedError
 
     def see(self, index):

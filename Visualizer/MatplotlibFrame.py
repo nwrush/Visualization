@@ -9,8 +9,8 @@ from VisualizerFrame import VisualizerFrame
 class MatplotlibFrame(VisualizerFrame):
     """Frame specifically for displaying matplotlib graphs"""
 
-    def __init__(self, figure, master=None):
-        super(MatplotlibFrame, self).__init__(master=master)
+    def __init__(self, figure, master=None, data_manager=None):
+        super(MatplotlibFrame, self).__init__(master=master, data_manager=data_manager)
 
         """Creates a canvas that can contains the given matplotlib figure, rooted to the given master or a new root if None"""
         self.canvas = FigureCanvasTkAgg(figure, master=self.frame)

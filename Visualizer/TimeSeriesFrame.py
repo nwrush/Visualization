@@ -10,7 +10,7 @@ from MatplotlibFrame import MatplotlibFrame
 class TimeSeriesFrame(MatplotlibFrame):
 
     def __init__(self, master, data):
-        super(TimeSeriesFrame, self).__init__(Figure(), master=master)
+        super(TimeSeriesFrame, self).__init__(Figure(), master=master, data_manager=data)
 
         # The canvas is the matplotlib stuff
         #self.pack_canvas()
