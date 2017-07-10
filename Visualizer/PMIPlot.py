@@ -121,10 +121,7 @@ class PMIPlot(MatplotlibFrame):
         row = i
         col = j
 
-        self.time_series_plot.clear()
-        self.time_series_plot.plot_series2(self.data.ts_matrix[row], self.data.ts_matrix[col], (self.data.idea_names[row], self.data.idea_names[col]))
-
-        self.time_series_plot.get_correlation()
+        self.time_series_plot.plot_idea_indexes((row, col))
 
     def filter_by_selected(self, event):
         widget = event.widget
@@ -187,8 +184,6 @@ class PMIPlot(MatplotlibFrame):
                 self.on_select(type('', (object,), {"ind": [new_index]})())
 
         self.redraw()
-
-
 
 def get_row_col(n, i):
     """

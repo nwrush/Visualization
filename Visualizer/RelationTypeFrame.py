@@ -28,36 +28,9 @@ class RelationTypeFrame(VisualizerFrame):
 
         self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
         self.list_data = [[] for i in self.types]
-
         self.lists = self._create_lists()
 
         self.active_index = None
-
-        # self.tryst_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        # self.tryst_list.add_yscrollbar()
-        # self.tryst_list.set_width()
-        # self.tryst_list.grid(row=1, column=0)
-        # self.tryst_list.add_select_handler(self._on_select)
-        #
-        # self.friends_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        # self.friends_list.add_yscrollbar()
-        # self.friends_list.set_width()
-        # self.friends_list.grid(row=1, column=1)
-        # self.friends_list.add_select_handler(self._on_select)
-        #
-        # self.head_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        # self.head_list.add_yscrollbar()
-        # self.head_list.set_width()
-        # self.head_list.grid(row=2, column=0)
-        # self.head_list.add_select_handler(self._on_select)
-        #
-        # self.arms_list = ListBoxColumn(master=self.frame, ncolumns=3)
-        # self.arms_list.add_yscrollbar()
-        # self.arms_list.set_width()
-        # self.arms_list.grid(row=2, column=1)
-        # self.arms_list.add_select_handler(self._on_select)
-
-        # self.data_mappings = {self.tryst_list: self.tryst_data, self.friends_list: self.friends_data, self.head_list: self.head_data, self.arms_list: self.arms_data}
 
         self._onselect_listeners = set()
 

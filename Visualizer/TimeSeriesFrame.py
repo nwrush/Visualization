@@ -36,44 +36,31 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.axes.set_xlabel("Year")
         self.axes.set_ylabel("Frequency")
 
-    def set_x_values(self, values):
-        self.data.x_values = values
-    def get_x_values(self):
-        return self.data.x_values
-
-    def plot_series(self, y, name=None):
+    def plot_series(self, y, name=None, redraw=True):
         self._add_series(y)
         self.axes.plot(self.data.x_values, y)
         if name is not None:
             self.axes.legend([name], loc="best")
-        self.redraw()
 
-    def plot_series2(self, y1, y2, name=None):
-        self._add_series(y1)
-        self._add_series(y2)
-        self.axes.plot(self.data.x_values, y1)
-        self.axes.plot(self.data.x_values, y2)
-
-        if name is not None:
-            assert len(name) >= 2
-            self.axes.legend(name, loc="best")
-
-        self.redraw()
-
-    def select_relation_type(self, event):
-        indexes = []
-        for selected in event.selected_data:
-            indexes.extend(selected[:2])
-
-        self.clear()
-        self.plot_idea_indexes(indexes)
+        if redraw:
+            self.redraw()
 
     def plot_idea_indexes(self, indexes, names=None):
+        self.clear()
+
+        index_names = []
         for index in indexes:
-            self.plot_series(self.data.ts_matrix[index])
+            self.plot_series(self.data.ts_matrix[index], redraw=False)
+            index_names.append(self.data.idea_names[index])
+
+        self.get_correlation()
 
         if names is not None:
             self.axes.legend(names, loc="best")
+        else:
+            self.axes.legend(index_names, loc="best")
+
+        self.redraw()
 
     def _add_series(self, data):
         if self.series is None:
@@ -92,4 +79,10 @@ class TimeSeriesFrame(MatplotlibFrame):
 
         self.correlation.set("")
 
-    # def plot_ideas(self, event):
+    def select_relation_type(self, event):
+        indexes = []
+        for selected in event.selected_data:
+            indexes.extend(selected[:2])
+
+        self.clear()
+        self.plot_idea_indexes(indexes)
