@@ -9,7 +9,7 @@ from MatplotlibFrame import MatplotlibFrame
 
 class TimeSeriesFrame(MatplotlibFrame):
 
-    def __init__(self, master, x_vals=None):
+    def __init__(self, master, ts_matrix, x_vals=None):
         super(TimeSeriesFrame, self).__init__(Figure(), master=master)
 
         # The canvas is the matplotlib stuff
@@ -17,13 +17,14 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.grid_canvas(row=0, column=0)
         # The frame is the root of the "widget" everything else gets placed inside of it
         #self.pack_frame(side=tk.LEFT, expand=1)
-        self.grid_frame(row=1, column=1, pady=(5, 0))
+        self.grid_frame(row=0, column=3, pady=(5, 0))
 
         self.correlation_label = tk.Label(master=self.frame, background="red")
         self.correlation_label.grid(row=0, column=1)
         self.correlation = tk.StringVar()
         self.correlation_label['textvariable'] = self.correlation
 
+        self.ts_matrix = ts_matrix
         self._x_values = x_vals
 
         self._init_plot()
@@ -60,6 +61,21 @@ class TimeSeriesFrame(MatplotlibFrame):
 
         self.redraw()
 
+    def select_relation_type(self, event):
+        indexes = []
+        for selected in event.selected_data:
+            indexes.extend(selected[:2])
+
+        self.clear()
+        self.plot_idea_indexes(indexes)
+
+    def plot_idea_indexes(self, indexes, names=None):
+        for index in indexes:
+            self.plot_series(self.ts_matrix[index])
+
+        if names is not None:
+            self.axes.legend(names, loc="best")
+
     def _add_series(self, data):
         if self.series is None:
             self.series = np.copy(data)
@@ -76,3 +92,5 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.redraw()
 
         self.correlation.set("")
+
+    # def plot_ideas(self, event):
