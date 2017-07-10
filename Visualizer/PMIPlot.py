@@ -34,6 +34,9 @@ class PMIPlot(MatplotlibFrame):
 
         self._init_handlers()
 
+        self._on_select_listeners = set()
+        self.add_select_listener(self._change_selected_color)
+
     def _init_plot__(self):
         """Reset the axes for plotting"""
         self.axes.clear()
@@ -80,13 +83,28 @@ class PMIPlot(MatplotlibFrame):
         self.y_values = ys
 
     def _init_handlers(self):
-        self.canvas.mpl_connect('button_press_event', self.on_click)
-        self.canvas.mpl_connect('pick_event', self.on_select)
+        self.canvas.mpl_connect('button_press_event', self._on_click)
+        self.canvas.mpl_connect('pick_event', self._on_select)
 
-    def on_click(self, event):
+    def _on_click(self, event):
         pass
 
-    def on_select(self, event):
+    def add_select_listener(self, func):
+        self._on_select_listeners.add(func)
+
+    def has_select_listener(self, func):
+        return func in self._on_select_listeners
+
+    def remove_select_listener(self, func):
+        self._on_select_listeners.discard(func)
+
+    def _on_select(self, event):
+        i, j = self.idea_indexes[event.ind[0]]
+        event.topic_indexes = (i, j)
+        for func in self._on_select_listeners:
+            func(event)
+
+    def _change_selected_color(self, event):
         ind = event.ind[0]
 
         if self._prev_selected_ind is not None:
@@ -104,13 +122,10 @@ class PMIPlot(MatplotlibFrame):
             self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
             self._prev_selected_ind = ind
 
-            self.set_time_series(ind)
-
         self.redraw()
 
-
-    def set_time_series(self, index):
-        i, j = self.idea_indexes[index]
+    def set_time_series(self, event):
+        i, j = event.topic_indexes
         #row, col = get_row_col(self.ts_matrix.shape[0], index) TODO: Remove this if the correlation coef is correct
         row = i
         col = j

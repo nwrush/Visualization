@@ -17,7 +17,7 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.grid_canvas(row=0, column=0)
         # The frame is the root of the "widget" everything else gets placed inside of it
         #self.pack_frame(side=tk.LEFT, expand=1)
-        self.grid_frame(row=0, column=3, pady=(5, 0))
+        self.grid_frame(row=0, column=2, pady=(5, 0))
 
         self.correlation_label = tk.Label(master=self.frame, background="red")
         self.correlation_label.grid(row=0, column=1)

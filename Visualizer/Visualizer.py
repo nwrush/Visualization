@@ -15,12 +15,13 @@ import numpy as np
 import tkinter as tk
 from tkinter import ttk
 
+from data import Data
 from MouseInteraction import MouseInteract
 from TimeSeriesFrame import TimeSeriesFrame
 from PMIPlot import PMIPlot
 from ListFrame import ListFrame
 from RelationTypeFrame import RelationTypeFrame
-from data import Data
+from TopRelations import TopRelations
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
@@ -190,6 +191,15 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     idea_list.update_width()
 
     relation_types = RelationTypeFrame(master=root, data=data_manager)
+
+    top_relation_1 = TopRelations(master=root, data=data_manager, position={"row":1, "column":1}, index=0)
+    top_relation_1.set_idea_index(0)
+
+    top_relation_2 = TopRelations(master=root, data=data_manager, position={"row":1, "column":2}, index=1)
+    top_relation_2.set_idea_index(10)
+
+    pmi.add_select_listener(top_relation_1.set_idea_event)
+    pmi.add_select_listener(top_relation_2.set_idea_event)
 
     idea_list.add_select_listener(pmi.filter_by_selected)
     relation_types.add_select_listener(pmi.filter_relation)
