@@ -192,12 +192,13 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     relation_types = RelationTypeFrame(master=root, data=data_manager)
 
-    top_relation_1 = TopRelations(master=root, data=data_manager, position={"row":1, "column":1}, index=0)
+    top_relation_1 = TopRelations(master=root, data=data_manager, position={"row":1, "column":1}, topic_index=0)
     top_relation_1.set_idea_index(0)
 
-    top_relation_2 = TopRelations(master=root, data=data_manager, position={"row":1, "column":2}, index=1)
+    top_relation_2 = TopRelations(master=root, data=data_manager, position={"row":1, "column":2}, topic_index=1)
     top_relation_2.set_idea_index(10)
 
+    pmi.add_select_listener(ts.plot_idea_indexes_event)
     pmi.add_select_listener(top_relation_1.set_idea_event)
     pmi.add_select_listener(top_relation_2.set_idea_event)
 

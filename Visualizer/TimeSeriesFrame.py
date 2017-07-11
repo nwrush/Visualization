@@ -45,6 +45,9 @@ class TimeSeriesFrame(MatplotlibFrame):
         if redraw:
             self.redraw()
 
+    def plot_idea_indexes_event(self, event):
+        self.plot_idea_indexes(event.topic_indexes)
+
     def plot_idea_indexes(self, indexes, names=None):
         self.clear()
 

@@ -36,6 +36,7 @@ class PMIPlot(MatplotlibFrame):
 
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
+        # self.add_select_listener(self.set_time_series)
 
     def _init_plot__(self):
         """Reset the axes for plotting"""

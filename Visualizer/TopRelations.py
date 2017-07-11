@@ -9,25 +9,24 @@ from VisualizerFrame import VisualizerFrame
 
 class TopRelations(VisualizerFrame):
     
-    def __init__(self, master, data, position={}, index=0):
+    def __init__(self, master, data, position={}, topic_index=0):
         super(TopRelations, self).__init__(master, data_manager=data)
         self.grid_frame(**position)
 
-        self.listbox = ListBoxColumn(master=self.frame, ncolumns=4)
+        self.title_text = tk.StringVar()
+        self.title_text.set("Selected Relation: ")
+        self.title = tk.Label(master=self.frame, textvariable=self.title_text)
+        self.title.pack()
+
+        self.listbox = ListBoxColumn(master=self.frame, ncolumns=3)
         self.listbox.pack()
 
-        self.index = index
+        self._index = topic_index
 
     def set_idea_name(self, name):
         return self.set_idea_index(self.data.idea_numbers[name])
 
     def set_idea_index(self, index):
-        rows = self.data.strength_matrix[index, index+1:]
-        cols = self.data.strength_matrix[:index, index]
-
-        strength = np.append(rows, cols)
-
-        topic_name = self.data.idea_names[index]
         strengths = []
         pmi, ts_cor = self.data.pmi, self.data.ts_correlation
         for i in range(0, self.data.num_ideas):
@@ -45,11 +44,13 @@ class TopRelations(VisualizerFrame):
                 type = self._get_point_type(point_pmi, point_cor)
 
                 other_topic_name = self.data.idea_names[i if i != index else j]
-                self._insert_sorted(strengths, (strength, type, topic_name, other_topic_name), sort_index=0)
-
+                self._insert_sorted(strengths, (round(strength, 3), type, other_topic_name), sort_index=0)
 
         self.listbox.delete(0, tk.END)
         self.listbox.insert(tk.END, *strengths)
+
+        # Update the frame title
+        self.title_text.set("Selected Relation: "+ self.data.idea_names[index])
 
     def _get_point_type(self, point_pmi, point_cor):
         if 0 <= point_pmi and point_cor < 0:
@@ -71,5 +72,4 @@ class TopRelations(VisualizerFrame):
         items.insert(index, item)
 
     def set_idea_event(self, event):
-        print(event)
-        self.set_idea_index(event.topic_indexes[self.index])
+        self.set_idea_index(event.topic_indexes[self._index])
