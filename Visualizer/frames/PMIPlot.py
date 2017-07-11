@@ -2,13 +2,13 @@
 # 7/5/2017
 
 import math
-
-from matplotlib.figure import Figure
-import matplotlib.colors as colors
-import numpy as np
 import tkinter as tk
 
-from MatplotlibFrame import MatplotlibFrame
+import matplotlib.colors as colors
+import numpy as np
+from matplotlib.figure import Figure
+
+from frames.MatplotlibFrame import MatplotlibFrame
 
 class PMIPlot(MatplotlibFrame):
 

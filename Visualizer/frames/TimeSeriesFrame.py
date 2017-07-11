@@ -1,11 +1,13 @@
 # Nikko Rush
 # 7/5/2017
 
-from matplotlib.figure import Figure
-import numpy as np
 import tkinter as tk
 
-from MatplotlibFrame import MatplotlibFrame
+import numpy as np
+from matplotlib.figure import Figure
+
+from frames.MatplotlibFrame import MatplotlibFrame
+
 
 class TimeSeriesFrame(MatplotlibFrame):
 

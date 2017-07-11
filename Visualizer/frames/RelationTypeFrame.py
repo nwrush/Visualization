@@ -2,12 +2,13 @@
 # 7/6/2017
 
 import functools
-
-import numpy as np
 import tkinter as tk
 
-from VisualizerFrame import VisualizerFrame
-from ListBoxColumn import ListBoxColumn
+import numpy as np
+
+from frames.VisualizerFrame import VisualizerFrame
+from widgets.ListBoxColumn import ListBoxColumn
+
 
 class RelationTypeFrame(VisualizerFrame):
 

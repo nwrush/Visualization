@@ -3,7 +3,7 @@
 
 import tkinter as tk
 
-from VisualizerFrame import VisualizerFrame
+from frames.VisualizerFrame import VisualizerFrame
 
 class ListFrame(VisualizerFrame):
     """description of class"""

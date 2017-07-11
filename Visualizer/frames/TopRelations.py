@@ -1,11 +1,13 @@
 # Nikko Rush
 # 7/10/2017
 
-import numpy as np
 import tkinter as tk
 
-from ListBoxColumn import ListBoxColumn
-from VisualizerFrame import VisualizerFrame
+import numpy as np
+
+from frames.VisualizerFrame import VisualizerFrame
+from widgets.ListBoxColumn import ListBoxColumn
+
 
 class TopRelations(VisualizerFrame):
     

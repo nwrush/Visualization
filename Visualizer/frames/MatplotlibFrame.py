@@ -2,9 +2,8 @@
 # 7/2/2017
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import tkinter as tk
 
-from VisualizerFrame import VisualizerFrame
+from frames.VisualizerFrame import VisualizerFrame
 
 class MatplotlibFrame(VisualizerFrame):
     """Frame specifically for displaying matplotlib graphs"""
