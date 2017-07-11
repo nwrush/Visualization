@@ -3,7 +3,6 @@
 
 
 --TODO
-7/2/17: Layout all six frames in the tk full screen widget
 7/2/17: Test multiple screen sizes
 7/5/17: Don't assume with the datestamps and step sizes
 7/6/17: Run in a profiler to see what's taking time on start
@@ -23,6 +22,7 @@
 --Done (please mention the commit name here too)
 7/2/17: Refactor code to make it easier to work with | 7/5/17 (abf2d55)
 7/2/17: MouseInteraction should know what color to change points too | 7/5/17 (abf2d55) MouseInteraction is obsolete
-7/2/17: Fix the correlation text overwriting when you select a new point (part of refactoring code into classes) | 7/5/17 (4b85354) Sure, that "works"
+7/2/17: Fix the correlation text overwriting when you select a new point (part of refactoring code into classes) | 7/5/17 (f855889) Sure, that "works"
 7/7/17: Custom Multicolumn listboxes | 7/9/17 (dadf23b)
 7/7/17: Refactor TimeSeriesFrame so it controls the graphing of plots instead of the PMI graph | 7/10/17 (329cfc4)
+7/2/17: Layout all six frames in the tk full screen widget | 7/11/17 (4fbcc56)
