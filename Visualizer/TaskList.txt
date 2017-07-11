@@ -10,7 +10,6 @@
 
 --Bugfix
 7/8/17: Synchronize the scrolling of ListBoxColumn lists
-7/10/17: Git commit hashes in the tasklist don't match up
 
 --Wishlist
 7/2/17: Find a better way to layout the time series plot correlation number
@@ -26,3 +25,4 @@
 7/7/17: Custom Multicolumn listboxes | 7/9/17 (dadf23b)
 7/7/17: Refactor TimeSeriesFrame so it controls the graphing of plots instead of the PMI graph | 7/10/17 (329cfc4)
 7/2/17: Layout all six frames in the tk full screen widget | 7/11/17 (4fbcc56)
+7/10/17: Git commit hashes in the tasklist don't match up | 7/11/17 (3f36d95)

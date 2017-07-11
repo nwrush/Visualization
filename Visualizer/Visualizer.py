@@ -7,13 +7,10 @@ import pickle
 
 import matplotlib
 matplotlib.use("TKAgg")
-import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 import numpy as np
 import tkinter as tk
-from tkinter import ttk
 
 from data import Data
 from MouseInteraction import MouseInteract
@@ -203,8 +200,11 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     pmi.add_select_listener(top_relation_2.set_idea_event)
 
     idea_list.add_select_listener(pmi.filter_by_selected)
+    
     relation_types.add_select_listener(pmi.filter_relation)
     relation_types.add_select_listener(ts.select_relation_type)
+    relation_types.add_select_listener(top_relation_1.set_idea_event)
+    relation_types.add_select_listener(top_relation_2.set_idea_event)
 
     pmi.plot(sample=1000)
 

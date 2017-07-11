@@ -101,7 +101,7 @@ class PMIPlot(MatplotlibFrame):
 
     def _on_select(self, event):
         i, j = self.idea_indexes[event.ind[0]]
-        event.topic_indexes = (i, j)
+        event.selected_indexes = (i, j)
         for func in self._on_select_listeners:
             func(event)
 
@@ -165,11 +165,7 @@ class PMIPlot(MatplotlibFrame):
         self.redraw()
 
     def filter_relation(self, event):
-        tmp = event.selected_data
-        idea_indexes = []
-        for item in tmp:
-            idea_indexes.append(item[0])
-            idea_indexes.append(item[1])
+        idea_indexes = event.selected_indexes
 
         old_point = None
         if self._prev_selected_ind is not None:
@@ -191,7 +187,7 @@ class PMIPlot(MatplotlibFrame):
             self._prev_selected_ind = None
             if old_point in self.idea_indexes:
                 new_index = self.idea_indexes.index(old_point)
-                self.on_select(type('', (object,), {"ind": [new_index]})())
+                self._on_select(type('', (object,), {"ind": [new_index]})())
 
         self.redraw()
 

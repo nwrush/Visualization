@@ -72,4 +72,4 @@ class TopRelations(VisualizerFrame):
         items.insert(index, item)
 
     def set_idea_event(self, event):
-        self.set_idea_index(event.topic_indexes[self._index])
+        self.set_idea_index(event.selected_indexes[self._index])

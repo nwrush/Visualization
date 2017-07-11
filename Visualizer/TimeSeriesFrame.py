@@ -46,7 +46,7 @@ class TimeSeriesFrame(MatplotlibFrame):
             self.redraw()
 
     def plot_idea_indexes_event(self, event):
-        self.plot_idea_indexes(event.topic_indexes)
+        self.plot_idea_indexes(event.selected_indexes)
 
     def plot_idea_indexes(self, indexes, names=None):
         self.clear()
@@ -83,9 +83,4 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.correlation.set("")
 
     def select_relation_type(self, event):
-        indexes = []
-        for selected in event.selected_data:
-            indexes.extend(selected[:2])
-
-        self.clear()
-        self.plot_idea_indexes(indexes)
+        self.plot_idea_indexes(event.selected_indexes)

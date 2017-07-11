@@ -127,12 +127,16 @@ class RelationTypeFrame(VisualizerFrame):
         self._onselect_listeners.discard(func)
 
     def _on_select(self, event):
+        data = self.list_data[self.active_index]
+        selected = []
+        selected_indexes = []
+        for index in event.ListBoxColumn.curselection():
+            selected.append(data[index])
+            selected_indexes.extend(data[index][:2])
+
+        event.selected_indexes = selected_indexes
+
         for listener in self._onselect_listeners:
-            data = self.list_data[self.active_index]
-            selected = []
-            for index in event.ListBoxColumn.curselection():
-                selected.append(data[index])
-            event.selected_data = selected
             listener(event)
 
     def _set_active(self, name):
