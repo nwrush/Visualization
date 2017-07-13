@@ -4,6 +4,7 @@
 import math
 import tkinter as tk
 
+import matplotlib.cm as cm
 import matplotlib.colors as colors
 import numpy as np
 from matplotlib.figure import Figure
@@ -12,14 +13,12 @@ from frames.MatplotlibFrame import MatplotlibFrame
 
 class PMIPlot(MatplotlibFrame):
 
-    def __init__(self, master, time_series_plot, data):
+    def __init__(self, master, data):
         super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
 
         self.pack_canvas(side=tk.LEFT)
         #self.pack_frame(side=tk.LEFT, expand=1)
         self.grid_frame(row=0, column=1, sticky="WE")
-
-        self.time_series_plot = time_series_plot
 
         self.plot_data = None
         self.idea_indexes = None
@@ -27,8 +26,12 @@ class PMIPlot(MatplotlibFrame):
         self.y_values = None
 
         # TODO: Allow these to be set dynamically
-        self.point_color = "Pink"
-        self.selected_color = "Red"
+        self.selected_color = "Black"
+        self.normalizer = colors.Normalize(vmin=0, vmax=1)
+        self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap="Reds"),
+                              cm.ScalarMappable(norm=self.normalizer, cmap="Greens"),
+                              cm.ScalarMappable(norm=self.normalizer, cmap="Oranges"),
+                              cm.ScalarMappable(norm=self.normalizer, cmap="Blues")]
 
         self._prev_selected_ind = None
 
@@ -73,8 +76,8 @@ class PMIPlot(MatplotlibFrame):
             xs.append(self.data.ts_correlation[i, j])
             ys.append(self.data.pmi[i, j])
 
-        c = [self.point_color] * len(xs)
-
+        # c = [self.point_color] * len(xs)
+        c = self._get_colors(xs, ys)
         self._init_plot__()
         plot = self.axes.scatter(xs, ys, color=c, picker=True)
 
@@ -82,6 +85,22 @@ class PMIPlot(MatplotlibFrame):
         self.idea_indexes = points
         self.x_values = xs
         self.y_values = ys
+
+    def _get_colors(self, xs, ys):
+        colors = []
+        for x, y in zip(xs, ys):
+            distance = math.sqrt(x**2 + y**2)
+            if x >= 0 and y >= 0: # First quadrant, someone has to select zero
+                colors.append(self.color_mappers[0].to_rgba(distance))
+            elif x < 0 and y > 0: # Second quadrant
+                colors.append(self.color_mappers[1].to_rgba(distance))
+            elif x < 0 and y < 0: # Third quadrant
+                colors.append(self.color_mappers[2].to_rgba(distance))
+            elif x > 0 and y < 0: # Fourth quadrant
+                colors.append(self.color_mappers[3].to_rgba(distance))
+            else:
+                print("Fail")
+        return colors
 
     def _init_handlers(self):
         self.canvas.mpl_connect('button_press_event', self._on_click)
@@ -117,21 +136,12 @@ class PMIPlot(MatplotlibFrame):
             self.plot_data._edgecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
             self._prev_selected_ind = None
 
-            self.time_series_plot.clear()
         else:
             self.plot_data._facecolors[ind] = colors.to_rgba(self.selected_color)
             self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
             self._prev_selected_ind = ind
 
         self.redraw()
-
-    def set_time_series(self, event):
-        i, j = event.topic_indexes
-        #row, col = get_row_col(self.ts_matrix.shape[0], index) TODO: Remove this if the correlation coef is correct
-        row = i
-        col = j
-
-        self.time_series_plot.plot_idea_indexes((row, col))
 
     def filter_by_selected(self, event):
         widget = event.widget
