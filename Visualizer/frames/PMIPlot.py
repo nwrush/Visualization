@@ -76,10 +76,9 @@ class PMIPlot(MatplotlibFrame):
             xs.append(self.data.ts_correlation[i, j])
             ys.append(self.data.pmi[i, j])
 
-        # c = [self.point_color] * len(xs)
-        c = self._get_colors(xs, ys)
+        self._point_colors = self._get_colors(xs, ys)
         self._init_plot__()
-        plot = self.axes.scatter(xs, ys, color=c, picker=True)
+        plot = self.axes.scatter(xs, ys, color=self._point_colors, picker=True)
 
         self.plot_data = plot
         self.idea_indexes = points
@@ -128,16 +127,13 @@ class PMIPlot(MatplotlibFrame):
         ind = event.ind[0]
 
         if self._prev_selected_ind is not None:
-            self.plot_data._facecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
-            self.plot_data._edgecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
+            self.plot_data._edgecolors[self._prev_selected_ind] = self._point_colors[self._prev_selected_ind]
 
         if self._prev_selected_ind == ind:
-            self.plot_data._facecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
-            self.plot_data._edgecolors[self._prev_selected_ind] = colors.to_rgba(self.point_color)
+            self.plot_data._edgecolors[self._prev_selected_ind] = self._point_colors[self._prev_selected_ind]
             self._prev_selected_ind = None
 
         else:
-            self.plot_data._facecolors[ind] = colors.to_rgba(self.selected_color)
             self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
             self._prev_selected_ind = ind
 
