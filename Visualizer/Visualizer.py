@@ -5,8 +5,8 @@ import pickle
 
 import matplotlib
 
-matplotlib.use("TKAgg")
 import tkinter as tk
+matplotlib.use("TKAgg")
 
 from data import Data
 from frames.TimeSeriesFrame import TimeSeriesFrame
@@ -20,7 +20,7 @@ GUI creation
 """
 
 def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
-
+    print(matplotlib.get_backend())
     root = tk.Tk()
 
     def exit_callback():
@@ -66,9 +66,9 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
 
-def main():
+def main(fname):
     # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
-    pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("keywords_data.p", 'rb'))
+    pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
     assert is_square_matrix(pmi)
     assert is_square_matrix(ts_correlation)
 
@@ -79,4 +79,5 @@ def main():
     gui(pmi, ts_correlation, ts_matrix, idea_names)
 
 if __name__ == "__main__":
-    main()
+    print(matplotlib.get_backend())
+    main("keywords_data.p")

@@ -6,8 +6,7 @@
     <ProjectGuid>bb4051a4-db57-4b6b-bf5b-2257d5049c49</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>Visualizer.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>.;..\idea_relations\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Visualizer</Name>
@@ -24,26 +23,25 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ColoredBox.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ListBoxColumn.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ListFrame.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MatplotlibFrame.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="frames\ListFrame.py" />
+    <Compile Include="frames\MatplotlibFrame.py" />
+    <Compile Include="frames\PMIPlot.py" />
+    <Compile Include="frames\RelationTypeFrame.py" />
+    <Compile Include="frames\TimeSeriesFrame.py" />
+    <Compile Include="frames\TimeSeriesVisualizer.py" />
+    <Compile Include="frames\TopRelations.py" />
+    <Compile Include="frames\VisualizerFrame.py" />
+    <Compile Include="frames\__init__.py" />
     <Compile Include="MouseInteraction.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PMIPlot.py" />
-    <Compile Include="RelationTypeFrame.py" />
-    <Compile Include="TimeSeriesFrame.py" />
+    <Compile Include="startup.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Visualizer.py" />
-    <Compile Include="VisualizerFrame.py" />
+    <Compile Include="widgets\ColoredBox.py" />
+    <Compile Include="widgets\ListBoxColumn.py" />
+    <Compile Include="widgets\__init__.py" />
     <Compile Include="Window.py">
       <SubType>Code</SubType>
     </Compile>
@@ -62,7 +60,12 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Keywords.config" />
     <Content Include="TaskList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="frames\" />
+    <Folder Include="widgets\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
