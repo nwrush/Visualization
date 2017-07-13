@@ -33,7 +33,7 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     data_manager = Data(pmi_matrix, ts_correlation, ts_matrix, idea_names, x_vals)
 
     ts = TimeSeriesFrame(master=root, data=data_manager)
-    pmi = PMIPlot(master=root, time_series_plot=ts, data=data_manager)
+    pmi = PMIPlot(master=root, data=data_manager)
 
     idea_list = ListFrame(master=root)
     idea_list.add_items(idea_names.values())
