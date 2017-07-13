@@ -51,6 +51,10 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     pmi.add_select_listener(top_relation_1.set_idea_event)
     pmi.add_select_listener(top_relation_2.set_idea_event)
 
+    pmi.add_reset_listener(idea_list.clear_selection)
+    pmi.add_reset_listener(relation_types.clear_selection)
+    pmi.add_reset_listener(ts.clear)
+
     idea_list.add_select_listener(pmi.filter_relation)
 
     relation_types.add_select_listener(pmi.filter_relation)

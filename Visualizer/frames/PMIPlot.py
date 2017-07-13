@@ -40,12 +40,15 @@ class PMIPlot(MatplotlibFrame):
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
 
+        self._on_reset_listeners = set()
+        self.add_reset_listener(self._reset_graph)
+
         self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
         self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
 
         self._color_samples = self._get_color_samples(self._control_panel)
 
-        self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._reset_graph)
+        self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._on_reset)
         self._reset_graph_btn.pack(side=tk.TOP, pady=10)
 
         self._filter_by_header = tk.Label(master=self._control_panel, text="Filtered by: ")
@@ -153,11 +156,24 @@ class PMIPlot(MatplotlibFrame):
     def remove_select_listener(self, func):
         self._on_select_listeners.discard(func)
 
+    def add_reset_listener(self, func):
+        self._on_reset_listeners.add(func)
+
+    def has_reset_listener(self, func):
+        return func in self._on_reset_listeners
+
+    def remove_reset_listener(self, func):
+        self._on_reset_listeners.discard(func)
+
     def _on_select(self, event):
         i, j = self.idea_indexes[event.ind[0]]
         event.selected_indexes = (i, j)
         for func in self._on_select_listeners:
             func(event)
+
+    def _on_reset(self):
+        for func in self._on_reset_listeners:
+            func()
 
     def _change_selected_color(self, event):
         ind = event.ind[0]
@@ -207,6 +223,7 @@ class PMIPlot(MatplotlibFrame):
 
     def _reset_graph(self):
         self.plot(sample=self.sample_size)
+        self._filter_by_data.set("")
         self.redraw()
 
 def get_row_col(n, i):

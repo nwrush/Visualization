@@ -64,6 +64,9 @@ class ListFrame(VisualizerFrame):
     def remove_select_listener(self, func):
         self._onselect_listeners.discard(func)
 
+    def clear_selection(self):
+        self.list.select_clear(0, tk.END)
+
     def _on_select(self, event):
         listbox = event.widget
         event.selected_indexes = [self.data.idea_numbers[listbox.get(index)] for index in event.widget.curselection()]

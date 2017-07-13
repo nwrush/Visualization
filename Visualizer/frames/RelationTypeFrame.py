@@ -144,7 +144,11 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _set_active_index(self, index):
         if self.active_index is not None:
+            self.lists[self.active_index].select_clear(0, tk.END)
             self.lists[self.active_index].pack_forget()
 
         self.lists[index].pack()
         self.active_index = index
+
+    def clear_selection(self):
+        self.lists[self.active_index].select_clear(0, tk.END)
