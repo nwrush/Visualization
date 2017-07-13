@@ -129,10 +129,8 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _on_select(self, event):
         data = self.list_data[self.active_index]
-        selected = []
         selected_indexes = []
         for index in event.ListBoxColumn.curselection():
-            selected.append(data[index])
             selected_indexes.extend(data[index][:2])
 
         event.selected_indexes = selected_indexes

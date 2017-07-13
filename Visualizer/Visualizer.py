@@ -35,7 +35,7 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     ts = TimeSeriesFrame(master=root, data=data_manager)
     pmi = PMIPlot(master=root, data=data_manager)
 
-    idea_list = ListFrame(master=root)
+    idea_list = ListFrame(master=root, data=data_manager)
     idea_list.add_items(idea_names.values())
     idea_list.update_width()
 
@@ -51,7 +51,7 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     pmi.add_select_listener(top_relation_1.set_idea_event)
     pmi.add_select_listener(top_relation_2.set_idea_event)
 
-    idea_list.add_select_listener(pmi.filter_by_selected)
+    idea_list.add_select_listener(pmi.filter_relation)
 
     relation_types.add_select_listener(pmi.filter_relation)
     relation_types.add_select_listener(ts.select_relation_type)

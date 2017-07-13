@@ -151,42 +151,11 @@ class PMIPlot(MatplotlibFrame):
 
         self.redraw()
 
-    def filter_by_selected(self, event):
-        widget = event.widget
-        selecteditems = widget.curselection()
-
-        selected_names = [widget.get(index) for index in selecteditems]
-
-        self._filter_by_data.set("\n".join(selected_names))
-
-        idea_indexes = [self.data.idea_numbers[name] for name in selected_names]
-
-        old_point = None
-        if self._prev_selected_ind is not None:
-            old_point = self.idea_indexes[self._prev_selected_ind]
-        # You want to plot everything in both the rows and columns specified by idea_indexes
-        # Take two passes over the matrixes
-        points = set()
-        for i in idea_indexes: # Row
-            for j in range(i+1, self.data.num_ideas): # Col
-                points.add((i,j))
-
-        for j in idea_indexes:
-            for i in range(0, j):
-                points.add((i,j))
-
-        self._plot(list(points))
-
-        if old_point is not None:
-            self._prev_selected_ind = None
-            if old_point in self.idea_indexes:
-                new_index = self.idea_indexes.index(old_point)
-                self.on_select(type('',(object,),{"ind": [new_index]})())
-
-        self.redraw()
-
     def filter_relation(self, event):
         idea_indexes = event.selected_indexes
+
+        selected_names = [self.data.idea_names[index] for index in idea_indexes]
+        self._filter_by_data.set("\n".join(selected_names))
 
         old_point = None
         if self._prev_selected_ind is not None:

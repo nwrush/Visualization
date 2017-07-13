@@ -7,8 +7,8 @@ from frames.VisualizerFrame import VisualizerFrame
 
 class ListFrame(VisualizerFrame):
     """description of class"""
-    def __init__(self, master):
-        super(ListFrame, self).__init__(master)
+    def __init__(self, master, data=None):
+        super(ListFrame, self).__init__(master, data_manager=data)
 
         self.grid_frame(row=0, column=0, sticky="NWSE", padx=(0, 10))
 
@@ -65,6 +65,9 @@ class ListFrame(VisualizerFrame):
         self._onselect_listeners.discard(func)
 
     def _on_select(self, event):
+        listbox = event.widget
+        event.selected_indexes = [self.data.idea_numbers[listbox.get(index)] for index in event.widget.curselection()]
+
         for listener in self._onselect_listeners:
             listener(event)
 
