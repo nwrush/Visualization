@@ -46,6 +46,7 @@ class PMIPlot(MatplotlibFrame):
         self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
         self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
 
+        self.color_map = dict()
         self._color_samples = self._get_color_samples(self._control_panel)
 
         self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._on_reset)
@@ -129,7 +130,7 @@ class PMIPlot(MatplotlibFrame):
         bck_r /= 256
         bck_g /= 256
         bck_b /= 256
-        for mapper, name in zip(self.color_mappers, ("Friends", "Tryst", "Head-to-Head", "Arms-Race")):
+        for mapper, name in zip(self.color_mappers, self.data.relation_types):
             r, g, b, a = mapper.to_rgba(0.7, bytes=True)
             r = int(r * (a/255) + bck_r * (1 - a/255))
             g = int(g * (a / 255) + bck_g * (1 - a / 255))
@@ -137,6 +138,7 @@ class PMIPlot(MatplotlibFrame):
             hex_color = "#{:02x}{:02x}{:02x}".format(r, g, b)
             sample = tk.Label(master=frame, background=hex_color, text=name)
             sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
+            self.color_map[name] = hex_color
 
         return frame
 

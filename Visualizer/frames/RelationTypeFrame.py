@@ -24,7 +24,7 @@ class RelationTypeFrame(VisualizerFrame):
 
         self.data = data
 
-        self.types = ["Tryst", "Friends", "Head-To-Head", "Arms-Race"]
+        self.types = self.data.relation_types
         self.buttons = self._create_buttons()
 
         self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
@@ -152,3 +152,7 @@ class RelationTypeFrame(VisualizerFrame):
 
     def clear_selection(self):
         self.lists[self.active_index].select_clear(0, tk.END)
+
+    def color_buttons(self, color_map):
+        for btn, name in zip(self.buttons, self.types):
+            btn['background'] = color_map[name]

@@ -28,6 +28,8 @@ class Data():
         self.num_ideas = len(self.idea_names)
 
         self.strength_matrix = self._get_strength_matrix()
+
+        self.relation_types = ("Tryst", "Friends", "Head-To-Head", "Arms-Race")
         pass
 
     def _get_strength_matrix(self):

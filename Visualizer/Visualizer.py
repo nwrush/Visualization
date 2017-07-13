@@ -20,7 +20,6 @@ GUI creation
 """
 
 def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
-    print(matplotlib.get_backend())
     root = tk.Tk()
 
     def exit_callback():
@@ -40,6 +39,7 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     idea_list.update_width()
 
     relation_types = RelationTypeFrame(master=root, data=data_manager)
+    relation_types.color_buttons(pmi.color_map)
 
     top_relation_1 = TopRelations(master=root, data=data_manager, position={"row":1, "column":1}, topic_index=0)
     top_relation_1.set_idea_index(0)
@@ -83,5 +83,4 @@ def main(fname):
     gui(pmi, ts_correlation, ts_matrix, idea_names)
 
 if __name__ == "__main__":
-    print(matplotlib.get_backend())
     main("keywords_data.p")

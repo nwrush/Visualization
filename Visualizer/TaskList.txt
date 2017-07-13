@@ -1,4 +1,5 @@
 --Priority
+7/13/17: Button names aren't correct, (tryst and friends are flipped)
 
 --TODO
 7/2/17: Test multiple screen sizes
