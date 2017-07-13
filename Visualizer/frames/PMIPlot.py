@@ -40,11 +40,13 @@ class PMIPlot(MatplotlibFrame):
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
 
-        self._control_panel = tk.Frame(master=self.frame)
-        self._control_panel.pack(side=tk.RIGHT, expand=1)
+        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
+        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+
+        self._color_samples = self._get_color_samples(self._control_panel)
 
         self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._reset_graph)
-        self._reset_graph_btn.pack(side=tk.TOP)
+        self._reset_graph_btn.pack(side=tk.TOP, pady=10)
 
         self._filter_by_header = tk.Label(master=self._control_panel, text="Filtered by: ")
         self._filter_by_header.pack(side=tk.TOP)
@@ -112,6 +114,28 @@ class PMIPlot(MatplotlibFrame):
             else:
                 print("Fail")
         return colors
+
+    def _get_color_samples(self, parent):
+        frame = tk.Frame(master=parent, borderwidth=2, relief=tk.RIDGE)
+        frame.pack(side=tk.TOP, expand=1, fill=tk.X, anchor=tk.N, pady=10)
+
+        label = tk.Label(master=frame, text="Legend:")
+        label.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2, pady=2)
+
+        bck_r, bck_g, bck_b = parent.winfo_rgb(parent['background'])
+        bck_r /= 256
+        bck_g /= 256
+        bck_b /= 256
+        for mapper, name in zip(self.color_mappers, ("Friends", "Tryst", "Head-to-Head", "Arms-Race")):
+            r, g, b, a = mapper.to_rgba(0.7, bytes=True)
+            r = int(r * (a/255) + bck_r * (1 - a/255))
+            g = int(g * (a / 255) + bck_g * (1 - a / 255))
+            b = int(b * (a / 255) + bck_b * (1 - a / 255))
+            hex_color = "#{:02x}{:02x}{:02x}".format(r, g, b)
+            sample = tk.Label(master=frame, background=hex_color, text=name)
+            sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
+
+        return frame
 
     def _init_handlers(self):
         self.canvas.mpl_connect('button_press_event', self._on_click)
