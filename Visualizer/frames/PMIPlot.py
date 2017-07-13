@@ -15,15 +15,15 @@ class PMIPlot(MatplotlibFrame):
 
     def __init__(self, master, data):
         super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
+        self.grid_frame(row=0, column=1, sticky="WE")
 
         self.pack_canvas(side=tk.LEFT)
-        #self.pack_frame(side=tk.LEFT, expand=1)
-        self.grid_frame(row=0, column=1, sticky="WE")
 
         self.plot_data = None
         self.idea_indexes = None
         self.x_values = None
         self.y_values = None
+        self.sample_size = None
 
         # TODO: Allow these to be set dynamically
         self.selected_color = "Black"
@@ -39,7 +39,18 @@ class PMIPlot(MatplotlibFrame):
 
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
-        # self.add_select_listener(self.set_time_series)
+
+        self._control_panel = tk.Frame(master=self.frame)
+        self._control_panel.pack(side=tk.RIGHT, expand=1)
+
+        self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._reset_graph)
+        self._reset_graph_btn.pack(side=tk.TOP)
+
+        self._filter_by_header = tk.Label(master=self._control_panel, text="Filtered by: ")
+        self._filter_by_header.pack(side=tk.TOP)
+        self._filter_by_data = tk.StringVar()
+        self._filter_by_label = tk.Label(master=self._control_panel, textvariable=self._filter_by_data, justify=tk.LEFT)
+        self._filter_by_label.pack(side=tk.TOP)
 
     def _init_plot__(self):
         """Reset the axes for plotting"""
@@ -51,6 +62,7 @@ class PMIPlot(MatplotlibFrame):
 
     def plot(self, sample=None):
         # Generate a list of all strictly upper triangular indexes
+        self.sample_size = sample
         points = []
         for i in range(0, self.data.num_ideas):
             for j in range(i+1, self.data.num_ideas):
@@ -144,6 +156,9 @@ class PMIPlot(MatplotlibFrame):
         selecteditems = widget.curselection()
 
         selected_names = [widget.get(index) for index in selecteditems]
+
+        self._filter_by_data.set("\n".join(selected_names))
+
         idea_indexes = [self.data.idea_numbers[name] for name in selected_names]
 
         old_point = None
@@ -195,6 +210,10 @@ class PMIPlot(MatplotlibFrame):
                 new_index = self.idea_indexes.index(old_point)
                 self._on_select(type('', (object,), {"ind": [new_index]})())
 
+        self.redraw()
+
+    def _reset_graph(self):
+        self.plot(sample=self.sample_size)
         self.redraw()
 
 def get_row_col(n, i):
