@@ -3,12 +3,18 @@
 
 import functools
 import tkinter as tk
+import tkinter.font as tkfont
 
 import numpy as np
 
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
 
+
+def _sort_by_strength(data, strength_index=2):
+    sorted_list = sorted(data, key=lambda item: abs(item[strength_index]))
+    sorted_list.reverse()
+    return sorted_list
 
 class RelationTypeFrame(VisualizerFrame):
 
@@ -27,6 +33,9 @@ class RelationTypeFrame(VisualizerFrame):
         self.types = self.data.relation_types
         self.buttons = self._create_buttons()
 
+        self._selected_btn_font = tkfont.Font(name = 'ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
+        self._selected_btn_font.config(underline=1)
+
         self.list_data = {name: [] for name in self.types}
         self.lists = self._create_lists()
 
@@ -37,11 +46,13 @@ class RelationTypeFrame(VisualizerFrame):
         self._determine_relations()
 
         self._set_active_index(0)
+        pass
 
     def _create_buttons(self):
         buttons = []
         for i, name in enumerate(self.types):
-            btn = tk.Button(master=self.header, text=name, command=functools.partial(self._set_active, name))
+            btn = tk.Button(master=self.header, text=name)
+            btn.config(command=functools.partial(self._btn_click, name, btn))
             btn.grid(row=1, column=i, sticky="we")
             buttons.append(btn)
         return buttons
@@ -93,7 +104,7 @@ class RelationTypeFrame(VisualizerFrame):
         data = self.list_data[name]
         listbox = self.lists[self.types.index(name)]
         if sort:
-            items = self._sort_by_strength(items)
+            items = _sort_by_strength(items)
 
         if top is not None:
             items = items[:top]
@@ -107,11 +118,6 @@ class RelationTypeFrame(VisualizerFrame):
             output = (round(item[2],4), self.data.idea_names[item[0]], self.data.idea_names[item[1]])
             outputs.append(output)
         return outputs
-
-    def _sort_by_strength(self, data, strength_index=2):
-        sorted_list = sorted(data, key=lambda item: abs(item[strength_index]))
-        sorted_list.reverse()
-        return sorted_list
 
     def clear_lists(self):
         for listbox in self.lists:
@@ -137,6 +143,9 @@ class RelationTypeFrame(VisualizerFrame):
         for listener in self._onselect_listeners:
             listener(event)
 
+    def _btn_click(self, name, btn):
+        self._set_active(name)
+
     def _set_active(self, name):
         index = self.types.index(name)
         return self._set_active_index(index)
@@ -145,8 +154,10 @@ class RelationTypeFrame(VisualizerFrame):
         if self.active_index is not None:
             self.lists[self.active_index].select_clear(0, tk.END)
             self.lists[self.active_index].pack_forget()
+            self.buttons[self.active_index].config(font='TkDefaultFont')
 
         self.lists[index].pack()
+        self.buttons[index].config(font='ButtonSelected')
         self.active_index = index
 
     def clear_selection(self):

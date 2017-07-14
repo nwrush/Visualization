@@ -1,5 +1,4 @@
 --Priority
-7/13/17: Button names aren't correct, (tryst and friends are flipped)
 
 --TODO
 7/2/17: Test multiple screen sizes
@@ -26,3 +25,4 @@
 7/2/17: Layout all six frames in the tk full screen widget | 7/11/17 (4fbcc56)
 7/10/17: Git commit hashes in the tasklist don't match up | 7/11/17 (3f36d95)
 7/7/17: Verify correlation coefficients (NOCOMMIT) | 7/11/17
+7/13/17: Button names aren't correct, (tryst and friends are flipped) | 7/14/17 (f37289f)
