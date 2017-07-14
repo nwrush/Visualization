@@ -29,7 +29,7 @@ class Data():
 
         self.strength_matrix = self._get_strength_matrix()
 
-        self.relation_types = ("Tryst", "Friends", "Head-To-Head", "Arms-Race")
+        self.relation_types = ("Friends", "Tryst", "Head-To-Head", "Arms-Race") # Layout the relation in quadrant order
         pass
 
     def _get_strength_matrix(self):

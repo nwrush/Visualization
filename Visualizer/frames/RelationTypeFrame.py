@@ -27,8 +27,7 @@ class RelationTypeFrame(VisualizerFrame):
         self.types = self.data.relation_types
         self.buttons = self._create_buttons()
 
-        self.tryst_data, self.friends_data, self.head_data, self.arms_data = [], [], [], []
-        self.list_data = [[] for i in self.types]
+        self.list_data = {name: [] for name in self.types}
         self.lists = self._create_lists()
 
         self.active_index = None
@@ -85,14 +84,14 @@ class RelationTypeFrame(VisualizerFrame):
 
         assert len(trysts) + len(friends) + len(head) + len(arms) == cnt
 
-        self._add_to_list(trysts, 0, sort=True, top=25)
-        self._add_to_list(friends, 1, sort=True, top=25)
-        self._add_to_list(head, 2, sort=True, top=25)
-        self._add_to_list(arms, 3, sort=True, top=25)
+        self._add_to_list(friends, "Friends", sort=True, top=25)
+        self._add_to_list(trysts, "Tryst", sort=True, top=25)
+        self._add_to_list(head, "Head-To-Head", sort=True, top=25)
+        self._add_to_list(arms, "Arms-Race", sort=True, top=25)
 
-    def _add_to_list(self, items, index, sort=True, top=None):
-        data = self.list_data[index]
-        listbox = self.lists[index]
+    def _add_to_list(self, items, name, sort=True, top=None):
+        data = self.list_data[name]
+        listbox = self.lists[self.types.index(name)]
         if sort:
             items = self._sort_by_strength(items)
 
@@ -128,7 +127,7 @@ class RelationTypeFrame(VisualizerFrame):
         self._onselect_listeners.discard(func)
 
     def _on_select(self, event):
-        data = self.list_data[self.active_index]
+        data = self.list_data[self.types[self.active_index]]
         selected_indexes = []
         for index in event.ListBoxColumn.curselection():
             selected_indexes.extend(data[index][:2])
