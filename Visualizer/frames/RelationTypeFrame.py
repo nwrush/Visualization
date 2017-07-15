@@ -9,7 +9,6 @@ import numpy as np
 
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
-from widgets.MultiListBox import MultiListbox
 
 
 def _sort_by_strength(data, strength_index=2):

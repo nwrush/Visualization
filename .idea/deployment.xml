@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="Zin">
+  <component name="PublishConfigData" serverName="Zin" compareModeInSync="SIZE">
     <serverData>
       <paths name="Zin">
         <serverdata>
           <mappings>
             <mapping deploy="/visualization/Visualization" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/venv" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/topics_data.p" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/keywords_data.p" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/keywords_lemmatized_data.p" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/__pycache__" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
