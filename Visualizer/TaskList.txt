@@ -7,7 +7,6 @@
 7/7/17: Allow dynamically set (user defined) colors for plots
 
 --Bugfix
-7/8/17: Synchronize the scrolling of ListBoxColumn lists
 
 --Wishlist
 7/2/17: Find a better way to layout the time series plot correlation number
@@ -26,3 +25,4 @@
 7/10/17: Git commit hashes in the tasklist don't match up | 7/11/17 (3f36d95)
 7/7/17: Verify correlation coefficients (NOCOMMIT) | 7/11/17
 7/13/17: Button names aren't correct, (tryst and friends are flipped) | 7/14/17 (f37289f)
+7/8/17: Synchronize the scrolling of ListBoxColumn lists | 7/14/17 (4931ce0)

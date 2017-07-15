@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="097ddee7-07f1-463c-a603-b943f97c051d" name="Zin" url="http://zin.cs.washington.edu">
+        <fileTransfer host="zin.cs.washington.edu" port="1255" privateKey="Z:\Keys\zin.ppk" rootFolder="/home/nikko" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="1255" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
