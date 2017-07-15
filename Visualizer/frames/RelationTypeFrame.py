@@ -9,6 +9,7 @@ import numpy as np
 
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
+from widgets.MultiListBox import MultiListbox
 
 
 def _sort_by_strength(data, strength_index=2):
@@ -61,7 +62,8 @@ class RelationTypeFrame(VisualizerFrame):
         lists = []
         for i, name in enumerate(self.types):
             listbox = ListBoxColumn(master=self.frame, ncolumns=3)
-            listbox.add_yscrollbar()
+            #listbox = MultiListbox(master=self.frame, lists=(("Strength", 20), ('x', 20), ('y', 20)))
+            listbox.show_yscrollbar()
             listbox.set_width()
             listbox.add_select_handler(self._on_select)
             lists.append(listbox)

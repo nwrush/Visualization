@@ -83,4 +83,6 @@ def main(fname):
     gui(pmi, ts_correlation, ts_matrix, idea_names)
 
 if __name__ == "__main__":
+    import os
+    os.environ["DISPLAY"] = "localhost:10.0"
     main("keywords_data.p")

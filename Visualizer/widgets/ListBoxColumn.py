@@ -2,6 +2,17 @@
 # 7/8/2017
 
 import functools
+import sys
+
+windows, linux, osx = False, False, False
+if sys.platform == 'win32':
+    windows = True
+elif sys.platform == 'linux':
+    linux = True # Assume that a display exists, cause if one doesn't exist you should have crashed a long time ago
+elif sys.platform == 'darwin':
+    osx = True
+else:
+    print("Error: Unknown system platform type")
 
 import tkinter as tk
 
@@ -19,30 +30,35 @@ class ListBoxColumn(tk.Frame):
             listBox.pack(side=tk.LEFT, fill=tk.Y, expand=1)
 
             listBox.bind("<<ListboxSelect>>", self._on_select)
+            if windows or osx:
+                listBox.bind("<MouseWheel>", self._yscroll)
+            else:
+                listBox.bind("<Button-4>", functools.partial(self._yscroll, direction=-1))
+                listBox.bind("<Button-5>", functools.partial(self._yscroll, direction=1))
 
-        self.xscrollbar = None
-        self.yscrollbar = None
+
+        self.xscrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
+        self.lists[0].config(xscrollcommand=self.xscrollbar.set)
+        self.xscrollbar.config(command=self._xscroll)
+
+        self.yscrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
+        self.lists[0].config(yscrollcommand=self.yscrollbar.set)
+        self.yscrollbar.config(command=self._yscroll)
 
         self.select_handlers = list()
 
         self.add_select_handler(self._sync_selection)
 
-    def add_xscrollbar(self):
-        self.xscrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
-        self.config(xscrollcommand=self.xscrollbar.set)
-        self.xscrollbar.config(command=self.xview)
+    def show_xscrollbar(self):
         self.xscrollbar.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
 
-    def add_yscrollbar(self):
-        self.yscrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
-        self.config(yscrollcommand=self.yscrollbar.set)
-        self.yscrollbar.config(command=self.yview)
+    def show_yscrollbar(self):
         self.yscrollbar.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
-    def remove_xscrollbar(self):
+    def hide_xscrollbar(self):
         self._remove_scrollbar(self.xscrollbar)
-        
-    def remove_yscrollbar(self):
+
+    def hide_yscrollbar(self):
         self._remove_scrollbar(self.yscrollbar)
 
     def _remove_scrollbar(self, scrollbar):
@@ -131,8 +147,10 @@ class ListBoxColumn(tk.Frame):
     def xview_scroll(self, number, what):
         for listBox in self.lists:
             listBox.xview_scroll(number, what)
+        return "break"
 
     def yview(self, *what):
+        print("YView: " + str(what))
         for listBox in self.lists:
             listBox.yview(*what)
 
@@ -143,6 +161,7 @@ class ListBoxColumn(tk.Frame):
     def yview_scroll(self, number, what):
         for listBox in self.lists:
             listBox.yview_scroll(number, what)
+        return "break"
 
     def bind(self, sequence=None, func=None, add=None):
         def handler(event):
@@ -181,3 +200,18 @@ class ListBoxColumn(tk.Frame):
                 max_width = len(str(item))
 
         listBox.config(width=max_width)
+
+    def _tmp(self, *args):
+        return self._yscroll(args[0])
+
+    def _yscroll(self, event, direction=None):
+        if windows:
+            return self.yview_scroll(int(event.delta / -120), "units")
+        elif linux:
+            return self.yview_scroll(direction, "units")
+        elif osx:
+            return self.yview_scroll(int(event.delta), "units")
+
+
+    def _xscroll(self, event):
+        return self.xview_scroll(int(event.delta/-120), "units")
