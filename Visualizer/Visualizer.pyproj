@@ -23,6 +23,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="data.py" />
     <Compile Include="frames\ListFrame.py" />
     <Compile Include="frames\MatplotlibFrame.py" />
     <Compile Include="frames\PMIPlot.py" />

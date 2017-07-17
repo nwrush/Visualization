@@ -15,22 +15,31 @@ class TimeSeriesFrame(MatplotlibFrame):
         super(TimeSeriesFrame, self).__init__(Figure(), master=master, data_manager=data)
 
         # The canvas is the matplotlib stuff
-        #self.pack_canvas()
-        self.grid_canvas(row=0, column=0)
+        self.pack_canvas(side=tk.LEFT)
+        #self.grid_canvas(row=0, column=0)
         # The frame is the root of the "widget" everything else gets placed inside of it
-        #self.pack_frame(side=tk.LEFT, expand=1)
-        self.grid_frame(row=0, column=2, pady=(5, 0))
-
-        self.correlation_label = tk.Label(master=self.frame, background="red")
-        self.correlation_label.grid(row=0, column=1)
-        self.correlation = tk.StringVar()
-        self.correlation_label['textvariable'] = self.correlation
+        self.grid_frame(row=0, column=2)
 
         self.data = data
 
         self._init_plot()
 
         self.series = None
+
+        self._create_control_panel()
+
+    def _create_control_panel(self):
+        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
+        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+
+        self._correlation_header = tk.Label(self._control_panel, text="Correlation:")
+        self._correlation_header.pack(side=tk.TOP)
+
+        self._correlation_data = tk.DoubleVar()
+
+        self._correlation_label = tk.Label(self._control_panel, textvariable=self._correlation_data)
+        self._correlation_label.pack(side=tk.TOP)
+
 
     def _init_plot(self):
         self.axes.clear()
@@ -75,14 +84,14 @@ class TimeSeriesFrame(MatplotlibFrame):
 
     def get_correlation(self):
         correlation = np.corrcoef(self.series, rowvar=False)
-        self.correlation.set("Correlation = {0:.5f}".format(correlation[0,1]))
+        self._correlation_data.set(round(correlation[0,1], 5))
 
     def clear(self):
         self.series = None
         self._init_plot()
         self.redraw()
 
-        self.correlation.set("")
+        self._correlation_data.set(0)
 
     def select_relation_type(self, event):
         self.plot_idea_indexes(event.selected_indexes)

@@ -41,3 +41,17 @@ class Data():
         lower_indexes = np.tril_indices(self.pmi.shape[0])
         a[lower_indexes] = np.nan
         return a
+
+    def get_idea_names(self, indexes):
+        if isinstance(indexes, int):
+            return self.idea_names[indexes]
+
+        try:
+            names = list()
+            for index in indexes:
+                names.append(self.idea_names[index])
+            return names
+        except TypeError as err:
+            print(err)
+
+        return None

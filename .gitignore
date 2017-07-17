@@ -42,3 +42,8 @@ output/
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+
+## Custom files
+data/
+*.whl
+Visualizer/acl_example/

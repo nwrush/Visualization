@@ -39,24 +39,34 @@ class PMIPlot(MatplotlibFrame):
 
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
+        self.add_select_listener(self._add_selection)
 
         self._on_reset_listeners = set()
         self.add_reset_listener(self._reset_graph)
 
+        self._create_control_panel()
+
+    def _create_control_panel(self):
         self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
         self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
-
+        
         self.color_map = dict()
         self._color_samples = self._get_color_samples(self._control_panel)
-
+        
         self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._on_reset)
         self._reset_graph_btn.pack(side=tk.TOP, pady=10)
-
+        
         self._filter_by_header = tk.Label(master=self._control_panel, text="Filtered by: ")
         self._filter_by_header.pack(side=tk.TOP)
         self._filter_by_data = tk.StringVar()
         self._filter_by_label = tk.Label(master=self._control_panel, textvariable=self._filter_by_data, justify=tk.LEFT)
         self._filter_by_label.pack(side=tk.TOP)
+        
+        self._selected_header = tk.Label(master=self._control_panel, text="Selected Relations: ")
+        self._selected_header.pack(side=tk.TOP)
+        self._selected_data = tk.StringVar()
+        self._selected_label = tk.Label(master=self._control_panel, textvariable=self._selected_data, justify=tk.LEFT)
+        self._selected_label.pack(side=tk.TOP)
 
     def _init_plot__(self):
         """Reset the axes for plotting"""
@@ -180,16 +190,14 @@ class PMIPlot(MatplotlibFrame):
     def _change_selected_color(self, event):
         ind = event.ind[0]
 
+        if self._prev_selected_ind == ind:
+            return None
+
         if self._prev_selected_ind is not None:
             self.plot_data._edgecolors[self._prev_selected_ind] = self._point_colors[self._prev_selected_ind]
 
-        if self._prev_selected_ind == ind:
-            self.plot_data._edgecolors[self._prev_selected_ind] = self._point_colors[self._prev_selected_ind]
-            self._prev_selected_ind = None
-
-        else:
-            self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
-            self._prev_selected_ind = ind
+        self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
+        self._prev_selected_ind = ind
 
         self.redraw()
 
@@ -226,8 +234,15 @@ class PMIPlot(MatplotlibFrame):
     def _reset_graph(self):
         self.plot(sample=self.sample_size)
         self._filter_by_data.set("")
+        self._selected_data.set("")
         self.redraw()
 
+    def _add_selection(self, event):
+        self._selected_data.set("Banana")
+        names = self.data.get_idea_names(event.selected_indexes)
+        self._selected_data.set("\n".join(names))
+
+            
 def get_row_col(n, i):
     """
     Given the index of a data point of an nxn strictly upper triangular matrix (a_ij = 0 for i>=j),
