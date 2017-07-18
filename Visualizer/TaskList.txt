@@ -9,11 +9,10 @@
 --Bugfix
 
 --Wishlist
-7/2/17: Find a better way to layout the time series plot correlation number
 7/2/17: Better looking frames
 7/5/17: More logical way to decide which element was picked in case of conflict
 7/5/17: Drag box selection of points with zooming?
-7/5/17: Parameter object that can be passed to frames to specify format (visual styles)
+7/5/17: Parameter object that can be passed to frames to specify format (visual styles)| 7/17/17 Exists on LayoutConfiguration branch but is rather messy
 
 --Done (please mention the commit name here too)
 7/2/17: Refactor code to make it easier to work with | 7/5/17 (abf2d55)
@@ -26,3 +25,4 @@
 7/7/17: Verify correlation coefficients (NOCOMMIT) | 7/11/17
 7/13/17: Button names aren't correct, (tryst and friends are flipped) | 7/14/17 (f37289f)
 7/8/17: Synchronize the scrolling of ListBoxColumn lists | 7/14/17 (4931ce0)
+7/2/17: Find a better way to layout the time series plot correlation number | 7/17/17 (8bc42d5) TimeSeries control panel still could use work
