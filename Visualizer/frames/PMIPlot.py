@@ -3,6 +3,7 @@
 
 import math
 import tkinter as tk
+import tkinter.ttk as ttk
 
 import matplotlib.cm as cm
 import matplotlib.colors as colors
@@ -61,6 +62,9 @@ class PMIPlot(MatplotlibFrame):
         self._filter_by_data = tk.StringVar()
         self._filter_by_label = tk.Label(master=self._control_panel, textvariable=self._filter_by_data, justify=tk.LEFT)
         self._filter_by_label.pack(side=tk.TOP)
+
+        self._seperator = ttk.Separator(master=self._control_panel, orient=tk.HORIZONTAL)
+        self._seperator.pack(side=tk.TOP, expand=1, fill=tk.X, pady=(5,10))
         
         self._selected_header = tk.Label(master=self._control_panel, text="Selected Relations: ")
         self._selected_header.pack(side=tk.TOP)
