@@ -21,6 +21,15 @@ class MatplotlibFrame(VisualizerFrame):
         self.canvas.get_tk_widget().pack(**kwargs)
     def grid_canvas(self, **kwargs):
         self.canvas.get_tk_widget().grid(**kwargs)
+       
+    def display_canvas(self, manager, **kwargs):
+        if manager == "pack":
+            return self.pack_canvas(**kwargs)
+        elif manager == "grid":
+            return self.grid_canvas(**kwargs)
+        else:
+            print("Invalid geometry manager")
+        return None
 
     def redraw(self):
         self.canvas.draw()

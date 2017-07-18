@@ -18,9 +18,9 @@ def _sort_by_strength(data, strength_index=2):
 
 class RelationTypeFrame(VisualizerFrame):
 
-    def __init__(self, master, data):
+    def __init__(self, master, data, frame_args=None):
         super(RelationTypeFrame, self).__init__(master=master, data_manager=data)
-        self.grid_frame(row=1, column=0, sticky="NWSE", padx=(0, 10))
+        self.display_frame(**frame_args)
 
         self.header = tk.Frame(master=self.frame)
         self.header.pack(side=tk.TOP, expand=1)

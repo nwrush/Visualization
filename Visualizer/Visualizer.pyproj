@@ -33,6 +33,9 @@
     <Compile Include="frames\TopRelations.py" />
     <Compile Include="frames\VisualizerFrame.py" />
     <Compile Include="frames\__init__.py" />
+    <Compile Include="layout_reader.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MouseInteraction.py">
       <SubType>Code</SubType>
     </Compile>
@@ -62,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Keywords.config" />
+    <Content Include="layout.json" />
     <Content Include="TaskList.txt" />
   </ItemGroup>
   <ItemGroup>

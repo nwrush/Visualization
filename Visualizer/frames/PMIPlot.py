@@ -13,11 +13,11 @@ from frames.MatplotlibFrame import MatplotlibFrame
 
 class PMIPlot(MatplotlibFrame):
 
-    def __init__(self, master, data):
+    def __init__(self, master, data, frame_args=None, canvas_args=None):
         super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
-        self.grid_frame(row=0, column=1, sticky="WE")
+        self.display_frame(**frame_args)
 
-        self.pack_canvas(side=tk.LEFT)
+        self.display_canvas(**canvas_args)
 
         self.plot_data = None
         self.idea_indexes = None

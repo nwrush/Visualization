@@ -11,15 +11,17 @@ from frames.MatplotlibFrame import MatplotlibFrame
 
 class TimeSeriesFrame(MatplotlibFrame):
 
-    def __init__(self, master, data):
+    def __init__(self, master, data, canvas_args=None, frame_args=None, **args):
         super(TimeSeriesFrame, self).__init__(Figure(), master=master, data_manager=data)
 
         # The canvas is the matplotlib stuff
-        self.pack_canvas(side=tk.LEFT)
+        #self.pack_canvas(side=tk.LEFT)
+        self.display_canvas(**canvas_args)
         #self.grid_canvas(row=0, column=0)
         # The frame is the root of the "widget" everything else gets placed inside of it
-        self.grid_frame(row=0, column=2)
-
+        #self.grid_frame(row=0, column=2)
+        self.display_frame(**frame_args)
+        
         self.data = data
 
         self._init_plot()

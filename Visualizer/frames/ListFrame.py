@@ -7,10 +7,10 @@ from frames.VisualizerFrame import VisualizerFrame
 
 class ListFrame(VisualizerFrame):
     """description of class"""
-    def __init__(self, master, data=None):
+    def __init__(self, master, data=None, frame_args=None):
         super(ListFrame, self).__init__(master, data_manager=data)
 
-        self.grid_frame(row=0, column=0, sticky="NWSE", padx=(0, 10))
+        self.display_frame(**frame_args)
 
         self.title = tk.Label(master=self.frame, text="Topics")
         self.title.pack(side=tk.TOP, fill=tk.X)

@@ -14,6 +14,7 @@ from frames.PMIPlot import PMIPlot
 from frames.ListFrame import ListFrame
 from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
+import layout_reader
 
 """
 GUI creation
@@ -21,6 +22,8 @@ GUI creation
 
 def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     root = tk.Tk()
+
+    layout = layout_reader.load_layouts()
 
     def exit_callback():
         root.quit()
@@ -31,20 +34,20 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     data_manager = Data(pmi_matrix, ts_correlation, ts_matrix, idea_names, x_vals)
 
-    ts = TimeSeriesFrame(master=root, data=data_manager)
-    pmi = PMIPlot(master=root, data=data_manager)
+    ts = TimeSeriesFrame(master=root, data=data_manager, **layout["MatplotlibCanvas"], **layout["TimeSeries"])
+    pmi = PMIPlot(master=root, data=data_manager, **layout["MatplotlibCanvas"], **layout["PMI"])
 
-    idea_list = ListFrame(master=root, data=data_manager)
+    idea_list = ListFrame(master=root, data=data_manager, **layout["RelationList"])
     idea_list.add_items(idea_names.values())
     idea_list.update_width()
 
-    relation_types = RelationTypeFrame(master=root, data=data_manager)
+    relation_types = RelationTypeFrame(master=root, data=data_manager, **layout["RelationTypes"])
     relation_types.color_buttons(pmi.color_map)
 
-    top_relation_1 = TopRelations(master=root, data=data_manager, position={"row":1, "column":1}, topic_index=0)
+    top_relation_1 = TopRelations(master=root, data=data_manager, topic_index=0, **layout["RelationFrame1"])
     top_relation_1.set_idea_index(0)
 
-    top_relation_2 = TopRelations(master=root, data=data_manager, position={"row":1, "column":2}, topic_index=1)
+    top_relation_2 = TopRelations(master=root, data=data_manager, topic_index=1, **layout["RelationFrame2"])
     top_relation_2.set_idea_index(10)
 
     pmi.add_select_listener(ts.plot_idea_indexes_event)

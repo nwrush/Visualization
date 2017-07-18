@@ -11,9 +11,9 @@ from widgets.ListBoxColumn import ListBoxColumn
 
 class TopRelations(VisualizerFrame):
     
-    def __init__(self, master, data, position={}, topic_index=0):
+    def __init__(self, master, data, position={}, topic_index=0, frame_args=None):
         super(TopRelations, self).__init__(master, data_manager=data)
-        self.grid_frame(**position)
+        self.display_frame(**frame_args)
 
         self.title_text = tk.StringVar()
         self.title_text.set("Selected Relation: ")
