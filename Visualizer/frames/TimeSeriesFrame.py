@@ -46,6 +46,7 @@ class TimeSeriesFrame(MatplotlibFrame):
         self.axes.set_title("Time Series")
         self.axes.set_xlabel("Year")
         self.axes.set_ylabel("Frequency")
+        self.axes.set_ylim([0, 1])
 
     def plot_series(self, y, name=None, redraw=True):
         self._add_series(y)

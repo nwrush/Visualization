@@ -5,6 +5,8 @@
 7/5/17: Don't assume with the datestamps and step sizes
 7/6/17: Run in a profiler to see what's taking time on start
 7/7/17: Allow dynamically set (user defined) colors for plots
+7/19/17: Make the settings for the file/directory dialog boxes more reasonable
+7/19/17: Don't freeze the UI when you run the subprocess
 
 --Bugfix
 
