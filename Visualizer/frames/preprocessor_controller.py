@@ -2,6 +2,8 @@
 # 7/18/17
 
 import os.path
+from pathlib import Path
+import subprocess
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -31,7 +33,7 @@ class InputField():
 
 def create_option_menu(field, options, row):
     var = field._var = tk.StringVar()
-    field.data_field = tk.OptionMenu(field.frame, var, *options)
+    field.data_field = tk.OptionMenu(field.frame, var, *options, command=None)
     field.data_field.grid(row=row, column=1)
     field._var.set(options[0])
 
@@ -72,6 +74,10 @@ def get_directory_factory(field):
     return callback
 
 
+def format_path(value):
+    return str(Path(value))
+
+
 class PreprocessorController(VisualizerFrame):
 
     def __init__(self, master):
@@ -86,6 +92,7 @@ class PreprocessorController(VisualizerFrame):
         self.adv_options.pack(side=tk.TOP, fill=tk.X, expand=1)
 
         self._options = dict()
+        self._flags = dict()
         self._create_options()
 
         self.run = tk.Button(master=self.frame, text="Run Preprocessor", command=self._start)
@@ -93,6 +100,11 @@ class PreprocessorController(VisualizerFrame):
 
     def _create_options(self):
         row = 0
+
+        run_type = InputField(self.basic_options, "option", row, label_text="Option: ")
+        create_option_menu(run_type, ["keywords", "topics"], row)
+        self._options["option"] = run_type
+        row += 1
 
         input_file = InputField(self.basic_options, "input_file", row, label_text="Input File:")
         create_entry(input_file, row)
@@ -112,16 +124,16 @@ class PreprocessorController(VisualizerFrame):
         self._options["final_output_dir"] = final_output_dir
         row += 1
 
-        mallet_bin_dir = InputField(self.basic_options, "mallet_bin_dir", row, label_text="Mallet Bin Directory:")
-        create_entry(mallet_bin_dir, row)
-        create_button(mallet_bin_dir, row, get_directory_factory(mallet_bin_dir))
-        self._options["mallet_bin_dir"] = mallet_bin_dir
-        row += 1
-
         background_file = InputField(self.basic_options, "background_file", row, label_text="Background File:")
         create_entry(background_file, row)
         create_button(background_file, row, get_file_factory(background_file))
         self._options["background_file"] = background_file
+        row += 1
+
+        mallet_bin_dir = InputField(self.basic_options, "mallet_bin_dir", row, label_text="Mallet Bin Directory:")
+        create_entry(mallet_bin_dir, row)
+        create_button(mallet_bin_dir, row, get_directory_factory(mallet_bin_dir))
+        self._options["mallet_bin_dir"] = mallet_bin_dir
         row += 1
 
         group_by = InputField(self.basic_options, "group_by", row, label_text="Group By:")
@@ -141,18 +153,30 @@ class PreprocessorController(VisualizerFrame):
 
         tokenize = InputField(self.adv_options, "tokenize", row, label_text="Tokenize: ")
         create_checkbox(tokenize, row)
-        self._options["tokenize"] = tokenize
+        self._flags["tokenize"] = tokenize
         row += 1
 
         lemmatize = InputField(self.adv_options, "lemmatize", row, label_text="Lemmatize: ")
         create_checkbox(lemmatize, row)
-        self._options["lemmatize"] = lemmatize
+        self._flags["lemmatize"] = lemmatize
         row += 1
 
         nostop = InputField(self.adv_options, "nostopwords", row, label_text="No Stop Words: ")
         create_checkbox(nostop, row)
-        self._options["nostopwords"] = nostop
+        self._flags["nostopwords"] = nostop
         row += 1
+
+        def toggle_fields(*args):
+            value = run_type._var.get()
+            if value == "keywords":
+                mallet_bin_dir.data_field['state'] = tk.DISABLED
+                background_file.data_field['state'] = tk.NORMAL
+            elif value == "topics":
+                mallet_bin_dir.data_field['state'] = tk.NORMAL
+                background_file.data_field['state'] = tk.DISABLED
+
+        run_type._var.trace('w', toggle_fields)
+        toggle_fields()
 
     def _start(self):
         valid = self._validate_params()
@@ -168,6 +192,23 @@ class PreprocessorController(VisualizerFrame):
         return valid
 
     def _run_preprocessor(self):
-        args = ["--{0} {1}".format(key, value.get_value()) for key, value in self._options.items()]
+        args = list()
+        for name, field in self._options.items():
+            if field.get_value():
+                args.append("--" + name)
+                args.append(field.get_value())
 
-        pass
+        for name, field in self._flags.items():
+            if field.get_value():
+                args.append("--"+name)
+
+        args.append("--no_create_graphs")
+
+        output_name = "banana.p"
+        args.extend(["--objects_location", output_name])
+
+        args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "main.py"] + args
+
+        subprocess.run(args, cwd=".\\idea_relations")
+        self.output_name = output_name
+        print("Done")

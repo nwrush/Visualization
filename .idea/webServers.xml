@@ -10,6 +10,9 @@
           <option name="port" value="1255" />
         </fileTransfer>
       </webServer>
+      <webServer id="b3edfe00-7826-4eee-8d0f-400dd0db52ba" name="Integrated" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="C:\Users\rushni\Documents\dev\Clean\Visualizer" accessType="MOUNT" />
+      </webServer>
     </option>
   </component>
 </project>
