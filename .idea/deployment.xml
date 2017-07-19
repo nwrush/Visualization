@@ -2,6 +2,18 @@
 <project version="4">
   <component name="PublishConfigData" serverName="Zin" compareModeInSync="SIZE">
     <serverData>
+      <paths name="Integrated">
+        <serverdata>
+          <mappings>
+            <mapping deploy="." local="$PROJECT_DIR$/Visualizer" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/venv" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/Visualizer.pyproj" />
+            <excludedPath local="true" path="$PROJECT_DIR$/Visualizer/Scripts" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
       <paths name="Zin">
         <serverdata>
           <mappings>
