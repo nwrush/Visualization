@@ -13,7 +13,7 @@ from frames.VisualizerFrame import VisualizerFrame
 
 class InputField():
 
-    def __init__(self, master, name, row, label_text=None):
+    def __init__(self, master, name, row, label_text=None, variable_fmt=None):
         self.frame = master
 
         self.name = name
@@ -27,8 +27,13 @@ class InputField():
 
         self.button = None
 
+        self.variable_callback = variable_fmt
+
     def get_value(self):
-        return self._var.get()
+        if self.variable_callback is None or not self._var.get():
+            return self._var.get()
+        else:
+            return self.variable_callback(self._var.get())
 
 
 def create_option_menu(field, options, row):
@@ -112,13 +117,15 @@ class PreprocessorController(VisualizerFrame):
         self._options["input_file"] = input_file
         row += 1
 
-        data_output_dir = InputField(self.basic_options, "data_output_dir", row, label_text="Output Directory:")
+        data_output_dir = InputField(self.basic_options, "data_output_dir", row, label_text="Output Directory:",
+                                     variable_fmt=format_path)
         create_entry(data_output_dir, row)
         create_button(data_output_dir, row, get_directory_factory(data_output_dir))
         self._options["data_output_dir"] = data_output_dir
         row += 1
 
-        final_output_dir = InputField(self.basic_options, "final_output_dir", row, label_text="Final Output Directory:")
+        final_output_dir = InputField(self.basic_options, "final_output_dir", row, label_text="Final Output Directory:",
+                                      variable_fmt=format_path)
         create_entry(final_output_dir, row)
         create_button(final_output_dir, row, get_directory_factory(final_output_dir))
         self._options["final_output_dir"] = final_output_dir
