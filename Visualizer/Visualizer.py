@@ -14,6 +14,7 @@ from frames.PMIPlot import PMIPlot
 from frames.ListFrame import ListFrame
 from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
+from frames.preprocessor_controller import PreprocessorController
 
 """
 GUI creation
@@ -95,12 +96,13 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
     # Preprocessor Controller
     preprocessor_frame = tk.Frame(master=notebook)
     notebook.add(preprocessor_frame, text="Preprocessor")
+    controller = PreprocessorController(master=preprocessor_frame)
     # Don't ask why, but you don't need to pack frames you place inside the notebook
     # probably because the notebook handles that for you
     visualizer_frame = tk.Frame(master=notebook)
     notebook.add(visualizer_frame, text="Visualizer")
 
-    create_preprocessor(preprocessor_frame)
+    # create_preprocessor(preprocessor_frame)
     create_visualizer(data_manager, visualizer_frame)
 
     tk.mainloop()
@@ -120,17 +122,8 @@ def main(fname):
     gui(pmi, ts_correlation, ts_matrix, idea_names)
 
 def test():
-    parent = tk.Tk()
-    p = ttk.Panedwindow(parent, orient=tk.VERTICAL)
-    # first pane, which would get widgets gridded into it:
-    f1 = ttk.Labelframe(p, text='Pane1', width=100, height=100)
-    f2 = ttk.Labelframe(p, text='Pane2', width=100, height=100)  # second pane
-    p.add(f1)
-    p.add(f2)
-
-    p.pack()
-
-    tk.mainloop()
+    import tkinter.filedialog as fd
+    print(fd.askopenfilename())
 
 if __name__ == "__main__":
     # test()
