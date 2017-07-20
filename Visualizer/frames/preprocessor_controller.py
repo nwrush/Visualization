@@ -214,8 +214,10 @@ class PreprocessorController(VisualizerFrame):
         output_name = "banana.p"
         args.extend(["--objects_location", output_name])
 
-        args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "main.py"] + args
+        args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "-u", "main.py"] + args
 
         subprocess.run(args, cwd=".\\idea_relations")
         self.output_name = output_name
         print("Done")
+
+
