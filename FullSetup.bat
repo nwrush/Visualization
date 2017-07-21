@@ -12,7 +12,7 @@ REM This script should be executed from where you want to root the application
 git submodule init
 git submodule update
 
-mkdir ""%AppPath%"
+mkdir "%AppPath%"
 
 REM Install the visualizer
 xcopy "%VisPath%\*.py" "%AppPath%\"
@@ -30,7 +30,7 @@ call .\venv\Scripts\deactivate.bat
 cd %ROOT%
 
 REM Install the preprocessor
-mkdir "%AppPath%\idea_relations%"
+mkdir "%AppPath%\idea_relations"
 
 xcopy "idea_relations\*.py" "%AppPath%\idea_relations\"
 xcopy "idea_relations\templates" "%AppPath%\idea_relations\templates\"
