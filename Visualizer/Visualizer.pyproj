@@ -27,6 +27,7 @@
     <Compile Include="frames\ListFrame.py" />
     <Compile Include="frames\MatplotlibFrame.py" />
     <Compile Include="frames\PMIPlot.py" />
+    <Compile Include="frames\preprocessor_controller.py" />
     <Compile Include="frames\RelationTypeFrame.py" />
     <Compile Include="frames\TimeSeriesFrame.py" />
     <Compile Include="frames\TimeSeriesVisualizer.py" />

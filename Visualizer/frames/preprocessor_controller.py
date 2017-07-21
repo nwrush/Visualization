@@ -3,7 +3,9 @@
 
 import os.path
 from pathlib import Path
+import queue
 import subprocess
+import threading
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -85,7 +87,7 @@ def format_path(value):
 
 class PreprocessorController(VisualizerFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, finished_callback=None):
         super(PreprocessorController, self).__init__(master=master)
 
         self.pack_frame()
@@ -95,13 +97,20 @@ class PreprocessorController(VisualizerFrame):
 
         self.adv_options = ttk.LabelFrame(master=self.frame, text="Advanced")
         self.adv_options.pack(side=tk.TOP, fill=tk.X, expand=1)
+        
+        self.status_field = ttk.LabelFrame(master=self.frame, text="Status")
+        self.status_field.pack(side=tk.TOP, fill=tk.X, expand=1)
 
         self._options = dict()
         self._flags = dict()
         self._create_options()
+        self._create_status()
 
-        self.run = tk.Button(master=self.frame, text="Run Preprocessor", command=self._start)
-        self.run.pack(side=tk.TOP)
+        self._preprocessor_thread = None
+        self._message_queue = queue.Queue()
+        self._callback = finished_callback
+
+        self.output_name = None
 
     def _create_options(self):
         row = 0
@@ -185,6 +194,14 @@ class PreprocessorController(VisualizerFrame):
         run_type._var.trace('w', toggle_fields)
         toggle_fields()
 
+    def _create_status(self):
+        self.run = tk.Button(master=self.status_field, text="Run Preprocessor", command=self._start)
+        self.run.pack(side=tk.TOP, pady=(0, 2))
+
+        self.progress = ttk.Progressbar(master=self.status_field, mode="indeterminate")
+        self.progress.pack(side=tk.LEFT, expand=1, fill=tk.X)
+        self.progress.pack_forget()
+
     def _start(self):
         valid = self._validate_params()
         if not valid:
@@ -215,9 +232,29 @@ class PreprocessorController(VisualizerFrame):
         args.extend(["--objects_location", output_name])
 
         args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "-u", "main.py"] + args
+        cwd = ".\\idea_relations"
 
-        subprocess.run(args, cwd=".\\idea_relations")
-        self.output_name = output_name
-        print("Done")
+        self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner, args=(args, cwd))
+        self._preprocessor_thread.start()
+        self.frame.after(500, self._poll_queue)
 
+        self.output_name = os.path.join(cwd, output_name)
 
+    def _preprocessor_thread_runner(self, args, cwd):
+        self.progress.pack()
+        self.progress.start()
+
+        output = subprocess.run(args, cwd=cwd)
+
+        self._message_queue.put(output.returncode)
+        self.progress.stop()
+
+    def _poll_queue(self):
+        if not self._message_queue.empty():
+            return_code = self._message_queue.get()
+            print(return_code)
+            
+            if self._callback is not None:
+                self._callback(self)
+        else:
+            self.frame.after(500, func=self._poll_queue)

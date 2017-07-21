@@ -8,6 +8,7 @@ import tkinter.ttk as ttk
 import matplotlib
 matplotlib.use("TKAgg")
 
+import data
 from data import Data
 from frames.TimeSeriesFrame import TimeSeriesFrame
 from frames.PMIPlot import PMIPlot
@@ -78,7 +79,14 @@ def create_visualizer(data, parent):
     relation_types.add_select_listener(top_relation_2.set_idea_event)
 
 
-def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
+def gui(data_fname=None):
+    x_vals = [i for i in range(1980, 2015)] # The actual time deltas should be pulled from the preprocessor and used here
+
+    data_manager = None
+    if data_fname is not None:
+        data_manager = data.load_data(data_fname)
+        data_manager.x_values = x_vals
+
     root = tk.Tk()
 
     notebook = ttk.Notebook(master=root)
@@ -89,21 +97,23 @@ def gui(pmi_matrix, ts_correlation, ts_matrix, idea_names):
 
     root.protocol("WM_DELETE_WINDOW", exit_callback)
 
-    x_vals = [i for i in range(1980, 2015)] # The actual time deltas should be pulled from the preprocessor and used here
-
-    data_manager = Data(pmi_matrix, ts_correlation, ts_matrix, idea_names, x_vals)
-
     # Preprocessor Controller
     preprocessor_frame = tk.Frame(master=notebook)
-    notebook.add(preprocessor_frame, text="Preprocessor")
-    controller = PreprocessorController(master=preprocessor_frame)
-    # Don't ask why, but you don't need to pack frames you place inside the notebook
-    # probably because the notebook handles that for you
     visualizer_frame = tk.Frame(master=notebook)
+
+    def callback(controller):
+        print(controller.output_name)
+        data_manager = data.load_data(controller.output_name)
+        data_manager.x_values = x_vals
+        create_visualizer(data_manager, visualizer_frame)
+
+    notebook.add(preprocessor_frame, text="Preprocessor")
+    controller = PreprocessorController(master=preprocessor_frame, finished_callback=callback)
+
     notebook.add(visualizer_frame, text="Visualizer")
 
-    # create_preprocessor(preprocessor_frame)
-    create_visualizer(data_manager, visualizer_frame)
+    if data_manager is not None:
+        create_visualizer(data_manager, visualizer_frame)
 
     tk.mainloop()
     print("Boo")
@@ -115,11 +125,12 @@ def is_square_matrix(a):
 
 def main(fname):
     # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
-    pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
-    assert is_square_matrix(pmi)
-    assert is_square_matrix(ts_correlation)
+    #pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
+    #assert is_square_matrix(pmi)
+    #assert is_square_matrix(ts_correlation)
 
-    gui(pmi, ts_correlation, ts_matrix, idea_names)
+    #gui(pmi, ts_correlation, ts_matrix, idea_names)
+    gui()
 
 def test():
     import tkinter.filedialog as fd

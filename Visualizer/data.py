@@ -1,6 +1,9 @@
 # Nikko Rush
 # 7/10/2017
 
+import os.path
+import pickle
+
 import numpy as np
 
 def reverse_dict(input):
@@ -15,9 +18,16 @@ def is_square(a):
     row, col = a.shape
     return row == col
 
+def load_data(fname):
+    if not os.path.isfile(fname):
+        print("Data file {0} doesn't exist".format(fname))
+        return None
+
+    return pickle.load(open(fname, 'rb'))
+
 class Data():
 
-    def __init__(self, pmi_matrix, ts_correlation_matrix, ts_matrix, idea_names, x_vals):
+    def __init__(self, pmi_matrix=None, ts_correlation_matrix=None, ts_matrix=None, idea_names=None, x_vals=None):
         self.pmi = pmi_matrix
         self.ts_correlation = ts_correlation_matrix
         self.ts_matrix = ts_matrix
