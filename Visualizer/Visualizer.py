@@ -16,6 +16,7 @@ from frames.ListFrame import ListFrame
 from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
 from frames.preprocessor_controller import PreprocessorController
+import menu
 
 """
 GUI creation
@@ -98,14 +99,28 @@ def gui(data_fname=None):
     root.protocol("WM_DELETE_WINDOW", exit_callback)
 
     # Preprocessor Controller
+    menubar = menu.Menubar(root)
+    root.config(menu=menubar)
+
     preprocessor_frame = tk.Frame(master=notebook)
     visualizer_frame = tk.Frame(master=notebook)
 
-    def callback(controller):
+    def callback(controller, rtn_code):
+        if rtn_code != 0:
+            print("Error Running Preprocessor")
+            return None
+
         print(controller.output_name)
         data_manager = data.load_data(controller.output_name)
         data_manager.x_values = x_vals
         create_visualizer(data_manager, visualizer_frame)
+
+    def open_handler(fname):
+        data_manager = data.load_data(fname)
+        data_manager.x_values = x_vals
+        create_visualizer(data_manager, visualizer_frame)
+
+    menubar._open_handlers.add(open_handler)
 
     notebook.add(preprocessor_frame, text="Preprocessor")
     controller = PreprocessorController(master=preprocessor_frame, finished_callback=callback)

@@ -5,7 +5,7 @@ Set ROOT=%CD%
 Set AppPath=Application
 Set VisPath=Visualizer
 
-Set PythonPath="C:\Users\rushni\AppData\Local\Programs\Python\Python35\python.exe"
+Set PythonPath="C:\Program Files\Python35\python.exe"
 
 REM This script should be executed from where you want to root the application
 
@@ -50,5 +50,5 @@ pip install -r requirements.txt
 
 call .\preprocessor_venv\Scripts\deactivate.bat
 
-cd %AppPath%
+cd %ROOT%\%AppPath%
 call .\venv\Scripts\activate.bat

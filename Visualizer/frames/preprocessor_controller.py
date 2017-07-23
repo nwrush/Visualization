@@ -1,6 +1,7 @@
 # Nikko Rush
 # 7/18/17
 
+import os
 import os.path
 from pathlib import Path
 import queue
@@ -231,8 +232,12 @@ class PreprocessorController(VisualizerFrame):
         output_name = "banana.p"
         args.extend(["--objects_location", output_name])
 
-        args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "-u", "main.py"] + args
-        cwd = ".\\idea_relations"
+        if os.name == 'nt':
+            args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "-u", "main.py"] + args
+            cwd = ".\\idea_relations"
+        else:
+            args = ["idea_relations/preprocessor_venv/Scripts/python.exe", "-u", "main.py"] + args
+            cwd = "./idea_relations"
 
         self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner, args=(args, cwd))
         self._preprocessor_thread.start()
@@ -255,6 +260,6 @@ class PreprocessorController(VisualizerFrame):
             print(return_code)
             
             if self._callback is not None:
-                self._callback(self)
+                self._callback(self, return_code)
         else:
             self.frame.after(500, func=self._poll_queue)

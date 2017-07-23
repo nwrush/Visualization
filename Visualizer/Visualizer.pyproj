@@ -34,6 +34,9 @@
     <Compile Include="frames\TopRelations.py" />
     <Compile Include="frames\VisualizerFrame.py" />
     <Compile Include="frames\__init__.py" />
+    <Compile Include="menu.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MouseInteraction.py">
       <SubType>Code</SubType>
     </Compile>
