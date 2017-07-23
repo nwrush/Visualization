@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ROOT=$(pwd)
 
 AppPath=Application
@@ -29,10 +31,10 @@ cd $ROOT
 mkdir $AppPath/idea_relations
 
 cp idea_relations/*.py $AppPath/idea_relations/
-cp idea_relations/templates $AppPath/idea_relations/templates/
+cp -r idea_relations/templates $AppPath/idea_relations/templates/
 cp idea_relations/*.bat $AppPath/idea_relations/
 cp idea_relations/*.sh $AppPath/idea_relations/
-cp idea_relations/*.whl $AppPath/idea_relations/
+# cp idea_relations/*.whl $AppPath/idea_relations/
 cp idea_relations/requirements.txt $AppPath/idea_relations/requirements.txt
 
 cd $AppPath/idea_relations
