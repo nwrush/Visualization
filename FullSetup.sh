@@ -44,5 +44,5 @@ source preprocessor_venv/bin/activate
 pip install -r requirements.txt
 deactivate
 
-cd $Root/$AppPath
+cd $ROOT/$AppPath
 source venv/bin/activate
