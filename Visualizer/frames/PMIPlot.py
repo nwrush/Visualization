@@ -10,6 +10,7 @@ import matplotlib.colors as colors
 import numpy as np
 from matplotlib.figure import Figure
 
+import colors as visualizer_colors
 from frames.MatplotlibFrame import MatplotlibFrame
 
 class PMIPlot(MatplotlibFrame):
@@ -28,10 +29,19 @@ class PMIPlot(MatplotlibFrame):
 
         # TODO: Allow these to be set dynamically
         self.selected_color = "Black"
-        self.normalizer = colors.Normalize(vmin=0, vmax=1)
-        self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap="Reds"),
-                              cm.ScalarMappable(norm=self.normalizer, cmap="Greens"),
+        self.normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
+        self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", (19, 126, 109)),
+                              visualizer_colors.PMIColormap("PMITryst", (207, 98, 117)),
+                              visualizer_colors.PMIColormap("PMIHeadToHead", (152, 0, 2)),
+                              visualizer_colors.PMIColormap("PMIArmsRace", (68, 142, 228))]
+
+        # self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[0]),
+        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[1]),
+        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[2]),
+        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[3])]
+        self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap="Greens"),
                               cm.ScalarMappable(norm=self.normalizer, cmap="Oranges"),
+                              cm.ScalarMappable(norm=self.normalizer, cmap="Reds"),
                               cm.ScalarMappable(norm=self.normalizer, cmap="Blues")]
 
         self._prev_selected_ind = None

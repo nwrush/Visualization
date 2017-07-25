@@ -145,7 +145,7 @@ def main(fname):
     #assert is_square_matrix(ts_correlation)
 
     #gui(pmi, ts_correlation, ts_matrix, idea_names)
-    gui()
+    gui(fname)
 
 def test():
     import tkinter.filedialog as fd
