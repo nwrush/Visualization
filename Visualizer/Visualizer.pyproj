@@ -23,6 +23,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="colors.py" />
     <Compile Include="data.py" />
     <Compile Include="frames\ListFrame.py" />
     <Compile Include="frames\MatplotlibFrame.py" />
@@ -34,7 +35,16 @@
     <Compile Include="frames\TopRelations.py" />
     <Compile Include="frames\VisualizerFrame.py" />
     <Compile Include="frames\__init__.py" />
+    <Compile Include="images.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="menu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="menus\pmi_menu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="menus\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MouseInteraction.py">
@@ -70,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="frames\" />
+    <Folder Include="menus\" />
     <Folder Include="widgets\" />
   </ItemGroup>
   <PropertyGroup>

@@ -11,7 +11,9 @@ import numpy as np
 from matplotlib.figure import Figure
 
 import colors as visualizer_colors
+import images
 from frames.MatplotlibFrame import MatplotlibFrame
+from menus import pmi_menu
 
 class PMIPlot(MatplotlibFrame):
 
@@ -30,10 +32,15 @@ class PMIPlot(MatplotlibFrame):
         # TODO: Allow these to be set dynamically
         self.selected_color = "Black"
         self.normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
-        self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", (19, 126, 109)),
-                              visualizer_colors.PMIColormap("PMITryst", (207, 98, 117)),
-                              visualizer_colors.PMIColormap("PMIHeadToHead", (152, 0, 2)),
-                              visualizer_colors.PMIColormap("PMIArmsRace", (68, 142, 228))]
+
+        self._colors = [(19, 126, 109),
+                        (207, 98, 117),
+                        (152, 0, 2),
+                        (68, 142, 228)]
+        self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", self._colors[0]),
+                              visualizer_colors.PMIColormap("PMITryst", self._colors[1]),
+                              visualizer_colors.PMIColormap("PMIHeadToHead", self._colors[2]),
+                              visualizer_colors.PMIColormap("PMIArmsRace", self._colors[3])]
 
         # self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[0]),
         #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[1]),
@@ -58,8 +65,12 @@ class PMIPlot(MatplotlibFrame):
         self._create_control_panel()
 
     def _create_control_panel(self):
-        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
+        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
         self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+
+        self._gear_icon = images.load_image("gear-2-16.gif")
+        self._settings = tk.Button(master=self._control_panel, text="Test", image=self._gear_icon, command=pmi_menu.create_factory(self))
+        self._settings.pack(anchor=tk.NW)
         
         self.color_map = dict()
         self._color_samples = self._get_color_samples(self._control_panel)

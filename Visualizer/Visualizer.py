@@ -22,31 +22,6 @@ import menu
 GUI creation
 """
 
-def create_preprocessor(parent):
-    input_file = tk.Entry(master=parent)
-    input_file.pack()
-    data_output_dir = tk.Entry(master=parent)
-    data_output_dir.pack()
-    final_outut_dir = tk.Entry(master=parent)
-    final_outut_dir.pack()
-    mallet_bin_dir = tk.Entry(master=parent)
-    mallet_bin_dir.pack()
-    background_file = tk.Entry(master=parent)
-    background_file.pack()
-    group_by = ttk.LabelFrame(master=parent)
-    group_by.pack()
-    prefix = tk.Entry(master=parent)
-    prefix.pack()
-    num_ideas = tk.Entry(master=parent)
-    num_ideas.pack()
-    tokenize = tk.Checkbutton(master=parent)
-    tokenize.pack()
-    lemmatize = tk.Checkbutton(master=parent)
-    lemmatize.pack()
-    nostopwords = tk.Checkbutton(master=parent)
-    nostopwords.pack()
-
-
 def create_visualizer(data, parent):
     ts = TimeSeriesFrame(master=parent, data=data)
 
@@ -86,7 +61,8 @@ def gui(data_fname=None):
     data_manager = None
     if data_fname is not None:
         data_manager = data.load_data(data_fname)
-        data_manager.x_values = x_vals
+        if data_manager is not None:
+            data_manager.x_values = x_vals
 
     root = tk.Tk()
 
@@ -99,7 +75,7 @@ def gui(data_fname=None):
     root.protocol("WM_DELETE_WINDOW", exit_callback)
 
     # Preprocessor Controller
-    menubar = menu.Menubar(root)
+    menubar = menu.Menubar(root, data_manager)
     root.config(menu=menubar)
 
     preprocessor_frame = tk.Frame(master=notebook)

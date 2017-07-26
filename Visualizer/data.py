@@ -1,6 +1,7 @@
 # Nikko Rush
 # 7/10/2017
 
+import os
 import os.path
 import pickle
 

@@ -9,6 +9,8 @@ class VisualizerFrame(object):
         self.frame = tk.Frame(master=master)
         self.data = data_manager
 
+        self.frame.config(bd=2, relief=tk.GROOVE)
+
     def pack_frame(self, **kwargs):
         self.frame.pack(**kwargs)
     def grid_frame(self, **kwargs):
