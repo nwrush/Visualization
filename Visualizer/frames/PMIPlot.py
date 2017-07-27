@@ -38,10 +38,11 @@ class PMIPlot(MatplotlibFrame):
 
         # TODO: Allow these to be set dynamically
         self.selected_color = "Black"
-        self._colors = [(0, 68, 27,),
-                        (127, 39, 4),
-                        (103, 0, 12),
-                        (8, 48, 107)]
+        # Colors should be a list of four matplotlib color maps or rgb tuples
+        self._colors = ["Greens",
+                        "Oranges",
+                        "Reds",
+                        "Blues"]
 
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
@@ -119,20 +120,16 @@ class PMIPlot(MatplotlibFrame):
         
         self._colors = color_spec
 
-        #self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", color_spec[0]),
-        #                    visualizer_colors.PMIColormap("PMITryst", color_spec[1]),
-        #                    visualizer_colors.PMIColormap("PMIHeadToHead", color_spec[2]),
-        #                    visualizer_colors.PMIColormap("PMIArmsRace", color_spec[3])]
+        self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", color_spec[0]),
+                            visualizer_colors.PMIColormap("PMITryst", color_spec[1]),
+                            visualizer_colors.PMIColormap("PMIHeadToHead", color_spec[2]),
+                            visualizer_colors.PMIColormap("PMIArmsRace", color_spec[3])]
 
-        #self.color_mappers = [cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[0]),
-        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[1]),
-        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[2]),
-        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[3])]
-        self.color_mappers = [cm.ScalarMappable(norm=self._normalizer, cmap="Greens"),
-                              cm.ScalarMappable(norm=self._normalizer, cmap="Oranges"),
-                              cm.ScalarMappable(norm=self._normalizer, cmap="Reds"),
-                              cm.ScalarMappable(norm=self._normalizer, cmap="Blues")]
-        
+        self.color_mappers = [cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[0]),
+                              cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[1]),
+                              cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[2]),
+                              cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[3])]
+
         self.color_samples = dict()
         for mapper, name in zip(self.color_mappers, self.data.relation_types):
             r,g,b,a = mapper.to_rgba(0.7, bytes=True)
