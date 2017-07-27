@@ -42,7 +42,8 @@ class PMIMenu(object):
         
     def _get_color_button(self, index):
         def func():
-            rgb, hex = tk.colorchooser.askcolor()
+            rgb, hex = tk.colorchooser.askcolor(parent=self._window)
+            self._window.lift()
 
             self._colors[index][2] = rgb
 
@@ -61,9 +62,11 @@ class PMIMenu(object):
         return func
 
     def on_exit(self):
+        new_colors = []
         for index, color in enumerate(self._colors):
             _, _, rgb = color
             
-            self._parent._colors[index] = rgb
+            new_colors.append(rgb)
         
         self._window.destroy()
+        self._parent._update_colors(new_colors)

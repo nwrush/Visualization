@@ -17,10 +17,25 @@ class MatplotlibFrame(VisualizerFrame):
         self.figure = figure
         self.axes = figure.gca()
 
+        self._allow_redraw = True
+        self._redraw_requested = False
+
     def pack_canvas(self, **kwargs):
         self.canvas.get_tk_widget().pack(**kwargs)
     def grid_canvas(self, **kwargs):
         self.canvas.get_tk_widget().grid(**kwargs)
 
     def redraw(self):
-        self.canvas.draw()
+        if self._allow_redraw:
+            self.canvas.draw()
+        else:
+            self._redraw_requested = True
+
+    def allow_redraw(self):
+        self._allow_redraw = True
+        if self._redraw_requested:
+            self.redraw()
+
+    def prevent_redraw(self):
+        self._allow_redraw = False
+        self._redraw_requested = False

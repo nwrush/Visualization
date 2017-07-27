@@ -167,3 +167,6 @@ class RelationTypeFrame(VisualizerFrame):
     def color_buttons(self, color_map):
         for btn, name in zip(self.buttons, self.types):
             btn['background'] = color_map[name]
+
+    def color_changed(self, pmi_frame):
+        self.color_buttons(pmi_frame.color_samples)

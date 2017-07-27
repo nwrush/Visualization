@@ -1,6 +1,7 @@
 # Nikko Rush
 # 6/21/2017
 
+import functools
 import pickle
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -33,7 +34,8 @@ def create_visualizer(data, parent):
     idea_list.update_width()
 
     relation_types = RelationTypeFrame(master=parent, data=data)
-    relation_types.color_buttons(pmi.color_map)
+    relation_types.color_buttons(pmi.color_samples)
+    pmi.add_color_changed_listener(functools.partial(relation_types.color_changed, pmi))
 
     top_relation_1 = TopRelations(master=parent, data=data, position={"row": 1, "column": 1},
                                   topic_index=0)

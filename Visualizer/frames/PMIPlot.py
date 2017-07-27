@@ -21,7 +21,14 @@ class PMIPlot(MatplotlibFrame):
         super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
         self.grid_frame(row=0, column=1, sticky="WE")
 
+        self.prevent_redraw()
+
         self.pack_canvas(side=tk.LEFT)
+
+        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
+        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+
+        self._init_handlers()
 
         self.plot_data = None
         self.idea_indexes = None
@@ -31,49 +38,52 @@ class PMIPlot(MatplotlibFrame):
 
         # TODO: Allow these to be set dynamically
         self.selected_color = "Black"
-        self.normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
-
-        self._colors = [(19, 126, 109),
-                        (207, 98, 117),
-                        (152, 0, 2),
-                        (68, 142, 228)]
-        self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", self._colors[0]),
-                              visualizer_colors.PMIColormap("PMITryst", self._colors[1]),
-                              visualizer_colors.PMIColormap("PMIHeadToHead", self._colors[2]),
-                              visualizer_colors.PMIColormap("PMIArmsRace", self._colors[3])]
-
-        # self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[0]),
-        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[1]),
-        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[2]),
-        #                       cm.ScalarMappable(norm=self.normalizer, cmap=self._color_maps[3])]
-        self.color_mappers = [cm.ScalarMappable(norm=self.normalizer, cmap="Greens"),
-                              cm.ScalarMappable(norm=self.normalizer, cmap="Oranges"),
-                              cm.ScalarMappable(norm=self.normalizer, cmap="Reds"),
-                              cm.ScalarMappable(norm=self.normalizer, cmap="Blues")]
-
-        self._prev_selected_ind = None
-
-        self._init_handlers()
+        self._colors = [(0, 68, 27,),
+                        (127, 39, 4),
+                        (103, 0, 12),
+                        (8, 48, 107)]
 
         self._on_select_listeners = set()
         self.add_select_listener(self._change_selected_color)
         self.add_select_listener(self._add_selection)
+        self._prev_selected_ind = None
 
         self._on_reset_listeners = set()
         self.add_reset_listener(self._reset_graph)
 
+        self._on_color_changed_listeners = set()
+
+        self._normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
+        self._update_colors(self._colors)
+        self.add_color_changed_listener(self._color_plot)
+
         self._create_control_panel()
 
-    def _create_control_panel(self):
-        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
-        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+        self.allow_redraw()
 
+    def _create_control_panel(self):
         self._gear_icon = images.load_image("gear-2-16.gif")
         self._settings = tk.Button(master=self._control_panel, text="Test", image=self._gear_icon, command=pmi_menu.create_factory(self))
         self._settings.pack(anchor=tk.NW)
         
-        self.color_map = dict()
-        self._color_samples = self._get_color_samples(self._control_panel)
+        # Color Samples
+        self._color_sample_frame = tk.Frame(master=self._control_panel, borderwidth=2, relief=tk.RIDGE)
+        self._color_sample_frame.pack(side=tk.TOP, expand=1, fill=tk.X, anchor=tk.N, pady=10)
+
+        label = tk.Label(master=self._color_sample_frame, text="Legend:")
+        label.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2, pady=2)
+
+        sample_labels = dict()
+        for mapper, name in zip(self.color_mappers, self.data.relation_types):
+            sample = tk.Label(master=self._color_sample_frame, background=self.color_samples[name], text=name)
+            sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
+            sample_labels[name] = sample
+
+        def recolor_labels():
+            for name, sample in sample_labels.items():
+                sample['background']=self.color_samples[name]
+
+        self.add_color_changed_listener(recolor_labels)
         
         self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._on_reset)
         self._reset_graph_btn.pack(side=tk.TOP, pady=10)
@@ -93,13 +103,44 @@ class PMIPlot(MatplotlibFrame):
         self._selected_label = tk.Label(master=self._control_panel, textvariable=self._selected_data, justify=tk.LEFT)
         self._selected_label.pack(side=tk.TOP)
 
-    def _init_plot__(self):
+    def _init_plot_(self):
         """Reset the axes for plotting"""
         self.axes.clear()
         self.axes.set_title("PMI vs. Cooccurrence")
         self.axes.set_xlabel("Prevalence Correlation")
         self.axes.set_ylabel("Cooccurrence")
         self.axes.set_xlim([-1.0, 1.0])
+
+    def _update_colors(self, color_spec):
+        """
+        Takes a sequence of 4 color tuples, builds the color maps, if
+        the plot data isn't none will modify the plot colors
+        """
+        
+        self._colors = color_spec
+
+        #self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", color_spec[0]),
+        #                    visualizer_colors.PMIColormap("PMITryst", color_spec[1]),
+        #                    visualizer_colors.PMIColormap("PMIHeadToHead", color_spec[2]),
+        #                    visualizer_colors.PMIColormap("PMIArmsRace", color_spec[3])]
+
+        #self.color_mappers = [cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[0]),
+        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[1]),
+        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[2]),
+        #                      cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[3])]
+        self.color_mappers = [cm.ScalarMappable(norm=self._normalizer, cmap="Greens"),
+                              cm.ScalarMappable(norm=self._normalizer, cmap="Oranges"),
+                              cm.ScalarMappable(norm=self._normalizer, cmap="Reds"),
+                              cm.ScalarMappable(norm=self._normalizer, cmap="Blues")]
+        
+        self.color_samples = dict()
+        for mapper, name in zip(self.color_mappers, self.data.relation_types):
+            r,g,b,a = mapper.to_rgba(0.7, bytes=True)
+            hex = "#{:02x}{:02x}{:02x}".format(int(r), int(g), int(b))
+            self.color_samples[name] = hex
+
+        self._on_color_changed()
+        self.redraw()
 
     def plot(self, sample=None):
         # Generate a list of all strictly upper triangular indexes
@@ -129,16 +170,34 @@ class PMIPlot(MatplotlibFrame):
             xs.append(self.data.ts_correlation[i, j])
             ys.append(self.data.pmi[i, j])
 
-        self._point_colors = self._get_colors(xs, ys)
-        self._init_plot__()
-        plot = self.axes.scatter(xs, ys, color=self._point_colors, picker=True)
+        self._init_plot_()
+        self.plot_data = self.axes.scatter(xs, ys, picker=True)
 
-        self.plot_data = plot
         self.idea_indexes = points
         self.x_values = xs
         self.y_values = ys
 
+        self._color_plot()
+
+    def _color_plot(self):
+        colors = []
+        for x, y in zip(self.x_values, self.y_values):
+            distance = math.sqrt(x**2 + y**2)
+            if x >= 0 and y >= 0: # First quadrant, someone has to select zero
+                colors.append(self.color_mappers[0].to_rgba(distance))
+            elif x < 0 and y > 0: # Second quadrant
+                colors.append(self.color_mappers[1].to_rgba(distance))
+            elif x < 0 and y < 0: # Third quadrant
+                colors.append(self.color_mappers[2].to_rgba(distance))
+            elif x > 0 and y < 0: # Fourth quadrant
+                colors.append(self.color_mappers[3].to_rgba(distance))
+            else:
+                print("Fail")
+        self.plot_data.set_color(colors)
+        self._point_colors = colors
+
     def _get_colors(self, xs, ys):
+        print("_get_colors obsolete")
         colors = []
         for x, y in zip(xs, ys):
             distance = math.sqrt(x**2 + y**2)
@@ -155,25 +214,16 @@ class PMIPlot(MatplotlibFrame):
         return colors
 
     def _get_color_samples(self, parent):
+        print("_get_color_samples obsolete")
         frame = tk.Frame(master=parent, borderwidth=2, relief=tk.RIDGE)
         frame.pack(side=tk.TOP, expand=1, fill=tk.X, anchor=tk.N, pady=10)
 
         label = tk.Label(master=frame, text="Legend:")
         label.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2, pady=2)
 
-        bck_r, bck_g, bck_b = parent.winfo_rgb(parent['background'])
-        bck_r /= 256
-        bck_g /= 256
-        bck_b /= 256
         for mapper, name in zip(self.color_mappers, self.data.relation_types):
-            r, g, b, a = mapper.to_rgba(0.7, bytes=True)
-            r = int(r * (a/255) + bck_r * (1 - a/255))
-            g = int(g * (a / 255) + bck_g * (1 - a / 255))
-            b = int(b * (a / 255) + bck_b * (1 - a / 255))
-            hex_color = "#{:02x}{:02x}{:02x}".format(r, g, b)
-            sample = tk.Label(master=frame, background=hex_color, text=name)
+            sample = tk.Label(master=frame, background=self.color_samples[name], text=name)
             sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
-            self.color_map[name] = hex_color
 
         return frame
 
@@ -202,6 +252,15 @@ class PMIPlot(MatplotlibFrame):
     def remove_reset_listener(self, func):
         self._on_reset_listeners.discard(func)
 
+    def add_color_changed_listener(self, func):
+        self._on_color_changed_listeners.add(func)
+
+    def has_color_changed_listener(self, func):
+        return func in self._on_color_changed_listeners
+
+    def remove_color_changed_listener(self, func):
+        self._on_color_changed_listeners.discard(func)
+
     def _on_select(self, event):
         i, j = self.idea_indexes[event.ind[0]]
         event.selected_indexes = (i, j)
@@ -210,6 +269,10 @@ class PMIPlot(MatplotlibFrame):
 
     def _on_reset(self):
         for func in self._on_reset_listeners:
+            func()
+
+    def _on_color_changed(self):
+        for func in self._on_color_changed_listeners:
             func()
 
     def _change_selected_color(self, event):
@@ -266,6 +329,14 @@ class PMIPlot(MatplotlibFrame):
         self._selected_data.set("Banana")
         names = self.data.get_idea_names(event.selected_indexes)
         self._selected_data.set("\n".join(names))
+
+    
+    def get_colors_hex(self):
+        return ["#{:02x}{:02x}{:02x}".format(*rgb) for rgb in self._colors]
+
+    def get_colors_rgb(self):
+        return self._colors
+
 
             
 def get_row_col(n, i):
