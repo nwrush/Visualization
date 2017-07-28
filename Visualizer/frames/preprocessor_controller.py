@@ -233,7 +233,7 @@ class PreprocessorController(VisualizerFrame):
         args.extend(["--objects_location", output_name])
 
         if os.name == 'nt':
-            args = ["idea_relations\\preprocessor_venv\\Scripts\\python.exe", "-u", "main.py"] + args
+            args = [".\\venv\\Scripts\\python.exe", "-u", "main.py"] + args
             cwd = ".\\idea_relations"
         else:
             args = ["preprocessor_venv/bin/python", "-u", "main.py"] + args
