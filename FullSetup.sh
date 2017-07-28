@@ -8,6 +8,19 @@ VisPath=Visualizer
 PythonPath=/opt/tools/python/3.5.1/bin/python
 VenvPath=./fake_venv.sh
 
+# Check executables for existance
+if [[ ! -f "$PythonPath" ]] || [[ ! -x "$PythonPath" ]]
+then
+    echo Couldn\'t locate python executable at $PythonPath
+    exit 1
+fi
+
+if [[ ! -f "$VenvPath" ]] || [[ ! -x "$VenvPath" ]]
+then
+    echo Couldn\'t locate virtualenv at $VenvPath
+    exit 1
+fi
+
 mkdir $AppPath
 mkdir $AppPath/frames
 mkdir $AppPath/widgets

@@ -8,9 +8,9 @@
 7/27/17: Column labels for the listboxes
 7/27/17: Grid resizing
 7/28/17: Move GUI root code into class
+7/28/17: Improve event handling system
 
 --Bugfix
-7/27/17: Loading a data file when one is already loaded fails when trying to create new fonts
 7/27/17: List highlighting
 7/27/17: Clear time series and and selected relations when new point is selected
 7/27/17: Mac scroll wheel bug
@@ -35,3 +35,4 @@
 7/2/17: Find a better way to layout the time series plot correlation number | 7/17/17 (8bc42d5) TimeSeries control panel still could use work
 7/19/17: Don't freeze the UI when you run the subprocess | 7/20/17 (2a3afb8)
 7/7/17: Allow dynamically set (user defined) colors for plots | 7/27/17 (0389392)
+7/27/17: Loading a data file when one is already loaded fails when trying to create new fonts | 7/28/17 (ac4bc09)

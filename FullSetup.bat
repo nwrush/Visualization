@@ -9,6 +9,11 @@ Set VisPath=Visualizer
 
 Set PythonPath="C:\Program Files\Python35\python.exe"
 
+IF NOT EXIST %PythonPath% (
+    ECHO Python executable at %PythonPath% was not found
+    EXIT /B 1
+)
+
 :: This script should be executed from where you want to root the application
 
 mkdir "%AppPath%"
