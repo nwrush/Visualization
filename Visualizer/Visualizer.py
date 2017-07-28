@@ -97,6 +97,7 @@ def gui(data_fname=None):
         data_manager = data.load_data(fname)
         data_manager.x_values = x_vals
         create_visualizer(data_manager, visualizer_frame)
+        print(len(visualizer_frame.children))
 
     menubar._open_handlers.add(open_handler)
 
@@ -108,6 +109,7 @@ def gui(data_fname=None):
     if data_manager is not None:
         create_visualizer(data_manager, visualizer_frame)
 
+    print(len(visualizer_frame.children))
     tk.mainloop()
     print("Boo")
 

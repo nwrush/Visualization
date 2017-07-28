@@ -7,6 +7,7 @@
 7/19/17: Make the settings for the file/directory dialog boxes more reasonable
 7/27/17: Column labels for the listboxes
 7/27/17: Grid resizing
+7/28/17: Move GUI root code into class
 
 --Bugfix
 7/27/17: Loading a data file when one is already loaded fails when trying to create new fonts

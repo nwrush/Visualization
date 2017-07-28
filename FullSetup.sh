@@ -8,9 +8,6 @@ VisPath=Visualizer
 PythonPath=/opt/tools/python/3.5.1/bin/python
 VenvPath=./fake_venv.sh
 
-# git submodule init
-# git submodule update
-
 mkdir $AppPath
 mkdir $AppPath/frames
 mkdir $AppPath/widgets

@@ -7,12 +7,9 @@ Set ROOT=%CD%
 Set AppPath=Application
 Set VisPath=Visualizer
 
-Set PythonPath="C:\Users\rushni\AppData\Local\Programs\Python\Python35\python.exe"
+Set PythonPath="C:\Program Files\Python35\python.exe"
 
 :: This script should be executed from where you want to root the application
-
-REM git submodule init
-REM git submodule update
 
 mkdir "%AppPath%"
 

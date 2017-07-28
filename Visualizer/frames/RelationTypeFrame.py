@@ -16,6 +16,7 @@ def _sort_by_strength(data, strength_index=2):
     sorted_list.reverse()
     return sorted_list
 
+
 class RelationTypeFrame(VisualizerFrame):
 
     def __init__(self, master, data):
@@ -33,8 +34,10 @@ class RelationTypeFrame(VisualizerFrame):
         self.types = self.data.relation_types
         self.buttons = self._create_buttons()
 
-        self._selected_btn_font = tkfont.Font(name = 'ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
-        self._selected_btn_font.config(underline=1)
+        if not "ButtonSelected" in tkfont.names():        
+            # If the font name already exists, the visualizer is being created again with new data
+            self._selected_btn_font = tkfont.Font(name='ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
+            self._selected_btn_font.config(underline=1)
 
         self.list_data = {name: [] for name in self.types}
         self.lists = self._create_lists()
@@ -61,7 +64,8 @@ class RelationTypeFrame(VisualizerFrame):
         lists = []
         for i, name in enumerate(self.types):
             listbox = ListBoxColumn(master=self.frame, ncolumns=3)
-            #listbox = MultiListbox(master=self.frame, lists=(("Strength", 20), ('x', 20), ('y', 20)))
+            #listbox = MultiListbox(master=self.frame, lists=(("Strength", 20),
+            #('x', 20), ('y', 20)))
             listbox.show_yscrollbar()
             listbox.set_width()
             listbox.add_select_handler(self._on_select)
@@ -75,7 +79,7 @@ class RelationTypeFrame(VisualizerFrame):
         num_ideas = self.data.num_ideas
         cnt = 0
         for i in range(0, num_ideas):
-            for j in range(i+1, num_ideas):
+            for j in range(i + 1, num_ideas):
                 point_pmi = pmi[i, j]
                 point_cor = ts_correlation[i, j]
                 if np.isnan(point_pmi) or np.isnan(point_cor):
@@ -83,7 +87,7 @@ class RelationTypeFrame(VisualizerFrame):
                 if np.isinf(point_pmi) or np.isinf(point_cor):
                     continue
                 cnt += 1
-                strength = point_pmi*point_cor
+                strength = point_pmi * point_cor
 
                 if 0 <= point_pmi and point_cor < 0:
                     trysts.append((i,j,strength))
