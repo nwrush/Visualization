@@ -236,7 +236,8 @@ class PreprocessorController(VisualizerFrame):
             args = [".\\venv\\Scripts\\python.exe", "-u", "main.py"] + args
             cwd = ".\\idea_relations"
         else:
-            args = ["preprocessor_venv/bin/python", "-u", "main.py"] + args
+            # args = ["python", "--version"]
+            args = ["python", "-u", "main.py"] + args
             cwd = "./idea_relations"
 
         self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner, args=(args, cwd))
