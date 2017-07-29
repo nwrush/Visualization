@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 
 import colors as visualizer_colors
 import images
+from events import listener
 from frames.MatplotlibFrame import MatplotlibFrame
 from menus import pmi_menu
 
@@ -44,15 +45,13 @@ class PMIPlot(MatplotlibFrame):
                         "Reds",
                         "Blues"]
 
-        self._on_select_listeners = set()
-        self.add_select_listener(self._change_selected_color)
-        self.add_select_listener(self._add_selection)
+        
         self._prev_selected_ind = None
 
-        self._on_reset_listeners = set()
-        self.add_reset_listener(self._reset_graph)
-
-        self._on_color_changed_listeners = set()
+        self._on_select_listener = listener.Listener(self._change_selected_color, self._add_selection)
+        self._on_reset_listener = listener.Listener(self._reset_graph)
+        self._on_color_changed_listener = listener.Listener()
+        self.on_select_clear_listener = listener.Listener(self._clear_selection)
 
         self._normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
         self._update_colors(self._colors)
@@ -193,37 +192,6 @@ class PMIPlot(MatplotlibFrame):
         self.plot_data.set_color(colors)
         self._point_colors = colors
 
-    def _get_colors(self, xs, ys):
-        print("_get_colors obsolete")
-        colors = []
-        for x, y in zip(xs, ys):
-            distance = math.sqrt(x**2 + y**2)
-            if x >= 0 and y >= 0: # First quadrant, someone has to select zero
-                colors.append(self.color_mappers[0].to_rgba(distance))
-            elif x < 0 and y > 0: # Second quadrant
-                colors.append(self.color_mappers[1].to_rgba(distance))
-            elif x < 0 and y < 0: # Third quadrant
-                colors.append(self.color_mappers[2].to_rgba(distance))
-            elif x > 0 and y < 0: # Fourth quadrant
-                colors.append(self.color_mappers[3].to_rgba(distance))
-            else:
-                print("Fail")
-        return colors
-
-    def _get_color_samples(self, parent):
-        print("_get_color_samples obsolete")
-        frame = tk.Frame(master=parent, borderwidth=2, relief=tk.RIDGE)
-        frame.pack(side=tk.TOP, expand=1, fill=tk.X, anchor=tk.N, pady=10)
-
-        label = tk.Label(master=frame, text="Legend:")
-        label.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2, pady=2)
-
-        for mapper, name in zip(self.color_mappers, self.data.relation_types):
-            sample = tk.Label(master=frame, background=self.color_samples[name], text=name)
-            sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
-
-        return frame
-
     def _init_handlers(self):
         self.canvas.mpl_connect('button_press_event', self._on_click)
         self.canvas.mpl_connect('pick_event', self._on_select)
@@ -231,49 +199,51 @@ class PMIPlot(MatplotlibFrame):
     def _on_click(self, event):
         pass
 
+    # Event listener functions
     def add_select_listener(self, func):
-        self._on_select_listeners.add(func)
+        self._on_select_listener.add(func)
 
     def has_select_listener(self, func):
-        return func in self._on_select_listeners
+        return self._on_select_listener.has_handler(func)
 
     def remove_select_listener(self, func):
-        self._on_select_listeners.discard(func)
+        self._on_select_listener.remove(func)
 
     def add_reset_listener(self, func):
-        self._on_reset_listeners.add(func)
+        self._on_reset_listener.add(func)
 
     def has_reset_listener(self, func):
-        return func in self._on_reset_listeners
+        return self._on_reset_listener.has_handler(func)
 
     def remove_reset_listener(self, func):
-        self._on_reset_listeners.discard(func)
+        self._on_reset_listener.remove(func)
 
     def add_color_changed_listener(self, func):
-        self._on_color_changed_listeners.add(func)
+        self._on_color_changed_listener.add(func)
 
     def has_color_changed_listener(self, func):
-        return func in self._on_color_changed_listeners
+        return self._on_color_changed_listener.has_handler(func)
 
     def remove_color_changed_listener(self, func):
-        self._on_color_changed_listeners.discard(func)
+        self._on_color_changed_listener.remove(func)
 
     def _on_select(self, event):
         i, j = self.idea_indexes[event.ind[0]]
         event.selected_indexes = (i, j)
-        for func in self._on_select_listeners:
-            func(event)
+        self._on_select_listener.invoke(event)
 
     def _on_reset(self):
-        for func in self._on_reset_listeners:
-            func()
+        self._on_reset_listener.invoke_empty()
 
     def _on_color_changed(self):
-        for func in self._on_color_changed_listeners:
-            func()
+        self._on_color_changed_listener.invoke_empty()
 
     def _change_selected_color(self, event):
-        ind = event.ind[0]
+        
+        if hasattr(event, "ind"):
+            ind = event.ind[0]
+        elif hasattr(event, "selected_indexes"):
+            ind = self.idea_indexes.index(tuple(event.selected_indexes))
 
         if self._prev_selected_ind == ind:
             return None
@@ -288,6 +258,8 @@ class PMIPlot(MatplotlibFrame):
 
     def filter_relation(self, event):
         idea_indexes = event.selected_indexes
+
+        self._clear_selection()
 
         selected_names = [self.data.idea_names[index] for index in idea_indexes]
         self._filter_by_data.set("\n".join(selected_names))
@@ -314,6 +286,9 @@ class PMIPlot(MatplotlibFrame):
                 new_index = self.idea_indexes.index(old_point)
                 self._on_select(type('', (object,), {"ind": [new_index]})())
 
+        if hasattr(event, "should_select") and event.should_select:
+            self._on_select_listener.invoke(event)
+
         self.redraw()
 
     def _reset_graph(self):
@@ -323,10 +298,11 @@ class PMIPlot(MatplotlibFrame):
         self.redraw()
 
     def _add_selection(self, event):
-        self._selected_data.set("Banana")
         names = self.data.get_idea_names(event.selected_indexes)
         self._selected_data.set("\n".join(names))
 
+    def _clear_selection(self):
+        self._selected_data.set("")
     
     def get_colors_hex(self):
         return ["#{:02x}{:02x}{:02x}".format(*rgb) for rgb in self._colors]

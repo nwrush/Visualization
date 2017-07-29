@@ -24,6 +24,7 @@ xcopy "%VisPath%\frames\*.py" "%AppPath%\frames\"
 xcopy "%VisPath%\widgets\*.py" "%AppPath%\widgets\"
 xcopy "%VisPath%\menus\*.py" "%AppPath%\menus\"
 xcopy "%VisPath%\Images\*.*" "%AppPath%\Images\"
+xcopy "%VisPath%\events\*.py" "%AppPath%\events\"
 
 :: Install the preprocessor
 mkdir "%AppPath%\idea_relations"

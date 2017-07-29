@@ -7,6 +7,7 @@ import tkinter.font as tkfont
 
 import numpy as np
 
+from events import listener
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
 
@@ -44,7 +45,7 @@ class RelationTypeFrame(VisualizerFrame):
 
         self.active_index = None
 
-        self._onselect_listeners = set()
+        self._onselect_listener = listener.Listener()
 
         self._determine_relations()
 
@@ -64,8 +65,6 @@ class RelationTypeFrame(VisualizerFrame):
         lists = []
         for i, name in enumerate(self.types):
             listbox = ListBoxColumn(master=self.frame, ncolumns=3)
-            #listbox = MultiListbox(master=self.frame, lists=(("Strength", 20),
-            #('x', 20), ('y', 20)))
             listbox.show_yscrollbar()
             listbox.set_width()
             listbox.add_select_handler(self._on_select)
@@ -129,13 +128,13 @@ class RelationTypeFrame(VisualizerFrame):
             listbox.delete(0, tk.END)
 
     def add_select_listener(self, func):
-        self._onselect_listeners.add(func)
+        self._onselect_listener.add(func)
 
     def has_select_listener(self, func):
-        return func in self._onselect_listeners
+        return self._onselect_listener.has_handler(func)
 
     def remove_select_listener(self, func):
-        self._onselect_listeners.discard(func)
+        self._onselect_listener.remove(func)
 
     def _on_select(self, event):
         data = self.list_data[self.types[self.active_index]]
@@ -144,10 +143,9 @@ class RelationTypeFrame(VisualizerFrame):
             selected_indexes.extend(data[index][:2])
 
         event.selected_indexes = selected_indexes
-
-        for listener in self._onselect_listeners:
-            listener(event)
-
+        event.should_select = True
+        self._onselect_listener.invoke(event)
+        
     def _btn_click(self, name, btn):
         self._set_active(name)
 

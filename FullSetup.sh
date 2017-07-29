@@ -26,6 +26,7 @@ mkdir $AppPath/frames
 mkdir $AppPath/widgets
 mkdir $AppPath/menus
 mkdir $AppPath/Images
+mkdir $AppPath/events
 
 
 cp $VisPath/*.py $AppPath
@@ -33,6 +34,7 @@ cp $VisPath/frames/*.py $AppPath/frames/
 cp $VisPath/widgets/*.py $AppPath/widgets/
 cp $VisPath/menus/*.py $AppPath/menus/
 cp $VisPath/Images/*.* $AppPath/Images/
+cp $VisPath/events/*.py $AppPath/events/
 
 mkdir $AppPath/idea_relations
 

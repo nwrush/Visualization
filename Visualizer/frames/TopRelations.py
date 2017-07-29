@@ -75,3 +75,7 @@ class TopRelations(VisualizerFrame):
 
     def set_idea_event(self, event):
         self.set_idea_index(event.selected_indexes[self._index])
+
+    def clear(self):
+        self.title_text.set("Selected Relation: ")
+        self.listbox.delete(0, tk.END)

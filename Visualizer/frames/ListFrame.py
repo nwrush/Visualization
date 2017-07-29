@@ -3,6 +3,7 @@
 
 import tkinter as tk
 
+from events import listener
 from frames.VisualizerFrame import VisualizerFrame
 
 class ListFrame(VisualizerFrame):
@@ -24,7 +25,7 @@ class ListFrame(VisualizerFrame):
         self.list.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.list.yview)
 
-        self._onselect_listeners = set()
+        self._onselect_listener = listener.Listener()
         self.list.bind("<<ListboxSelect>>", self._on_select)
 
     def add_item(self, item):
@@ -56,13 +57,13 @@ class ListFrame(VisualizerFrame):
         self.list.config(width=max_width)
 
     def add_select_listener(self, func):
-        self._onselect_listeners.add(func)
+        self._onselect_listener.add(func)
 
     def has_select_listener(self, func):
-        return func in self._onselect_listeners
+        return self._onselect_listener.has_handler(func)
 
     def remove_select_listener(self, func):
-        self._onselect_listeners.discard(func)
+        self._onselect_listener.remove(func)
 
     def clear_selection(self):
         self.list.select_clear(0, tk.END)
@@ -70,8 +71,4 @@ class ListFrame(VisualizerFrame):
     def _on_select(self, event):
         listbox = event.widget
         event.selected_indexes = [self.data.idea_numbers[listbox.get(index)] for index in event.widget.curselection()]
-
-        for listener in self._onselect_listeners:
-            listener(event)
-
-
+        self._onselect_listener.invoke(event)

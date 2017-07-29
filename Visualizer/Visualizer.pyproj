@@ -25,6 +25,15 @@
   <ItemGroup>
     <Compile Include="colors.py" />
     <Compile Include="data.py" />
+    <Compile Include="events\event.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="events\listener.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="events\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="frames\ListFrame.py" />
     <Compile Include="frames\MatplotlibFrame.py" />
     <Compile Include="frames\PMIPlot.py" />
@@ -79,6 +88,7 @@
     <Content Include="TaskList.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="events\" />
     <Folder Include="frames\" />
     <Folder Include="menus\" />
     <Folder Include="widgets\" />

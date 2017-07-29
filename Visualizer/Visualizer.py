@@ -50,11 +50,13 @@ def create_visualizer(data, parent):
     pmi.add_reset_listener(ts.clear)
 
     idea_list.add_select_listener(pmi.filter_relation)
+    idea_list.add_select_listener(top_relation_1.clear)
+    idea_list.add_select_listener(top_relation_2.clear)
+    idea_list.add_select_listener(ts.clear)
+    idea_list.add_select_listener(relation_types.clear_selection)
 
     relation_types.add_select_listener(pmi.filter_relation)
-    relation_types.add_select_listener(ts.select_relation_type)
-    relation_types.add_select_listener(top_relation_1.set_idea_event)
-    relation_types.add_select_listener(top_relation_2.set_idea_event)
+    relation_types.add_select_listener(idea_list.clear_selection)
 
 
 def gui(data_fname=None):

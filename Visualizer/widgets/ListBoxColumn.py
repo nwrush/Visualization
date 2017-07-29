@@ -100,6 +100,10 @@ class ListBoxColumn(tk.Frame):
             for item, listBox in zip(adding, self.lists):
                 listBox.insert(index, item)
 
+    def delete(self, first, last=None):
+        for list in self.lists:
+            list.delete(first, last)
+
     def itemcget(self, index, option):
         return self.lists[0].itemcget(index, option)
 
