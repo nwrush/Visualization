@@ -7,7 +7,7 @@ Set ROOT=%CD%
 Set AppPath=Application
 Set VisPath=Visualizer
 
-Set PythonPath="C:\Program Files\Python35\python.exe"
+Set PythonPath="C:\Users\Nikko\AppData\Local\Programs\Python\Python35\python.exe"
 
 IF NOT EXIST %PythonPath% (
     ECHO Python executable at %PythonPath% was not found
