@@ -5,6 +5,8 @@ import math
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from PyQt5 import QtWidgets
+
 import matplotlib.cm as cm
 import matplotlib.colors as colors
 import numpy as np
@@ -13,21 +15,27 @@ from matplotlib.figure import Figure
 import colors as visualizer_colors
 import images
 from events import listener
-from frames.MatplotlibFrame import MatplotlibFrame
+from frames.MatplotlibFrame import QMatplotlib
+from frames.VisualizerFrame import VisualizerFrame
 from menus import pmi_menu
 
-class PMIPlot(MatplotlibFrame):
+class PMIPlot(VisualizerFrame):
 
-    def __init__(self, master, data):
-        super(PMIPlot, self).__init__(Figure(), master=master, data_manager=data)
-        self.grid_frame(row=0, column=1, sticky="WE")
+    def __init__(self, parent, data):
+        super(PMIPlot, self).__init__(parent=parent, data_manager=data)
 
-        self.prevent_redraw()
+        self.layout = QtWidgets.QVBoxLayout(self)
 
-        self.pack_canvas(side=tk.LEFT)
+        self._mpl = QMatplotlib(parent=self)
+        self._mpl.prevent_redraw()
 
-        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
-        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+        self.layout.addWidget(self._mpl)
+
+        self.axes = self._mpl.axes
+        self.canvas = self._mpl.canvas
+
+        # self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
+        # self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
 
         self._init_handlers()
 
@@ -48,7 +56,7 @@ class PMIPlot(MatplotlibFrame):
         
         self._prev_selected_ind = None
 
-        self._on_select_listener = listener.Listener(self._change_selected_color, self._add_selection)
+        self._on_select_listener = listener.Listener(self._change_selected_color)#, self._add_selection)
         self._on_reset_listener = listener.Listener(self._reset_graph)
         self._on_color_changed_listener = listener.Listener()
         self.on_select_clear_listener = listener.Listener(self._clear_selection)
@@ -57,9 +65,9 @@ class PMIPlot(MatplotlibFrame):
         self._update_colors(self._colors)
         self.add_color_changed_listener(self._color_plot)
 
-        self._create_control_panel()
+        # self._create_control_panel()
 
-        self.allow_redraw()
+        self._mpl.allow_redraw()
 
     def _create_control_panel(self):
         self._gear_icon = images.load_image("gear-2-16.gif")
@@ -136,7 +144,7 @@ class PMIPlot(MatplotlibFrame):
             self.color_samples[name] = hex
 
         self._on_color_changed()
-        self.redraw()
+        self._mpl.redraw()
 
     def plot(self, sample=None):
         # Generate a list of all strictly upper triangular indexes
@@ -254,7 +262,7 @@ class PMIPlot(MatplotlibFrame):
         self.plot_data._edgecolors[ind] = colors.to_rgba(self.selected_color)
         self._prev_selected_ind = ind
 
-        self.redraw()
+        self._mpl.redraw()
 
     def filter_relation(self, event):
         idea_indexes = event.selected_indexes

@@ -2,23 +2,26 @@
 # 7/5/2017
 
 import tkinter as tk
+from PyQt5 import QtWidgets
 
 import numpy as np
 from matplotlib.figure import Figure
 
-from frames.MatplotlibFrame import MatplotlibFrame
+from frames.VisualizerFrame import VisualizerFrame
+from frames.MatplotlibFrame import QMatplotlib
 
 
-class TimeSeriesFrame(MatplotlibFrame):
+class TimeSeriesFrame(VisualizerFrame):
 
-    def __init__(self, master, data):
-        super(TimeSeriesFrame, self).__init__(Figure(), master=master, data_manager=data)
+    def __init__(self, parent, data):
+        super(TimeSeriesFrame, self).__init__(parent=parent, data_manager=data)
 
-        # The canvas is the matplotlib stuff
-        self.pack_canvas(side=tk.LEFT)
-        #self.grid_canvas(row=0, column=0)
-        # The frame is the root of the "widget" everything else gets placed inside of it
-        self.grid_frame(row=0, column=2)
+        self.layout = QtWidgets.QVBoxLayout(self)
+
+        self._mpl = QMatplotlib(parent=self)
+        self.axes = self._mpl.axes
+
+        self.layout.addWidget(self._mpl)
 
         self.data = data
 
@@ -26,7 +29,7 @@ class TimeSeriesFrame(MatplotlibFrame):
 
         self.series = None
 
-        self._create_control_panel()
+        # self._create_control_panel()
 
     def _create_control_panel(self):
         self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
@@ -68,14 +71,14 @@ class TimeSeriesFrame(MatplotlibFrame):
             self.plot_series(self.data.ts_matrix[index], redraw=False)
             index_names.append(self.data.idea_names[index])
 
-        self.get_correlation()
+        # self.get_correlation()
 
         if names is not None:
             self.axes.legend(names, loc="best")
         else:
             self.axes.legend(index_names, loc="best")
 
-        self.redraw()
+        self._mpl.redraw()
 
     def _add_series(self, data):
         if self.series is None:
@@ -90,9 +93,9 @@ class TimeSeriesFrame(MatplotlibFrame):
     def clear(self):
         self.series = None
         self._init_plot()
-        self.redraw()
+        self._mpl.redraw()
 
-        self._correlation_data.set(0)
+        # self._correlation_data.set(0)
 
     def select_relation_type(self, event):
         self.plot_idea_indexes(event.selected_indexes)
