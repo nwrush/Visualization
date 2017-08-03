@@ -53,6 +53,9 @@ class Application(QtWidgets.QMainWindow):
         self.grid_layout.addWidget(self.idea_list, 0, 0)
         self.idea_list.add_items(data.idea_names.values())
 
+        self.relation_types = RelationTypeFrame(parent=self, data=data)
+        self.grid_layout.addWidget(self.relation_types, 1, 0)
+
         self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
         self.idea_list.add_select_listener(self.pmi.filter_relation)
 

@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_topicsList(object):
     def setupUi(self, topicsList):
         topicsList.setObjectName("topicsList")
-        topicsList.resize(350, 520)
+        topicsList.resize(213, 384)
         self.verticalLayout = QtWidgets.QVBoxLayout(topicsList)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(topicsList)

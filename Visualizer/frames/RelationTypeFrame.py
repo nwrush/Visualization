@@ -2,14 +2,14 @@
 # 7/6/2017
 
 import functools
-import tkinter as tk
-import tkinter.font as tkfont
+from PyQt5 import QtWidgets
 
 import numpy as np
 
-from events import listener
+from events import listener, event
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
+from ui import top_relations
 
 
 def _sort_by_strength(data, strength_index=2):
@@ -20,46 +20,40 @@ def _sort_by_strength(data, strength_index=2):
 
 class RelationTypeFrame(VisualizerFrame):
 
-    def __init__(self, master, data):
-        super(RelationTypeFrame, self).__init__(master=master, data_manager=data)
-        self.grid_frame(row=1, column=0, sticky="NWSE", padx=(0, 10))
+    def __init__(self, parent, data):
+        super(RelationTypeFrame, self).__init__(parent=parent, data_manager=data)
 
-        self.header = tk.Frame(master=self.frame)
-        self.header.pack(side=tk.TOP, expand=1)
-
-        self.title = tk.Label(master=self.header, text="Strongest Relations")
-        self.title.grid(row=0, columnspan=4, sticky="we")
+        self.ui = top_relations.Ui_topRelations()
+        self.ui.setupUi(self)
 
         self.data = data
-
+        #
         self.types = self.data.relation_types
-        self.buttons = self._create_buttons()
-
-        if not "ButtonSelected" in tkfont.names():        
-            # If the font name already exists, the visualizer is being created again with new data
-            self._selected_btn_font = tkfont.Font(name='ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
-            self._selected_btn_font.config(underline=1)
-
+        self._config_buttons()
+        #
+        # if not "ButtonSelected" in tkfont.names():
+        #     # If the font name already exists, the visualizer is being created again with new data
+        #     self._selected_btn_font = tkfont.Font(name='ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
+        #     self._selected_btn_font.config(underline=1)
+        #
         self.list_data = {name: [] for name in self.types}
-        self.lists = self._create_lists()
-
-        self.active_index = None
-
-        self._onselect_listener = listener.Listener()
-
+        # self.lists = self._create_lists()
+        #
+        # self.active_index = None
+        #
+        # self._onselect_listener = listener.Listener()
+        #
         self._determine_relations()
-
-        self._set_active_index(0)
+        #
+        # self._set_active_index(0)
         pass
 
-    def _create_buttons(self):
-        buttons = []
+    def _config_buttons(self):
         for i, name in enumerate(self.types):
-            btn = tk.Button(master=self.header, text=name)
-            btn.config(command=functools.partial(self._btn_click, name, btn))
-            btn.grid(row=1, column=i, sticky="we")
-            buttons.append(btn)
-        return buttons
+            btn_name = "{0}Button".format(name.lower().replace('-', ''))
+            btn = self.findChildren(QtWidgets.QPushButton, btn_name)[0]
+
+            btn.clicked.connect(functools.partial(self._btn_click, name))
 
     def _create_lists(self):
         lists = []
@@ -106,7 +100,6 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _add_to_list(self, items, name, sort=True, top=None):
         data = self.list_data[name]
-        listbox = self.lists[self.types.index(name)]
         if sort:
             items = _sort_by_strength(items)
 
@@ -114,7 +107,6 @@ class RelationTypeFrame(VisualizerFrame):
             items = items[:top]
 
         data.extend(items)
-        listbox.insert(tk.END, *self._get_output_repr(items))
 
     def _get_output_repr(self, items):
         outputs = []
@@ -146,7 +138,7 @@ class RelationTypeFrame(VisualizerFrame):
         event.should_select = True
         self._onselect_listener.invoke(event)
         
-    def _btn_click(self, name, btn):
+    def _btn_click(self, name):
         self._set_active(name)
 
     def _set_active(self, name):
