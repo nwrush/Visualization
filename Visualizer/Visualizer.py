@@ -1,6 +1,8 @@
 # Nikko Rush
 # 6/21/2017
 
+import exception_handler
+
 import functools
 import pickle
 import sys
@@ -172,9 +174,3 @@ def test():
 if __name__ == "__main__":
     # test()
     main("keywords_data.p")
-
-    qApp = QtWidgets.QApplication(sys.argv)
-    window = Application()
-    window.show()
-    qApp.exec()
-
