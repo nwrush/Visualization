@@ -3,15 +3,21 @@
 
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget
+import PyQt5.QtWidgets as QtWidgets
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
-    w = QWidget()
+    w = QtWidgets.QWidget()
     w.resize(250, 150)
     w.move(300, 300)
     w.setWindowTitle("Test")
-    w.show()
 
+    layout = QtWidgets.QHBoxLayout(w)
+    w.setLayout(layout)
+
+    label = QtWidgets.QLabel("test", w)
+    layout.addWidget(label)
+
+    w.show()
     sys.exit(app.exec_())

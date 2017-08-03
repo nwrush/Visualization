@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 
 import colors as visualizer_colors
 import images
-from events import listener
+from events import listener, event
 from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
 from menus import pmi_menu
@@ -264,13 +264,13 @@ class PMIPlot(VisualizerFrame):
 
         self._mpl.redraw()
 
-    def filter_relation(self, event):
-        idea_indexes = event.selected_indexes
+    def filter_relation(self, eve):
+        idea_indexes = eve.selected_indexes
 
-        self._clear_selection()
+        # self._clear_selection()
 
         selected_names = [self.data.idea_names[index] for index in idea_indexes]
-        self._filter_by_data.set("\n".join(selected_names))
+        # self._filter_by_data.set("\n".join(selected_names))
 
         old_point = None
         if self._prev_selected_ind is not None:
@@ -294,10 +294,10 @@ class PMIPlot(VisualizerFrame):
                 new_index = self.idea_indexes.index(old_point)
                 self._on_select(type('', (object,), {"ind": [new_index]})())
 
-        if hasattr(event, "should_select") and event.should_select:
-            self._on_select_listener.invoke(event)
+        if hasattr(eve, "should_select") and eve.should_select:
+            self._on_select_listener.invoke(eve)
 
-        self.redraw()
+        self._mpl.redraw()
 
     def _reset_graph(self):
         self.plot(sample=self.sample_size)

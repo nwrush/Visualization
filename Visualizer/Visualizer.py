@@ -44,12 +44,17 @@ class Application(QtWidgets.QMainWindow):
 
         self.pmi = PMIPlot(self.main_widget, data)
         self.pmi.plot(sample=1000)
-        self.grid_layout.addWidget(self.pmi, 0, 0)
+        self.grid_layout.addWidget(self.pmi, 0, 1)
 
         self.ts = TimeSeriesFrame(self.main_widget, data)
-        self.grid_layout.addWidget(self.ts, 0, 1)
+        self.grid_layout.addWidget(self.ts, 0, 2)
+
+        self.idea_list = ListFrame(parent=self, data=data)
+        self.grid_layout.addWidget(self.idea_list, 0, 0)
+        self.idea_list.add_items(data.idea_names.values())
 
         self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
+        self.idea_list.add_select_listener(self.pmi.filter_relation)
 
 
 def create_visualizer(data, parent):
