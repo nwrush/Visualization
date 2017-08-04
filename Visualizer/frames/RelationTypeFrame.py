@@ -3,12 +3,12 @@
 
 import functools
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QFont
 
 import numpy as np
 
 from events import listener, event
 from frames.VisualizerFrame import VisualizerFrame
-from widgets.ListBoxColumn import ListBoxColumn
 from ui import top_relations
 
 
@@ -27,43 +27,37 @@ class RelationTypeFrame(VisualizerFrame):
         self.ui.setupUi(self)
 
         self.data = data
-        #
         self.types = self.data.relation_types
-        self._config_buttons()
-        #
-        # if not "ButtonSelected" in tkfont.names():
-        #     # If the font name already exists, the visualizer is being created again with new data
-        #     self._selected_btn_font = tkfont.Font(name='ButtonSelected', **tkfont.nametofont('TkDefaultFont').config())
-        #     self._selected_btn_font.config(underline=1)
-        #
+
+        self._buttons = []
+        self._tables = []
+        self._config_ui()
+
         self.list_data = {name: [] for name in self.types}
-        # self.lists = self._create_lists()
-        #
-        # self.active_index = None
-        #
-        # self._onselect_listener = listener.Listener()
-        #
+
+        self.active_index = None
+        self._onselect_listener = listener.Listener()
+
         self._determine_relations()
-        #
-        # self._set_active_index(0)
+        self._fill_tables()
+
+        self._set_active_index(0)
         pass
 
-    def _config_buttons(self):
+    def _config_ui(self):
         for i, name in enumerate(self.types):
             btn_name = "{0}Button".format(name.lower().replace('-', ''))
-            btn = self.findChildren(QtWidgets.QPushButton, btn_name)[0]
+            tbl_name = "{0}Table".format(name.lower().replace('-', ''))
+
+            btn = self.findChild(QtWidgets.QPushButton, btn_name)
+            tbl = self.findChild(QtWidgets.QTableWidget, tbl_name)
+
+            self._buttons.append(btn)
+            self._tables.append(tbl)
 
             btn.clicked.connect(functools.partial(self._btn_click, name))
-
-    def _create_lists(self):
-        lists = []
-        for i, name in enumerate(self.types):
-            listbox = ListBoxColumn(master=self.frame, ncolumns=3)
-            listbox.show_yscrollbar()
-            listbox.set_width()
-            listbox.add_select_handler(self._on_select)
-            lists.append(listbox)
-        return lists
+            tbl.itemSelectionChanged.connect(self._on_select)
+            tbl.hide()
 
     def _determine_relations(self):
         pmi = self.data.pmi
@@ -108,16 +102,29 @@ class RelationTypeFrame(VisualizerFrame):
 
         data.extend(items)
 
+    def _fill_tables(self):
+        for index, name in enumerate(self.data.relation_types):
+            raw_data = self.list_data[name]
+            tbl = self._tables[index]
+
+            data = self._get_output_repr(raw_data)
+
+            for i, relation in enumerate(data):
+                tbl.insertRow(i)
+                for j, item in enumerate(relation):
+                    qtbl_item = QtWidgets.QTableWidgetItem(item)
+                    tbl.setItem(i, j, qtbl_item)
+
     def _get_output_repr(self, items):
         outputs = []
         for item in items:
-            output = (round(item[2],4), self.data.idea_names[item[0]], self.data.idea_names[item[1]])
+            output = ("{n:.{d}}".format(n=item[2], d=4), self.data.idea_names[item[0]], self.data.idea_names[item[1]])
             outputs.append(output)
         return outputs
 
     def clear_lists(self):
-        for listbox in self.lists:
-            listbox.delete(0, tk.END)
+        for table in self._tables:
+            table.clearContents()
 
     def add_select_listener(self, func):
         self._onselect_listener.add(func)
@@ -128,15 +135,28 @@ class RelationTypeFrame(VisualizerFrame):
     def remove_select_listener(self, func):
         self._onselect_listener.remove(func)
 
-    def _on_select(self, event):
-        data = self.list_data[self.types[self.active_index]]
-        selected_indexes = []
-        for index in event.ListBoxColumn.curselection():
-            selected_indexes.extend(data[index][:2])
+    def _on_select(self):
+        col_count = self._tables[self.active_index].columnCount()
 
-        event.selected_indexes = selected_indexes
-        event.should_select = True
-        self._onselect_listener.invoke(event)
+        selected_items = dict()
+        for item in self._tables[self.active_index].selectedItems():
+            row, col = item.row(), item.column()
+            if row not in selected_items.keys():
+                selected_items[row] = [0] * col_count
+            selected_items[row][col] = item.text()
+
+        if not len(selected_items):
+            return None
+
+        selected_indexes = set()
+        for row, item in selected_items.items():
+            selected_indexes.add(self.data.idea_numbers[item[1]])
+            selected_indexes.add(self.data.idea_numbers[item[2]])
+
+        eve = event.Event()
+        eve.selected_indexes = selected_indexes
+        eve.should_select = True
+        self._onselect_listener.invoke(eve)
         
     def _btn_click(self, name):
         self._set_active(name)
@@ -147,16 +167,23 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _set_active_index(self, index):
         if self.active_index is not None:
-            self.lists[self.active_index].select_clear(0, tk.END)
-            self.lists[self.active_index].pack_forget()
-            self.buttons[self.active_index].config(font='TkDefaultFont')
+            self._tables[self.active_index].hide()
+            self._tables[self.active_index].clearSelection()
 
-        self.lists[index].pack()
-        self.buttons[index].config(font='ButtonSelected')
+            font = self._buttons[self.active_index].font()
+            font.setUnderline(False)
+            self._buttons[self.active_index].setFont(font)
+
+        self._tables[index].show()
+
+        font = self._buttons[index].font()
+        font.setUnderline(True)
+        self._buttons[index].setFont(font)
+
         self.active_index = index
 
     def clear_selection(self):
-        self.lists[self.active_index].select_clear(0, tk.END)
+        self.lists[self.active_index].clearSelection()
 
     def color_buttons(self, color_map):
         for btn, name in zip(self.buttons, self.types):

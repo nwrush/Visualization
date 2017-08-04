@@ -246,12 +246,19 @@ class PMIPlot(VisualizerFrame):
     def _on_color_changed(self):
         self._on_color_changed_listener.invoke_empty()
 
-    def _change_selected_color(self, event):
+    def _change_selected_color(self, eve):
         
-        if hasattr(event, "ind"):
-            ind = event.ind[0]
-        elif hasattr(event, "selected_indexes"):
-            ind = self.idea_indexes.index(tuple(event.selected_indexes))
+        if hasattr(eve, "ind"):
+            ind = eve.ind[0]
+        elif hasattr(eve, "selected_indexes"):
+            a, b = tuple(eve.selected_indexes)
+            if (a,b) in self.idea_indexes:
+                ind = self.idea_indexes.index((a,b))
+            elif (b,a) in self.idea_indexes:
+                ind = self.idea_indexes.index((b,a))
+            else:
+                print("Selected indexes not found on PMI graph")
+                return None
 
         if self._prev_selected_ind == ind:
             return None

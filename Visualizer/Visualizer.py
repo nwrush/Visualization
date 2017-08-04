@@ -59,6 +59,8 @@ class Application(QtWidgets.QMainWindow):
         self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
         self.idea_list.add_select_listener(self.pmi.filter_relation)
 
+        self.relation_types.add_select_listener(self.pmi.filter_relation)
+
 
 def create_visualizer(data, parent):
     ts = TimeSeriesFrame(parent=parent, data=data)
