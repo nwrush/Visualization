@@ -22,6 +22,7 @@ class Ui_topicsList(object):
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
         self.listWidget = QtWidgets.QListWidget(topicsList)
+        self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
 

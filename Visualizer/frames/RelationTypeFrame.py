@@ -2,7 +2,7 @@
 # 7/6/2017
 
 import functools
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 import numpy as np
 
@@ -185,8 +185,12 @@ class RelationTypeFrame(VisualizerFrame):
         self.lists[self.active_index].clearSelection()
 
     def color_buttons(self, color_map):
-        for btn, name in zip(self.buttons, self.types):
-            btn['background'] = color_map[name]
+        for btn, name in zip(self._buttons, self.types):
+            color = color_map[name]
+
+            palette = QtGui.QPalette()
+            palette.setColor(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, QtGui.QColor(*color))
+            btn.setPalette(palette)
 
     def color_changed(self, pmi_frame):
         self.color_buttons(pmi_frame.color_samples)

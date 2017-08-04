@@ -55,6 +55,7 @@ class Application(QtWidgets.QMainWindow):
 
         self.relation_types = RelationTypeFrame(parent=self, data=data)
         self.grid_layout.addWidget(self.relation_types, 1, 0)
+        self.relation_types.color_buttons(self.pmi.color_samples)
 
         self.top_relation_1 = TopRelations(parent=self, data=data, topic_index=0)
         self.grid_layout.addWidget(self.top_relation_1, 1, 1)

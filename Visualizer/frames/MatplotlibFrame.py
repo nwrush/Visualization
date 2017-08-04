@@ -12,19 +12,33 @@ from frames.VisualizerFrame import VisualizerFrame
 class QMatplotlib(FigureCanvasQTAgg):
     """Frame specifically for displaying matplotlib graphs"""
 
-    def __init__(self, figure=None, parent=None):
-        self._figure = Figure(figsize=(6,5)) if figure is None else figure
+    def __init__(self, figure=None, parent=None, width=None, height=None, dpi=None):
+
+        if figure is not None:
+            self._figure = figure
+        else:
+            if width or height or dpi is None:
+                self._figure = Figure()
+            else:
+                self._figure = Figure(figsize=(width, height), dpi=dpi)
+
         self._axes = self._figure.gca()
 
         super(QMatplotlib, self).__init__(self._figure)
         self.setParent(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self._set_size()
         self.updateGeometry()
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
         self._allow_redraw = True
         self._redraw_requested = False
+
+    def _set_size(self):
+        fig_w, fig_h = map(int, self._figure.get_size_inches() * self._figure.dpi)
+        self.setMaximumSize(fig_w, fig_h)
+        self.setMinimumSize(fig_w, fig_h)
 
     @property
     def axes(self):

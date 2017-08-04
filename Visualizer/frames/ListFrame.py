@@ -54,7 +54,11 @@ class ListFrame(VisualizerFrame):
         self.ui.listWidget.clearSelection()
 
     def _on_select(self, selected_item):
-        eve = event.Event()
+        print("Hello")
+        indexes = set()
+        for item in self.ui.listWidget.selectedItems():
+            indexes.add(self.data.idea_numbers[item.text()])
 
-        eve.selected_indexes = [self.data.idea_numbers[selected_item.text()]]
+        eve = event.Event()
+        eve.selected_indexes = indexes
         self._onselect_listener.invoke(eve)
