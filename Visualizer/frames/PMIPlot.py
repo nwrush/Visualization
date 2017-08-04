@@ -6,11 +6,11 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from PyQt5 import QtWidgets
+from PyQt5 import QtGui
 
 import matplotlib.cm as cm
 import matplotlib.colors as colors
 import numpy as np
-from matplotlib.figure import Figure
 
 import colors as visualizer_colors
 import images
@@ -18,13 +18,15 @@ from events import listener, event
 from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
 from menus import pmi_menu
+from ui import pmi_control_panel_vert
+from ui import pmi_control_panel_horiz
 
 class PMIPlot(VisualizerFrame):
 
     def __init__(self, parent, data):
         super(PMIPlot, self).__init__(parent=parent, data_manager=data)
 
-        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout = QtWidgets.QHBoxLayout(self)
 
         self._mpl = QMatplotlib(parent=self)
         self._mpl.prevent_redraw()
@@ -34,8 +36,10 @@ class PMIPlot(VisualizerFrame):
         self.axes = self._mpl.axes
         self.canvas = self._mpl.canvas
 
-        # self._control_panel = tk.Frame(master=self.frame, padx=10, pady=0)
-        # self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
+        self._control_panel = QtWidgets.QWidget(self)
+        self._control_panel_ui = pmi_control_panel_vert.Ui_pmi_control_panel()
+        self._control_panel_ui.setupUi(self._control_panel)
+        self.layout.addWidget(self._control_panel)
 
         self._init_handlers()
 
@@ -55,61 +59,41 @@ class PMIPlot(VisualizerFrame):
 
         
         self._prev_selected_ind = None
+        self._prev_annotation = None
 
-        self._on_select_listener = listener.Listener(self._change_selected_color)#, self._add_selection)
+        self._on_select_listener = listener.Listener(self._change_selected_color, self._annotate_selected)
         self._on_reset_listener = listener.Listener(self._reset_graph)
         self._on_color_changed_listener = listener.Listener()
+
         self.on_select_clear_listener = listener.Listener(self._clear_selection)
 
         self._normalizer = colors.Normalize(vmin=0, vmax=1, clip=True)
         self._update_colors(self._colors)
         self.add_color_changed_listener(self._color_plot)
 
-        # self._create_control_panel()
+        self._setup_control_panel()
 
         self._mpl.allow_redraw()
+        print(self._mpl.figure.get_size_inches())
 
-    def _create_control_panel(self):
-        self._gear_icon = images.load_image("gear-2-16.gif")
-        self._settings = tk.Button(master=self._control_panel, text="Test", image=self._gear_icon, command=pmi_menu.create_factory(self))
-        self._settings.pack(anchor=tk.NW)
-        
-        # Color Samples
-        self._color_sample_frame = tk.Frame(master=self._control_panel, borderwidth=2, relief=tk.RIDGE)
-        self._color_sample_frame.pack(side=tk.TOP, expand=1, fill=tk.X, anchor=tk.N, pady=10)
+    LEGEND_ROWS = 2
+    def _setup_control_panel(self):
+        # self._gear_icon = images.load_image("gear-2-16.gif")
+        control_panel_ui = self._control_panel_ui
+        control_panel_ui.resetButton.clicked.connect(self._on_reset)
 
-        label = tk.Label(master=self._color_sample_frame, text="Legend:")
-        label.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2, pady=2)
+        self._color_legend()
 
-        sample_labels = dict()
-        for mapper, name in zip(self.color_mappers, self.data.relation_types):
-            sample = tk.Label(master=self._color_sample_frame, background=self.color_samples[name], text=name)
-            sample.pack(side=tk.TOP, expand=1, fill=tk.X, padx=2)
-            sample_labels[name] = sample
+    def _color_legend(self):
+        for name in self.data.relation_types:
+            label_name = name.lower().replace('-', '') + "Label"
+            label = self._control_panel_ui.colorLabels.findChild(QtWidgets.QLabel, label_name)
 
-        def recolor_labels():
-            for name, sample in sample_labels.items():
-                sample['background']=self.color_samples[name]
+            color = self.color_samples[name]
 
-        self.add_color_changed_listener(recolor_labels)
-        
-        self._reset_graph_btn = tk.Button(master=self._control_panel, text="Reset Graph", command=self._on_reset)
-        self._reset_graph_btn.pack(side=tk.TOP, pady=10)
-        
-        self._filter_by_header = tk.Label(master=self._control_panel, text="Filtered by: ")
-        self._filter_by_header.pack(side=tk.TOP)
-        self._filter_by_data = tk.StringVar()
-        self._filter_by_label = tk.Label(master=self._control_panel, textvariable=self._filter_by_data, justify=tk.LEFT)
-        self._filter_by_label.pack(side=tk.TOP)
-
-        self._seperator = ttk.Separator(master=self._control_panel, orient=tk.HORIZONTAL)
-        self._seperator.pack(side=tk.TOP, expand=1, fill=tk.X, pady=(5,10))
-        
-        self._selected_header = tk.Label(master=self._control_panel, text="Selected Relations: ")
-        self._selected_header.pack(side=tk.TOP)
-        self._selected_data = tk.StringVar()
-        self._selected_label = tk.Label(master=self._control_panel, textvariable=self._selected_data, justify=tk.LEFT)
-        self._selected_label.pack(side=tk.TOP)
+            palette = QtGui.QPalette()
+            palette.setColor(QtGui.QPalette.Active, QtGui.QPalette.Window, QtGui.QColor(*color))
+            label.setPalette(palette)
 
     def _init_plot_(self):
         """Reset the axes for plotting"""
@@ -140,8 +124,7 @@ class PMIPlot(VisualizerFrame):
         self.color_samples = dict()
         for mapper, name in zip(self.color_mappers, self.data.relation_types):
             r,g,b,a = mapper.to_rgba(0.7, bytes=True)
-            hex = "#{:02x}{:02x}{:02x}".format(int(r), int(g), int(b))
-            self.color_samples[name] = hex
+            self.color_samples[name] = (r,g,b,a)
 
         self._on_color_changed()
         self._mpl.redraw()
@@ -248,17 +231,7 @@ class PMIPlot(VisualizerFrame):
 
     def _change_selected_color(self, eve):
         
-        if hasattr(eve, "ind"):
-            ind = eve.ind[0]
-        elif hasattr(eve, "selected_indexes"):
-            a, b = tuple(eve.selected_indexes)
-            if (a,b) in self.idea_indexes:
-                ind = self.idea_indexes.index((a,b))
-            elif (b,a) in self.idea_indexes:
-                ind = self.idea_indexes.index((b,a))
-            else:
-                print("Selected indexes not found on PMI graph")
-                return None
+        ind = self._get_point_index_from_event(eve)
 
         if self._prev_selected_ind == ind:
             return None
@@ -271,13 +244,69 @@ class PMIPlot(VisualizerFrame):
 
         self._mpl.redraw()
 
+    def _annotate_selected(self, eve):
+        ind = self._get_point_index_from_event(eve)
+
+        if self._prev_annotation is not None:
+            self._prev_annotation.remove()
+
+        topic_1, topic_2 = self.idea_indexes[ind]
+        topic_1_name = self.data.idea_names[topic_1]
+        topic_2_name = self.data.idea_names[topic_2]
+
+        x_cord, y_cord = self.x_values[ind], self.y_values[ind]
+        text = "({0}, {1})".format(topic_1_name, topic_2_name)
+
+        offset = 0
+        if x_cord > 0:
+            offset = self._get_text_offset(text)
+
+        self._prev_annotation = self.axes.annotate(s="({0}, {1})".format(topic_1_name, topic_2_name),
+                                                   xy=(self.x_values[ind]-offset, self.y_values[ind]))
+        self._mpl.redraw()
+
+    def _get_text_offset(self, text):
+        text_width = self._get_text_width(text)
+
+        dis_data_trans = self.axes.transData.inverted()
+        disp_pnt_1 = (0, 0)
+        disp_pnt_2 = (text_width, 0)
+
+        data_pnt_1, data_pnt_2 = dis_data_trans.transform([disp_pnt_1, disp_pnt_2])
+        return data_pnt_2[0] - data_pnt_1[0]
+
+    def _get_text_width(self, text):
+        t = self.axes.text(0, 0, text)
+        bb = t.get_window_extent(renderer=self._mpl.figure.canvas.get_renderer())
+        width = bb.width
+        t.remove()
+        return width
+
+    def _get_point_index_from_event(self, eve):
+        if hasattr(eve, "ind"):
+            return eve.ind[0]
+        elif hasattr(eve, "selected_indexes"):
+            a, b = tuple(eve.selected_indexes)
+            if (a,b) in self.idea_indexes:
+                return self.idea_indexes.index((a,b))
+            elif (b,a) in self.idea_indexes:
+                return self.idea_indexes.index((b,a))
+            else:
+                print("Selected indexes not found on PMI graph")
+                return None
+
+    def _clear_selection(self):
+        if self._prev_annotation is not None:
+            self._prev_annotation.remove()
+            self._prev_annotation = None
+
     def filter_relation(self, eve):
         idea_indexes = eve.selected_indexes
 
-        # self._clear_selection()
+        self._clear_selection()
+        self._clear_filter()
 
-        selected_names = [self.data.idea_names[index] for index in idea_indexes]
-        # self._filter_by_data.set("\n".join(selected_names))
+        self._add_filter([self.data.idea_names[index] for index in idea_indexes])
 
         old_point = None
         if self._prev_selected_ind is not None:
@@ -308,25 +337,23 @@ class PMIPlot(VisualizerFrame):
 
     def _reset_graph(self):
         self.plot(sample=self.sample_size)
-        self._filter_by_data.set("")
-        self._selected_data.set("")
-        self.redraw()
+        # self._filter_by_data.set("")
+        self._clear_selection()
+        self._mpl.redraw()
 
-    def _add_selection(self, event):
-        names = self.data.get_idea_names(event.selected_indexes)
-        self._selected_data.set("\n".join(names))
-
-    def _clear_selection(self):
-        self._selected_data.set("")
-    
     def get_colors_hex(self):
         return ["#{:02x}{:02x}{:02x}".format(*rgb) for rgb in self._colors]
 
     def get_colors_rgb(self):
         return self._colors
 
+    def _add_filter(self, names):
+        self._control_panel_ui.filteredList.addItems(names)
 
-            
+    def _clear_filter(self):
+        self._control_panel_ui.filteredList.clear()
+
+
 def get_row_col(n, i):
     """
     Given the index of a data point of an nxn strictly upper triangular matrix (a_ij = 0 for i>=j),
