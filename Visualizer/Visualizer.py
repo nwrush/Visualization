@@ -56,7 +56,14 @@ class Application(QtWidgets.QMainWindow):
         self.relation_types = RelationTypeFrame(parent=self, data=data)
         self.grid_layout.addWidget(self.relation_types, 1, 0)
 
+        self.top_relation_1 = TopRelations(parent=self, data=data, topic_index=0)
+        self.grid_layout.addWidget(self.top_relation_1, 1, 1)
+        self.top_relation_2 = TopRelations(parent=self, data=data, topic_index=1)
+        self.grid_layout.addWidget(self.top_relation_2, 1, 2)
+
         self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
+        self.pmi.add_select_listener(self.top_relation_1.set_idea_event)
+        self.pmi.add_select_listener(self.top_relation_2.set_idea_event)
         self.idea_list.add_select_listener(self.pmi.filter_relation)
 
         self.relation_types.add_select_listener(self.pmi.filter_relation)

@@ -3,13 +3,12 @@
 
 import functools
 from PyQt5 import QtWidgets
-from PyQt5.QtGui import QFont
 
 import numpy as np
 
 from events import listener, event
 from frames.VisualizerFrame import VisualizerFrame
-from ui import top_relations
+from ui import relation_types
 
 
 def _sort_by_strength(data, strength_index=2):
@@ -23,7 +22,7 @@ class RelationTypeFrame(VisualizerFrame):
     def __init__(self, parent, data):
         super(RelationTypeFrame, self).__init__(parent=parent, data_manager=data)
 
-        self.ui = top_relations.Ui_topRelations()
+        self.ui = relation_types.Ui_relationTypes()
         self.ui.setupUi(self)
 
         self.data = data
@@ -148,10 +147,10 @@ class RelationTypeFrame(VisualizerFrame):
         if not len(selected_items):
             return None
 
-        selected_indexes = set()
+        selected_indexes = list()
         for row, item in selected_items.items():
-            selected_indexes.add(self.data.idea_numbers[item[1]])
-            selected_indexes.add(self.data.idea_numbers[item[2]])
+            selected_indexes.append(self.data.idea_numbers[item[1]])
+            selected_indexes.append(self.data.idea_numbers[item[2]])
 
         eve = event.Event()
         eve.selected_indexes = selected_indexes

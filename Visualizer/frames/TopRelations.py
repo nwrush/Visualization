@@ -1,27 +1,21 @@
 # Nikko Rush
 # 7/10/2017
 
-import tkinter as tk
+from PyQt5 import QtWidgets
 
 import numpy as np
 
 from frames.VisualizerFrame import VisualizerFrame
 from widgets.ListBoxColumn import ListBoxColumn
-
+from ui import top_relations
 
 class TopRelations(VisualizerFrame):
     
-    def __init__(self, master, data, position={}, topic_index=0):
-        super(TopRelations, self).__init__(master, data_manager=data)
-        self.grid_frame(**position)
+    def __init__(self, parent, data, topic_index=0):
+        super(TopRelations, self).__init__(parent, data_manager=data)
 
-        self.title_text = tk.StringVar()
-        self.title_text.set("Selected Relation: ")
-        self.title = tk.Label(master=self.frame, textvariable=self.title_text)
-        self.title.pack()
-
-        self.listbox = ListBoxColumn(master=self.frame, ncolumns=3)
-        self.listbox.pack()
+        self.ui = top_relations.Ui_topRelation()
+        self.ui.setupUi(self)
 
         self._index = topic_index
 
@@ -46,13 +40,13 @@ class TopRelations(VisualizerFrame):
                 type = self._get_point_type(point_pmi, point_cor)
 
                 other_topic_name = self.data.idea_names[i if i != index else j]
-                self._insert_sorted(strengths, (round(strength, 3), type, other_topic_name), sort_index=0)
+                self._insert_sorted(strengths, ("{n:.{d}}".format(n=strength, d=3), type, other_topic_name), sort_index=0)
 
-        self.listbox.delete(0, tk.END)
-        self.listbox.insert(tk.END, *strengths)
+        self._clear_list()
+        self._insert_list(strengths)
 
         # Update the frame title
-        self.title_text.set("Selected Relation: "+ self.data.idea_names[index])
+        self.ui.relationName.setText(self.data.idea_names[index])
 
     def _get_point_type(self, point_pmi, point_cor):
         if 0 <= point_pmi and point_cor < 0:
@@ -73,9 +67,20 @@ class TopRelations(VisualizerFrame):
                 break
         items.insert(index, item)
 
+    def _insert_list(self, items):
+        tbl = self.ui.tableWidget
+        for i, relation in enumerate(items):
+            tbl.insertRow(i)
+            for j, item in enumerate(relation):
+                qtbl_item = QtWidgets.QTableWidgetItem(item)
+                tbl.setItem(i, j, qtbl_item)
+
     def set_idea_event(self, event):
         self.set_idea_index(event.selected_indexes[self._index])
 
     def clear(self):
-        self.title_text.set("Selected Relation: ")
-        self.listbox.delete(0, tk.END)
+        self.ui.relationName.clear()
+        self._clear_list()
+
+    def _clear_list(self):
+        self.ui.tableWidget.clearContents()

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>topRelations</class>
- <widget class="QWidget" name="topRelations">
+ <class>topRelation</class>
+ <widget class="QWidget" name="topRelation">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>451</height>
+    <width>324</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,191 +15,54 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Top Relations</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="friendsButton">
+      <widget class="QLabel" name="staticLabel">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Friends</string>
+        <string>Selected Relation:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="trystButton">
-       <property name="text">
-        <string>Tryst</string>
+      <widget class="QLabel" name="relationName">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="headtoheadButton">
        <property name="text">
-        <string>Head-To-Head</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="armsraceButton">
-       <property name="text">
-        <string>Arms-Race</string>
+        <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QTableWidget" name="friendsTable">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Strength</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 2</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="armsraceTable">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Strength</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 2</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="headtoheadTable">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Strength</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 2</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="trystTable">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Strength</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 1</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Relation 2</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QTableWidget" name="tableWidget">
+     <column>
+      <property name="text">
+       <string>Strength</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Relation Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Relation 2</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>
