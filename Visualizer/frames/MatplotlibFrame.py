@@ -27,7 +27,7 @@ class QMatplotlib(FigureCanvasQTAgg):
         super(QMatplotlib, self).__init__(self._figure)
         self.setParent(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self._set_size()
+        # self._set_size()
         self.updateGeometry()
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
@@ -62,3 +62,16 @@ class QMatplotlib(FigureCanvasQTAgg):
     def prevent_redraw(self):
         self._allow_redraw = False
         self._redraw_requested = False
+
+    def grow_plot(self, delta):
+        size = self.figure.get_size_inches()
+        size[0] = size[0] + delta/self.figure.dpi
+        self.figure.set_size_inches(size)
+        # self._set_size()
+        # self.updateGeometry()
+        self.redraw()
+
+    def set_plot_size(self, width):
+        size = self.figure.get_size_inches()
+        size[0] = width/self.figure.dpi
+        self.figure.set_size_inches(size)

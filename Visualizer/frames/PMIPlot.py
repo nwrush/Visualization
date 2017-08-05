@@ -28,10 +28,15 @@ class PMIPlot(VisualizerFrame):
 
         self.layout = QtWidgets.QHBoxLayout(self)
 
-        self._mpl = QMatplotlib(parent=self)
+        self._mpl_container = QtWidgets.QWidget(self)
+        self._mpl_layout = QtWidgets.QHBoxLayout(self._mpl_container)
+        self._old_mpl_width = self._mpl_container.width()
+
+        self._mpl = QMatplotlib(parent=self._mpl_container)
+        self._mpl_layout.addWidget(self._mpl)
         self._mpl.prevent_redraw()
 
-        self.layout.addWidget(self._mpl)
+        self.layout.addWidget(self._mpl_container)
 
         self.axes = self._mpl.axes
         self.canvas = self._mpl.canvas
@@ -75,6 +80,20 @@ class PMIPlot(VisualizerFrame):
 
         self._mpl.allow_redraw()
         print(self._mpl.figure.get_size_inches())
+
+    def resizeEvent(self, eve):
+        super(PMIPlot, self).resizeEvent(eve)
+        if eve.oldSize().width() == -1 or eve.oldSize().height() == -1:
+            self._old_mpl_width = self._mpl_container.width()
+            return
+
+        # self._mpl.grow_plot(self._mpl_container.width()-self._old_mpl_width)
+        self._mpl.set_plot_size(self._mpl_container.width())
+
+        print(self._mpl.figure.get_size_inches()*self._mpl.figure.dpi)
+        print(self._mpl_container.width())
+        print(self._control_panel.width())
+        print(self.width())
 
     LEGEND_ROWS = 2
     def _setup_control_panel(self):
