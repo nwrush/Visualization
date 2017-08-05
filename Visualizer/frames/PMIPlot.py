@@ -267,7 +267,7 @@ class PMIPlot(VisualizerFrame):
         ind = self._get_point_index_from_event(eve)
 
         if self._prev_annotation is not None:
-            self._prev_annotation.remove()
+            self._clear_selection()
 
         topic_1, topic_2 = self.idea_indexes[ind]
         topic_1_name = self.data.idea_names[topic_1]
@@ -355,9 +355,9 @@ class PMIPlot(VisualizerFrame):
         self._mpl.redraw()
 
     def _reset_graph(self):
-        self.plot(sample=self.sample_size)
-        # self._filter_by_data.set("")
         self._clear_selection()
+        self.plot(sample=self.sample_size)
+        self._clear_filter()
         self._mpl.redraw()
 
     def get_colors_hex(self):

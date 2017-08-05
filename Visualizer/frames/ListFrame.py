@@ -54,7 +54,6 @@ class ListFrame(VisualizerFrame):
         self.ui.listWidget.clearSelection()
 
     def _on_select(self, selected_item):
-        print("Hello")
         indexes = set()
         for item in self.ui.listWidget.selectedItems():
             indexes.add(self.data.idea_numbers[item.text()])

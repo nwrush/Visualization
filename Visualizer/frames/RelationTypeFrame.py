@@ -182,7 +182,7 @@ class RelationTypeFrame(VisualizerFrame):
         self.active_index = index
 
     def clear_selection(self):
-        self.lists[self.active_index].clearSelection()
+        self._tables[self.active_index].clearSelection()
 
     def color_buttons(self, color_map):
         for btn, name in zip(self._buttons, self.types):

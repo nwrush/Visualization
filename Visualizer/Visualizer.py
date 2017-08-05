@@ -62,12 +62,25 @@ class Application(QtWidgets.QMainWindow):
         self.top_relation_2 = TopRelations(parent=self, data=data, topic_index=1)
         self.grid_layout.addWidget(self.top_relation_2, 1, 2)
 
+        # PMI Select Listener
         self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
         self.pmi.add_select_listener(self.top_relation_1.set_idea_event)
         self.pmi.add_select_listener(self.top_relation_2.set_idea_event)
+
+        # Idea list Select Listener
         self.idea_list.add_select_listener(self.pmi.filter_relation)
 
+        # Relation types Select Listener
         self.relation_types.add_select_listener(self.pmi.filter_relation)
+
+        # PMI reset Listeners
+        self.pmi.add_reset_listener(self.idea_list.clear_selection)
+        self.pmi.add_reset_listener(self.relation_types.clear_selection)
+        self.pmi.add_reset_listener(self.ts.clear)
+
+        # Keep lists current with selection
+        self.relation_types.add_select_listener(self.pmi.filter_relation)
+        self.relation_types.add_select_listener(self.idea_list.clear_selection)
 
 
 def create_visualizer(data, parent):
