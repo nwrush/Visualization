@@ -55,7 +55,11 @@
    <item row="1" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="inputFile"/>
+      <widget class="QLineEdit" name="inputFile">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="inputFileBtn">
@@ -84,7 +88,11 @@
    <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLineEdit" name="outputDir"/>
+      <widget class="QLineEdit" name="outputDir">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="outputDirBtn">
@@ -113,7 +121,11 @@
    <item row="3" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLineEdit" name="finalDir"/>
+      <widget class="QLineEdit" name="finalDir">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="finalDirBtn">
@@ -142,7 +154,11 @@
    <item row="4" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLineEdit" name="bckFile"/>
+      <widget class="QLineEdit" name="bckFile">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="bckFileBtn">
@@ -171,7 +187,11 @@
    <item row="5" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QLineEdit" name="malletDir"/>
+      <widget class="QLineEdit" name="malletDir">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="malletDirBtn">
@@ -340,21 +360,6 @@
   <tabstop>tokenizeBox</tabstop>
   <tabstop>lemmatizeBox</tabstop>
   <tabstop>stopwordBox</tabstop>
-  <tabstop>finalDirBtn</tabstop>
-  <tabstop>inputFileBtn</tabstop>
-  <tabstop>bckFileBtn</tabstop>
-  <tabstop>outputDirBtn</tabstop>
-  <tabstop>malletDirBtn</tabstop>
-  <tabstop>outputDir</tabstop>
-  <tabstop>outputDirBtn</tabstop>
-  <tabstop>finalDir</tabstop>
-  <tabstop>finalDirBtn</tabstop>
-  <tabstop>inputFile</tabstop>
-  <tabstop>inputFileBtn</tabstop>
-  <tabstop>malletDir</tabstop>
-  <tabstop>malletDirBtn</tabstop>
-  <tabstop>bckFile</tabstop>
-  <tabstop>bckFileBtn</tabstop>
  </tabstops>
  <resources/>
  <connections/>

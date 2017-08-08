@@ -220,7 +220,7 @@ class PreprocessorController(VisualizerFrame):
         args.extend(["--objects_location", output_name])
 
         if os.name == 'nt':
-            args = [".\\venv\\Scripts\\python.exe", "-u", "main.py"] + args
+            args = ["python.exe", "-u", "main.py"] + args
             # args = ["python.exe", "--version"]
             cwd = ".\\idea_relations"
             # cwd = "."
@@ -250,7 +250,7 @@ class PreprocessorController(VisualizerFrame):
             return_code = self._message_queue.get()
             print(return_code)
 
-            self._preprocessor_done(self, return_code)
+            self._preprocessor_done(return_code)
 
         else:
             self._timer.start()

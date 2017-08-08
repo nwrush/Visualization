@@ -1,6 +1,7 @@
 # Nikko Rush
 # 6/21/2017
 
+# region Imports
 import sys
 
 import PyQt5
@@ -10,14 +11,18 @@ import PyQt5.QtWidgets as QtWidgets
 import matplotlib
 matplotlib.use("Qt5Agg")
 
+import exception_handler
 import data
 from frames.preprocessor_controller import PreprocessorController
 from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
+# endregion
 
 """
 GUI creation
 """
+
+X_VALS = [i for i in range(1980, 2015)]
 
 def tmp_callback(*args):
     print(args)
@@ -34,11 +39,37 @@ class Application(QtWidgets.QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
-        self._preprocess_widget = PreprocessorController(self.main_widget, tmp_callback)
+        self._data_manager = data_manager
+
+        self._preprocess_widget = None
+        self._load_preprocessor()
+
+        self._visualizer_widget = None
+        if self._data_manager is not None:
+            self._load_visualizer()
+
+    def _load_preprocessor(self):
+        self._preprocess_widget = PreprocessorController(self.main_widget, self._preprocessor_callback)
         self.ui.tabWidget.insertTab(0, self._preprocess_widget, "Preprocessor")
 
-        self._visualizer_widget = VisualizerWidget(self.main_widget, data_manager)
+    def _load_visualizer(self):
+        self._visualizer_widget = VisualizerWidget(self.main_widget, self._data_manager)
         self.ui.tabWidget.insertTab(1, self._visualizer_widget, "Visualizer")
+
+    def set_data(self, new_data):
+        self._data_manager = new_data
+
+        if self._visualizer_widget is not None:
+            self.ui.tabWidget.removeTab(1)
+
+        self._load_visualizer()
+
+    def _preprocessor_callback(self, return_code):
+        if return_code == 0:
+            data_manager = data.load_data(self._preprocess_widget.output_name)
+            assert data_manager is not None
+            data_manager.x_values = X_VALS
+            self.set_data(data_manager)
 
 
 def is_square_matrix(a):
@@ -56,7 +87,8 @@ def main(fname):
     x_vals = [i for i in range(1980, 2015)]
 
     data_manager = data.load_data(fname)
-    data_manager.x_values = x_vals
+    if data_manager is not None:
+        data_manager.x_values = x_vals
 
     qApp = QtWidgets.QApplication(sys.argv)
     window = Application(data_manager)
