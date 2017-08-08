@@ -223,7 +223,6 @@ class PreprocessorController(VisualizerFrame):
             args = ["python.exe", "-u", "main.py"] + args
             # args = ["python.exe", "--version"]
             cwd = ".\\idea_relations"
-            # cwd = "."
         else:
             # args = ["python", "--version"]
             args = ["python", "-u", "main.py"] + args

@@ -1,8 +1,12 @@
 @echo off
 
+Set Loc=%CD%
+
 setlocal
 
-Set ROOT=%CD%
+Set ROOT=%~dp0
+echo %ROOT%
+cd %ROOT%
 
 Set AppPath=Application
 Set VisPath=Visualizer
@@ -25,8 +29,8 @@ xcopy /Y  "idea_relations\templates" "%AppPath%\idea_relations\templates\"
 xcopy /Y  "idea_relations\*.bat" "%AppPath%\idea_relations\"
 xcopy /Y  "idea_relations\*.sh" "%AppPath%\idea_relations\"
 
-endlocal & Set AppPath=%AppPath%
+endlocal
 
-cd %AppPath%
+cd %Loc%
 
-set "AppPath="
+set "Loc="
