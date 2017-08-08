@@ -12,6 +12,7 @@ cp -u $VisPath/widgets/*.py $AppPath/widgets/
 cp -u $VisPath/menus/*.py $AppPath/menus/
 cp -u $VisPath/Images/*.* $AppPath/Images/
 cp -u $VisPath/events/*.py $AppPath/events/
+cp -u $VisPath/ui/*.py $AppPath/ui
 
 # Update Idea Relations
 cp -u idea_relations/*.py $AppPath/idea_relations/
