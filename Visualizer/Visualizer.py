@@ -87,8 +87,8 @@ def main(fname):
     x_vals = [i for i in range(1980, 2015)]
 
     data_manager = data.load_data(fname)
-    if data_manager is not None:
-        data_manager.x_values = x_vals
+    # if data_manager is not None:
+    #     data_manager.x_values = x_vals
 
     qApp = QtWidgets.QApplication(sys.argv)
     window = Application(data_manager)
