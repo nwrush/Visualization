@@ -8,7 +8,7 @@ import numpy as np
 
 from events import listener, event
 from frames.VisualizerFrame import VisualizerFrame
-from ui import relation_types
+from ui import relation_types_tabs
 
 
 def _sort_by_strength(data, strength_index=2):
@@ -22,7 +22,7 @@ class RelationTypeFrame(VisualizerFrame):
     def __init__(self, parent, data):
         super(RelationTypeFrame, self).__init__(parent=parent, data_manager=data)
 
-        self.ui = relation_types.Ui_relationTypes()
+        self.ui = relation_types_tabs.Ui_relationTypes()
         self.ui.setupUi(self)
 
         self.data = data
@@ -45,18 +45,11 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _config_ui(self):
         for i, name in enumerate(self.types):
-            btn_name = "{0}Button".format(name.lower().replace('-', ''))
             tbl_name = "{0}Table".format(name.lower().replace('-', ''))
-
-            btn = self.findChild(QtWidgets.QPushButton, btn_name)
             tbl = self.findChild(QtWidgets.QTableWidget, tbl_name)
 
-            self._buttons.append(btn)
             self._tables.append(tbl)
-
-            btn.clicked.connect(functools.partial(self._btn_click, name))
             tbl.itemSelectionChanged.connect(self._on_select)
-            tbl.hide()
 
     def _determine_relations(self):
         pmi = self.data.pmi
@@ -169,28 +162,17 @@ class RelationTypeFrame(VisualizerFrame):
             self._tables[self.active_index].hide()
             self._tables[self.active_index].clearSelection()
 
-            font = self._buttons[self.active_index].font()
-            font.setUnderline(False)
-            self._buttons[self.active_index].setFont(font)
-
         self._tables[index].show()
-
-        font = self._buttons[index].font()
-        font.setUnderline(True)
-        self._buttons[index].setFont(font)
-
         self.active_index = index
 
     def clear_selection(self):
         self._tables[self.active_index].clearSelection()
 
-    def color_buttons(self, color_map):
-        for btn, name in zip(self._buttons, self.types):
-            color = color_map[name]
+    def color_tabs(self, color_map):
+        tab_bar = self.ui.tabWidget.tabBar()
 
-            palette = QtGui.QPalette()
-            palette.setColor(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, QtGui.QColor(*color))
-            btn.setPalette(palette)
+        for i, name in zip(range(tab_bar.count()), self.types):
+            tab_bar.setTabTextColor(i, QtGui.QColor(*color_map[name]))
 
     def color_changed(self, pmi_frame):
-        self.color_buttons(pmi_frame.color_samples)
+        self.color_tabs(pmi_frame.color_samples)

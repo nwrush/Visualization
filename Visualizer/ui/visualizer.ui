@@ -16,9 +16,15 @@
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="minimumSize">
+      <size>
+       <width>480</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
-       <width>400</width>
+       <width>480</width>
        <height>16777215</height>
       </size>
      </property>

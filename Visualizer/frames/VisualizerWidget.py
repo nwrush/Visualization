@@ -38,7 +38,7 @@ class VisualizerWidget(VisualizerFrame):
 
         self._relation_types = RelationTypeFrame(self, data=self._data)
         self.ui.tabWidget.insertTab(1, self._relation_types, "Types")
-        self._relation_types.color_buttons(self._pmi.color_samples)
+        self._relation_types.color_tabs(self._pmi.color_samples)
 
         self._top_relation_1 = TopRelations(self, data=self._data, topic_index=0)
         self.ui.tabWidget.insertTab(2, self._top_relation_1, "Top Relation 1")

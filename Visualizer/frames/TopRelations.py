@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets
 import numpy as np
 
 from frames.VisualizerFrame import VisualizerFrame
-from widgets.ListBoxColumn import ListBoxColumn
 from ui import top_relations
 
 class TopRelations(VisualizerFrame):
