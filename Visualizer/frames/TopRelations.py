@@ -1,7 +1,7 @@
 # Nikko Rush
 # 7/10/2017
 
-from PyQt5 import QtWidgets
+import PyQt5.QtWidgets as QtWidgets
 
 import numpy as np
 
@@ -47,7 +47,8 @@ class TopRelations(VisualizerFrame):
         # Update the frame title
         self.ui.relationName.setText(self.data.idea_names[index])
 
-    def _get_point_type(self, point_pmi, point_cor):
+    @staticmethod
+    def _get_point_type(point_pmi, point_cor):
         if 0 <= point_pmi and point_cor < 0:
             return "Tryst"
         elif 0 <= point_pmi and 0 <= point_cor:
@@ -57,7 +58,8 @@ class TopRelations(VisualizerFrame):
         elif point_pmi < 0 and 0 <= point_cor:
             return "Arms-Race"
 
-    def _insert_sorted(self, items, item, sort_index=0):
+    @staticmethod
+    def _insert_sorted(items, item, sort_index=0):
         index = 0
         for index in range(len(items)):
             list_item = items[index]

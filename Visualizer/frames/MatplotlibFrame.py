@@ -1,13 +1,11 @@
 # Nikko Rush
 # 7/2/2017
 
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import PyQt5.QtCore as QtCore
+import PyQt5.QtWidgets as QtWidgets
+
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-
-from frames.VisualizerFrame import VisualizerFrame
 
 class QMatplotlib(FigureCanvasQTAgg):
     """Frame specifically for displaying matplotlib graphs"""

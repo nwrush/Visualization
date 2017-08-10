@@ -1,8 +1,8 @@
 # Nikko Rush
 # 7/6/2017
 
-import functools
-from PyQt5 import QtWidgets, QtGui
+import PyQt5.QtWidgets as QtWidgets
+import PyQt5.QtGui as QtGui
 
 import numpy as np
 

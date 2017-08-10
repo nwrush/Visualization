@@ -1,8 +1,6 @@
 # Nikko Rush
 # 7/6/2017
 
-import PyQt5.QtWidgets as QtWidgets
-
 from events import event, listener
 from frames.VisualizerFrame import VisualizerFrame
 from ui import topics_list

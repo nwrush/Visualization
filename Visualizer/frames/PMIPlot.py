@@ -2,24 +2,19 @@
 # 7/5/2017
 
 import math
-import tkinter as tk
-import tkinter.ttk as ttk
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
+import PyQt5.QtWidgets as QtWidgets
+import PyQt5.QtGui as QtGui
 
 import matplotlib.cm as cm
 import matplotlib.colors as colors
 import numpy as np
 
 import colors as visualizer_colors
-import images
-from events import listener, event
+from events import listener
 from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
-from menus import pmi_menu
 from ui import pmi_control_panel_vert
-from ui import pmi_control_panel_horiz
 
 class PMIPlot(VisualizerFrame):
 

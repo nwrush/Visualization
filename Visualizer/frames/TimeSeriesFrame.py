@@ -1,11 +1,8 @@
 # Nikko Rush
 # 7/5/2017
 
-import tkinter as tk
-from PyQt5 import QtWidgets
-
 import numpy as np
-from matplotlib.figure import Figure
+import PyQt5.QtWidgets as QtWidgets
 
 from frames.VisualizerFrame import VisualizerFrame
 from frames.MatplotlibFrame import QMatplotlib
@@ -28,21 +25,6 @@ class TimeSeriesFrame(VisualizerFrame):
         self._init_plot()
 
         self.series = None
-
-        # self._create_control_panel()
-
-    def _create_control_panel(self):
-        self._control_panel = tk.Frame(master=self.frame, padx=10, pady=20)
-        self._control_panel.pack(side=tk.RIGHT, expand=1, anchor=tk.N)
-
-        self._correlation_header = tk.Label(self._control_panel, text="Correlation:")
-        self._correlation_header.pack(side=tk.TOP)
-
-        self._correlation_data = tk.DoubleVar()
-
-        self._correlation_label = tk.Label(self._control_panel, textvariable=self._correlation_data)
-        self._correlation_label.pack(side=tk.TOP)
-
 
     def _init_plot(self):
         self.axes.clear()

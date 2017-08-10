@@ -8,13 +8,8 @@ import queue
 import subprocess
 import threading
 
-import tkinter as tk
-import tkinter.ttk as ttk
-import tkinter.filedialog as filedialog
-
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog, QVBoxLayout, QWidget
-
 
 from frames.VisualizerFrame import VisualizerFrame
 from ui import preprocessor_form
@@ -22,78 +17,6 @@ from ui import preprocessor_run
 
 RUNTYPE_OPTIONS = ["Keywords", "Topics"]
 GROUP_BY = ["Year", "Month", "Quarter"]
-
-class InputField():
-
-    def __init__(self, master, name, row, label_text=None, variable_fmt=None):
-        self.frame = master
-
-        self.name = name
-
-        label_text = name if label_text is None else label_text
-        self.label = tk.Label(self.frame, text=label_text)
-        self.label.grid(row=row, column=0, sticky="W", pady=2)
-
-        self._var = None
-        self.data_field = None
-
-        self.button = None
-
-        self.variable_callback = variable_fmt
-
-    def get_value(self):
-        if self.variable_callback is None or not self._var.get():
-            return self._var.get()
-        else:
-            return self.variable_callback(self._var.get())
-
-
-def create_option_menu(field, options, row):
-    var = field._var = tk.StringVar()
-    field.data_field = tk.OptionMenu(field.frame, var, *options, command=None)
-    field.data_field.grid(row=row, column=1)
-    field._var.set(options[0])
-
-
-def create_entry(field, row):
-    var = field._var = tk.StringVar()
-    field.data_field = tk.Entry(field.frame, textvariable=var, width=50)
-    field.data_field.grid(row=row, column=1)
-
-
-def create_checkbox(field, row):
-    var = field._var = tk.IntVar()
-    field.data_field = tk.Checkbutton(field.frame, var=var)
-    field.data_field.grid(row=row, column=1)
-
-
-def create_button(field, row, callback):
-    button = tk.Button(master=field.frame, text="...", command=callback)
-    button.grid(row=row, column=2, padx=5)
-    field.button = button
-
-
-def get_file_factory(field):
-    def callback():
-        value = filedialog.askopenfilename(parent=field.frame)
-        if value is not None:
-            field._var.set(value)
-
-    return callback
-
-
-def get_directory_factory(field):
-    def callback():
-        value = filedialog.askdirectory(parent=field.frame)
-        if value is not None:
-            field._var.set(value)
-
-    return callback
-
-
-def format_path(value):
-    return str(Path(value))
-
 
 class PreprocessorController(VisualizerFrame):
 
@@ -189,7 +112,7 @@ class PreprocessorController(VisualizerFrame):
         ui.runPreprocessor.clicked.connect(self._run_preprocessor)
 
     def _start(self):
-        valid = self._validate_params()
+        valid = self._validate_params(None)
         if not valid:
             return
 

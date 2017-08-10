@@ -1,7 +1,6 @@
 # Nikko Rush
 # 7/2/2017
 
-import tkinter as tk
 import PyQt5.QtWidgets as QtWidgets
 
 class VisualizerFrame(QtWidgets.QWidget):

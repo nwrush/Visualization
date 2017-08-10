@@ -6,11 +6,12 @@ import sys
 import matplotlib
 matplotlib.use("Qt5Agg")
 
-from PyQt5 import QtCore, QtWidgets
+import PyQt5.QtCore as QtCore
+import PyQt5.QtWidgets as QtWidgets
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-from numpy import arange, sin, pi
+import numpy as np
 
 class QMatplotlib(FigureCanvasQTAgg):
 
@@ -27,8 +28,8 @@ class QMatplotlib(FigureCanvasQTAgg):
         FigureCanvasQTAgg.updateGeometry(self)
 
     def get_initial(self):
-        t = arange(0.0, 3.0, 0.01)
-        s = sin(2*pi*t)
+        t = np.arange(0.0, 3.0, 0.01)
+        s = np.sin(2*np.pi*t)
         self.axes.plot(t,s, 'r')
 
 class Application(QtWidgets.QMainWindow):
@@ -49,7 +50,7 @@ class Application(QtWidgets.QMainWindow):
 
 def test():
     import sys
-    from PyQt5 import QtWidgets
+    import PyQt5.QtWidgets as QtWidgets
 
     """
     ZetCode PyQt4 tutorial 

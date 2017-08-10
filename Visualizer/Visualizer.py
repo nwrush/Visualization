@@ -4,8 +4,6 @@
 # region Imports
 import sys
 
-import PyQt5
-import PyQt5.QtCore as QtCore
 import PyQt5.QtWidgets as QtWidgets
 
 import matplotlib

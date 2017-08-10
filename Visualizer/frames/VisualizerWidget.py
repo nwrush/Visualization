@@ -1,8 +1,6 @@
 # Nikko Rush
 # 8/7/2017
 
-import PyQt5.QtWidgets as QtWidgets
-
 from frames.VisualizerFrame import VisualizerFrame
 from frames.PMIPlot import PMIPlot
 from frames.TimeSeriesFrame import TimeSeriesFrame
@@ -19,7 +17,6 @@ class VisualizerWidget(VisualizerFrame):
         self.ui = visualizer.Ui_visualizaerWidget()
         self.ui.setupUi(self)
 
-        # self._layout = QtWidgets.QGridLayout(self)
         self._data = data_manager
         self._load_visualizaer()
 
