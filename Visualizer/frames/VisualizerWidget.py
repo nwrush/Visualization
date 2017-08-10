@@ -9,54 +9,58 @@ from frames.TimeSeriesFrame import TimeSeriesFrame
 from frames.ListFrame import ListFrame
 from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
+from ui import visualizer
 
 class VisualizerWidget(VisualizerFrame):
 
     def __init__(self, parent, data_manager):
         super(VisualizerWidget, self).__init__(parent=parent)
 
-        self._layout = QtWidgets.QGridLayout(self)
+        self.ui = visualizer.Ui_visualizaerWidget()
+        self.ui.setupUi(self)
+
+        # self._layout = QtWidgets.QGridLayout(self)
         self._data = data_manager
         self._load_visualizaer()
 
 
     def _load_visualizaer(self):
-        self.pmi = PMIPlot(self, self._data)
-        self.pmi.plot(sample=1000)
-        self._layout.addWidget(self.pmi, 0, 1)
+        self._pmi = PMIPlot(self, self._data)
+        self._pmi.plot(sample=1000)
+        self.ui.pmiWidget.layout().addWidget(self._pmi)
 
-        self.ts = TimeSeriesFrame(self, self._data)
-        self._layout.addWidget(self.ts, 0, 2)
+        self._ts = TimeSeriesFrame(self, self._data)
+        self.ui.tsWidget.layout().addWidget(self._ts)
 
-        self.idea_list = ListFrame(self, data=self._data)
-        self._layout.addWidget(self.idea_list, 0, 0)
-        self.idea_list.add_items(self._data.idea_names.values())
+        self._idea_list = ListFrame(self.ui.tabWidget, data=self._data)
+        self.ui.tabWidget.insertTab(0, self._idea_list, "Ideas")
+        self._idea_list.add_items(self._data.idea_names.values())
 
-        self.relation_types = RelationTypeFrame(self, data=self._data)
-        self._layout.addWidget(self.relation_types, 1, 0)
-        self.relation_types.color_buttons(self.pmi.color_samples)
+        self._relation_types = RelationTypeFrame(self, data=self._data)
+        self.ui.tabWidget.insertTab(1, self._relation_types, "Types")
+        self._relation_types.color_buttons(self._pmi.color_samples)
 
-        self.top_relation_1 = TopRelations(self, data=self._data, topic_index=0)
-        self._layout.addWidget(self.top_relation_1, 1, 1)
-        self.top_relation_2 = TopRelations(self, data=self._data, topic_index=1)
-        self._layout.addWidget(self.top_relation_2, 1, 2)
+        self._top_relation_1 = TopRelations(self, data=self._data, topic_index=0)
+        self.ui.tabWidget.insertTab(2, self._top_relation_1, "Top Relation 1")
+        self._top_relation_2 = TopRelations(self, data=self._data, topic_index=1)
+        self.ui.tabWidget.insertTab(3, self._top_relation_2, "Top Relation 2")
 
         # PMI Select Listener
-        self.pmi.add_select_listener(self.ts.plot_idea_indexes_event)
-        self.pmi.add_select_listener(self.top_relation_1.set_idea_event)
-        self.pmi.add_select_listener(self.top_relation_2.set_idea_event)
+        self._pmi.add_select_listener(self._ts.plot_idea_indexes_event)
+        self._pmi.add_select_listener(self._top_relation_1.set_idea_event)
+        self._pmi.add_select_listener(self._top_relation_2.set_idea_event)
 
         # Idea list Select Listener
-        self.idea_list.add_select_listener(self.pmi.filter_relation)
+        self._idea_list.add_select_listener(self._pmi.filter_relation)
 
         # Relation types Select Listener
-        self.relation_types.add_select_listener(self.pmi.filter_relation)
+        self._relation_types.add_select_listener(self._pmi.filter_relation)
 
         # PMI reset Listeners
-        self.pmi.add_reset_listener(self.idea_list.clear_selection)
-        self.pmi.add_reset_listener(self.relation_types.clear_selection)
-        self.pmi.add_reset_listener(self.ts.clear)
+        self._pmi.add_reset_listener(self._idea_list.clear_selection)
+        self._pmi.add_reset_listener(self._relation_types.clear_selection)
+        self._pmi.add_reset_listener(self._ts.clear)
 
         # Keep lists current with selection
-        self.relation_types.add_select_listener(self.pmi.filter_relation)
-        self.relation_types.add_select_listener(self.idea_list.clear_selection)
+        self._relation_types.add_select_listener(self._pmi.filter_relation)
+        self._relation_types.add_select_listener(self._idea_list.clear_selection)
