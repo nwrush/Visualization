@@ -3,7 +3,8 @@
 
 import matplotlib.pyplot as plt
 
-### Plot the Time Series for the given idea
+
+# Plot the Time Series for the given idea
 def plot_idea_timeseries(idea_name, idea_numbers, ts_matrix):
     ts_data = ts_matrix[idea_numbers[idea_name]]
 

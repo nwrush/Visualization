@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Visualizer" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/Application" />
+      <excludeFolder url="file://$MODULE_DIR$/Visualizer/venv" />
       <excludeFolder url="file://$MODULE_DIR$/idea_relations" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.5.2 virtualenv at C:\Users\rushni\Documents\dev\Visualization\Visualizer\venv" jdkType="Python SDK" />

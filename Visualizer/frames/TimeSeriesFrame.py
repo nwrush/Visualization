@@ -9,7 +9,6 @@ from frames.MatplotlibFrame import QMatplotlib
 
 
 class TimeSeriesFrame(VisualizerFrame):
-
     def __init__(self, parent, data):
         super(TimeSeriesFrame, self).__init__(parent=parent, data_manager=data)
 
@@ -70,7 +69,7 @@ class TimeSeriesFrame(VisualizerFrame):
 
     def get_correlation(self):
         correlation = np.corrcoef(self.series, rowvar=False)
-        self._correlation_data.set(round(correlation[0,1], 5))
+        self._correlation_data.set(round(correlation[0, 1], 5))
 
     def clear(self):
         self.series = None

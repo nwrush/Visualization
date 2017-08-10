@@ -3,6 +3,7 @@
 
 import PyQt5.QtWidgets as QtWidgets
 
+
 class VisualizerFrame(QtWidgets.QWidget):
     """Abstract class, please don't instantiate"""
     def __init__(self, parent=None, data_manager=None):

@@ -8,8 +8,8 @@ import numpy as np
 from frames.VisualizerFrame import VisualizerFrame
 from ui import top_relations
 
+
 class TopRelations(VisualizerFrame):
-    
     def __init__(self, parent, data, topic_index=0):
         super(TopRelations, self).__init__(parent, data_manager=data)
 
@@ -25,7 +25,7 @@ class TopRelations(VisualizerFrame):
         strengths = []
         pmi, ts_cor = self.data.pmi, self.data.ts_correlation
         for i in range(0, self.data.num_ideas):
-            for j in range(i+1, self.data.num_ideas):
+            for j in range(i + 1, self.data.num_ideas):
                 if i != index and j != index:
                     continue
                 point_pmi = pmi[i, j]
@@ -36,10 +36,11 @@ class TopRelations(VisualizerFrame):
                     continue
 
                 strength = point_pmi * point_cor
-                type = self._get_point_type(point_pmi, point_cor)
+                point_type = self._get_point_type(point_pmi, point_cor)
 
                 other_topic_name = self.data.idea_names[i if i != index else j]
-                self._insert_sorted(strengths, ("{n:.{d}}".format(n=strength, d=3), type, other_topic_name), sort_index=0)
+                self._insert_sorted(strengths, ("{n:.{d}}".format(n=strength, d=3), point_type, other_topic_name),
+                                    sort_index=0)
 
         self._clear_list()
         self._insert_list(strengths)

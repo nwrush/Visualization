@@ -9,8 +9,8 @@ from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
 from ui import visualizer
 
-class VisualizerWidget(VisualizerFrame):
 
+class VisualizerWidget(VisualizerFrame):
     def __init__(self, parent, data_manager):
         super(VisualizerWidget, self).__init__(parent=parent)
 
@@ -19,7 +19,6 @@ class VisualizerWidget(VisualizerFrame):
 
         self._data = data_manager
         self._load_visualizaer()
-
 
     def _load_visualizaer(self):
         self._pmi = PMIPlot(self, self._data)

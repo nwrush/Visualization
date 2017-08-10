@@ -5,15 +5,15 @@
 import sys
 
 import PyQt5.QtWidgets as QtWidgets
-
 import matplotlib
-matplotlib.use("Qt5Agg")
 
 import exception_handler
 import data
 from frames.preprocessor_controller import PreprocessorController
 from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
+
+matplotlib.use("Qt5Agg")
 # endregion
 
 """
@@ -22,8 +22,6 @@ GUI creation
 
 X_VALS = [i for i in range(1980, 2015)]
 
-def tmp_callback(*args):
-    print(args)
 
 class Application(QtWidgets.QMainWindow):
 
@@ -76,9 +74,9 @@ def is_square_matrix(a):
 
 def main(fname):
     # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
-    #pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
-    #assert is_square_matrix(pmi)
-    #assert is_square_matrix(ts_correlation)
+    # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
+    # assert is_square_matrix(pmi)
+    # assert is_square_matrix(ts_correlation)
 
     # gui(fname)
     # The actual time deltas should be pulled from the preprocessor and used here

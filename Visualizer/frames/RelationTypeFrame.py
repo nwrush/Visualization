@@ -18,7 +18,6 @@ def _sort_by_strength(data, strength_index=2):
 
 
 class RelationTypeFrame(VisualizerFrame):
-
     def __init__(self, parent, data):
         super(RelationTypeFrame, self).__init__(parent=parent, data_manager=data)
 
@@ -69,7 +68,7 @@ class RelationTypeFrame(VisualizerFrame):
                 strength = point_pmi * point_cor
 
                 if 0 <= point_pmi and point_cor < 0:
-                    trysts.append((i,j,strength))
+                    trysts.append((i, j, strength))
                 elif 0 <= point_pmi and 0 <= point_cor:
                     friends.append((i, j, strength))
                 elif point_pmi < 0 and point_cor < 0:
@@ -149,7 +148,7 @@ class RelationTypeFrame(VisualizerFrame):
         eve.selected_indexes = selected_indexes
         eve.should_select = True
         self._onselect_listener.invoke(eve)
-        
+
     def _btn_click(self, name):
         self._set_active(name)
 

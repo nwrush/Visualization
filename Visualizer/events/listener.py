@@ -1,8 +1,8 @@
 # Nikko Rush
 # 7/28/2017
 
+
 class Listener(object):
-    
     def __init__(self, *handlers):
         self._handlers = set(handlers)
 

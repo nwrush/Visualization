@@ -4,7 +4,6 @@
 import sys
 
 import matplotlib
-matplotlib.use("Qt5Agg")
 
 import PyQt5.QtCore as QtCore
 import PyQt5.QtWidgets as QtWidgets
@@ -12,6 +11,9 @@ import PyQt5.QtWidgets as QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import numpy as np
+
+matplotlib.use("Qt5Agg")
+
 
 class QMatplotlib(FigureCanvasQTAgg):
 
@@ -30,7 +32,8 @@ class QMatplotlib(FigureCanvasQTAgg):
     def get_initial(self):
         t = np.arange(0.0, 3.0, 0.01)
         s = np.sin(2*np.pi*t)
-        self.axes.plot(t,s, 'r')
+        self.axes.plot(t, s, 'r')
+
 
 class Application(QtWidgets.QMainWindow):
 
@@ -47,6 +50,7 @@ class Application(QtWidgets.QMainWindow):
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
+
 
 def test():
     import sys
@@ -68,9 +72,9 @@ def test():
         def __init__(self):
             super(Example, self).__init__()
 
-            self.initUI()
+            self.init_ui()
 
-        def initUI(self):
+        def init_ui(self):
 
             grid = QtWidgets.QGridLayout()
             self.setLayout(grid)
