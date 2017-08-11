@@ -11,12 +11,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_visualizaerWidget(object):
     def setupUi(self, visualizaerWidget):
         visualizaerWidget.setObjectName("visualizaerWidget")
-        visualizaerWidget.resize(845, 657)
+        visualizaerWidget.resize(1024, 657)
         self.horizontalLayout = QtWidgets.QHBoxLayout(visualizaerWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tabWidget = QtWidgets.QTabWidget(visualizaerWidget)
         self.tabWidget.setMinimumSize(QtCore.QSize(0, 0))
-        self.tabWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.tabWidget.setMaximumSize(QtCore.QSize(400, 16777215))
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.South)
         self.tabWidget.setObjectName("tabWidget")
         self.horizontalLayout.addWidget(self.tabWidget)

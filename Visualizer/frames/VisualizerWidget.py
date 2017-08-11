@@ -1,6 +1,8 @@
 # Nikko Rush
 # 8/7/2017
 
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTabWidget, QSplitter
+
 from frames.VisualizerFrame import VisualizerFrame
 from frames.PMIPlot import PMIPlot
 from frames.TimeSeriesFrame import TimeSeriesFrame
@@ -19,6 +21,9 @@ class VisualizerWidget(VisualizerFrame):
 
         self._data = data_manager
         self._load_visualizaer()
+
+    def sizeHint(self):
+        return self.parent().size()
 
     def _load_visualizaer(self):
         self._pmi = PMIPlot(self, self._data)
@@ -60,3 +65,7 @@ class VisualizerWidget(VisualizerFrame):
         # Keep lists current with selection
         self._relation_types.add_select_listener(self._pmi.filter_relation)
         self._relation_types.add_select_listener(self._idea_list.clear_selection)
+
+    def resizeEvent(self, event):
+        self.ui.tabWidget.setFixedWidth(min(300, int(self.size().width()/5)))
+        super(VisualizerWidget, self).resizeEvent(event)

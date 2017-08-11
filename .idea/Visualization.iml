@@ -9,6 +9,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.5.2 virtualenv at C:\Users\rushni\Documents\dev\Visualization\Visualizer\venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="idea_relations" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_FOLDERS">
