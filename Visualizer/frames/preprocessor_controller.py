@@ -26,7 +26,6 @@ DEFAULT_FINAL_DIR = "./output/final/"
 
 
 class PreprocessorController(VisualizerFrame):
-
     def __init__(self, parent, finished_callback=None):
         super(PreprocessorController, self).__init__(parent=parent)
 
@@ -50,6 +49,7 @@ class PreprocessorController(VisualizerFrame):
         self._timer.setInterval(500)
 
         self._preprocessor_thread = None
+        self._num_steps = None
         self._message_queue = queue.Queue()
         self._callback = finished_callback
 
@@ -202,6 +202,7 @@ class PreprocessorController(VisualizerFrame):
         def unset_connection():
             field.setPalette(DEFAULT_PALETTE)
             field.textEdited.disconnect(unset_connection)
+
         field.textChanged.connect(unset_connection)
 
     def _run_preprocessor(self):
@@ -241,24 +242,39 @@ class PreprocessorController(VisualizerFrame):
         self.output_name = os.path.join(cwd, output_name)
 
     def _preprocessor_thread_runner(self, args, cwd):
-        output = subprocess.run(args, cwd=cwd)
+        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
+                             universal_newlines=True)
+
+        for line in p.stdout:
+            if line.startswith("Status"):
+                self._message_queue.put(int(line.split(':')[1]))
+
+        print("Waiting")
+        output = p.wait()
+        print(output)
         print("Done")
 
-        self._message_queue.put(output.returncode)
+        self._message_queue.put(-1*output)
 
     def _poll_queue(self):
         if not self._message_queue.empty():
-            return_code = self._message_queue.get()
-            print(return_code)
+            code = self._message_queue.get()
+            if code <= 0:
+                self._preprocessor_done(-1*code)
+                return
 
-            self._preprocessor_done(return_code)
+            if self._num_steps is None:
+                self._num_steps = code
+                self._run_ui.progressBar.setRange(0, code)
+                self._run_ui.progressBar.setValue(0)
+            else:
+                self._run_ui.progressBar.setValue(code)
 
+            self._timer.start()
         else:
             self._timer.start()
 
     def _preprocessor_done(self, *args):
-        self._run_ui.progressBar.setMaximum(1)
-        self._run_ui.progressBar.setValue(1)
-
+        print(args)
         if self._callback is not None:
             self._callback(*args)
