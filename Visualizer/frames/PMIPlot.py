@@ -16,6 +16,7 @@ from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
 from ui import pmi_control_panel_vert
 
+
 class PMIPlot(VisualizerFrame):
 
     def __init__(self, parent, data):
@@ -57,7 +58,6 @@ class PMIPlot(VisualizerFrame):
                         "Reds",
                         "Blues"]
 
-        
         self._prev_selected_ind = None
         self._prev_annotation = None
 
@@ -137,8 +137,8 @@ class PMIPlot(VisualizerFrame):
 
         self.color_samples = dict()
         for mapper, name in zip(self.color_mappers, self.data.relation_types):
-            r,g,b,a = mapper.to_rgba(0.7, bytes=True)
-            self.color_samples[name] = (r,g,b,a)
+            r, g, b, a = mapper.to_rgba(0.7, bytes=True)
+            self.color_samples[name] = (r, g, b, a)
 
         self._on_color_changed()
         self._mpl.redraw()
@@ -149,13 +149,13 @@ class PMIPlot(VisualizerFrame):
         points = []
         for i in range(0, self.data.num_ideas):
             for j in range(i+1, self.data.num_ideas):
-                points.append((i,j))
+                points.append((i, j))
 
         self._plot(points, sample)
 
     def _plot(self, points, sample=None):
 
-        if sample is not None  and isinstance(sample, int):
+        if sample is not None and isinstance(sample, int):
             if 0 < sample and sample < len(points):
                 indexes = np.random.choice(len(points), sample, replace=False)
                 points = [points[i] for i in indexes]
@@ -184,13 +184,13 @@ class PMIPlot(VisualizerFrame):
         colors = []
         for x, y in zip(self.x_values, self.y_values):
             distance = math.sqrt(x**2 + y**2)
-            if x >= 0 and y >= 0: # First quadrant, someone has to select zero
+            if x >= 0 and y >= 0:  # First quadrant, someone has to select zero
                 colors.append(self.color_mappers[0].to_rgba(distance))
-            elif x < 0 and y > 0: # Second quadrant
+            elif x < 0 and y > 0:  # Second quadrant
                 colors.append(self.color_mappers[1].to_rgba(distance))
-            elif x < 0 and y < 0: # Third quadrant
+            elif x < 0 and y < 0:  # Third quadrant
                 colors.append(self.color_mappers[2].to_rgba(distance))
-            elif x > 0 and y < 0: # Fourth quadrant
+            elif x > 0 and y < 0:  # Fourth quadrant
                 colors.append(self.color_mappers[3].to_rgba(distance))
             else:
                 print("Fail")
@@ -301,10 +301,10 @@ class PMIPlot(VisualizerFrame):
             return eve.ind[0]
         elif hasattr(eve, "selected_indexes"):
             a, b = tuple(eve.selected_indexes)
-            if (a,b) in self.idea_indexes:
-                return self.idea_indexes.index((a,b))
-            elif (b,a) in self.idea_indexes:
-                return self.idea_indexes.index((b,a))
+            if (a, b) in self.idea_indexes:
+                return self.idea_indexes.index((a, b))
+            elif (b, a) in self.idea_indexes:
+                return self.idea_indexes.index((b, a))
             else:
                 print("Selected indexes not found on PMI graph")
                 return None

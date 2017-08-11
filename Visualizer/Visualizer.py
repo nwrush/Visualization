@@ -6,14 +6,13 @@ import sys
 
 import PyQt5.QtWidgets as QtWidgets
 import matplotlib
+matplotlib.use("Qt5Agg")
 
 import exception_handler
 import data
 from frames.preprocessor_controller import PreprocessorController
 from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
-
-matplotlib.use("Qt5Agg")
 # endregion
 
 """
