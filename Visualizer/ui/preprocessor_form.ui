@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>370</height>
+    <width>784</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
      </item>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
@@ -52,83 +52,23 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="inputFile">
        <property name="focusPolicy">
         <enum>Qt::StrongFocus</enum>
        </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">base: rgb(170, 255, 255)</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="inputFileBtn">
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Output Directory</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLineEdit" name="outputDir">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="outputDirBtn">
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Final Output Directory</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLineEdit" name="finalDir">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="finalDirBtn">
        <property name="focusPolicy">
         <enum>Qt::ClickFocus</enum>
        </property>
@@ -172,7 +112,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_4">
      <property name="font">
       <font>
@@ -184,7 +124,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QLineEdit" name="malletDir">
@@ -205,7 +145,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_3">
      <property name="font">
       <font>
@@ -217,7 +157,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="8" column="1">
     <widget class="QComboBox" name="groupBox">
      <item>
       <property name="text">
@@ -236,7 +176,7 @@
      </item>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="label_8">
      <property name="font">
       <font>
@@ -244,14 +184,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Prefix</string>
+      <string>Exploration Name</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="10" column="1">
     <widget class="QLineEdit" name="prefix"/>
    </item>
-   <item row="8" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="label_9">
      <property name="font">
       <font>
@@ -263,32 +203,10 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="12" column="1">
     <widget class="QLineEdit" name="numIdeas"/>
    </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_13">
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Advanced Options</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
+   <item row="14" column="0">
     <widget class="QLabel" name="label_10">
      <property name="font">
       <font>
@@ -300,14 +218,14 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="14" column="1">
     <widget class="QCheckBox" name="tokenizeBox">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="label_11">
      <property name="font">
       <font>
@@ -319,14 +237,14 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="15" column="1">
     <widget class="QCheckBox" name="lemmatizeBox">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="label_12">
      <property name="font">
       <font>
@@ -338,8 +256,100 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
+   <item row="16" column="1">
     <widget class="QCheckBox" name="stopwordBox">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="0">
+    <widget class="QLabel" name="outputDirLbl">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Output Directory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="outputDir">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="outputDirBtn">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="20" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLineEdit" name="finalDir">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finalDirBtn">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="20" column="0">
+    <widget class="QLabel" name="finalDirLbl">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Final Output Directory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="0">
+    <widget class="QLabel" name="label_13">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Advanced Options</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="1">
+    <widget class="QCheckBox" name="showAdvancedBox">
      <property name="text">
       <string/>
      </property>
@@ -350,8 +360,6 @@
  <tabstops>
   <tabstop>optionBox</tabstop>
   <tabstop>inputFile</tabstop>
-  <tabstop>outputDir</tabstop>
-  <tabstop>finalDir</tabstop>
   <tabstop>bckFile</tabstop>
   <tabstop>malletDir</tabstop>
   <tabstop>groupBox</tabstop>

@@ -10,6 +10,7 @@ import threading
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog, QVBoxLayout, QWidget
+from PyQt5.QtGui import QPalette, QColor
 
 from frames.VisualizerFrame import VisualizerFrame
 from ui import preprocessor_form
@@ -17,6 +18,12 @@ from ui import preprocessor_run
 
 RUNTYPE_OPTIONS = ["Keywords", "Topics"]
 GROUP_BY = ["Year", "Month", "Quarter"]
+
+DEFAULT_PALETTE = QPalette()
+
+DEFAULT_PROC_DIR = "./output/proc/"
+DEFAULT_FINAL_DIR = "./output/final/"
+
 
 class PreprocessorController(VisualizerFrame):
 
@@ -60,6 +67,9 @@ class PreprocessorController(VisualizerFrame):
         self._file_dialog_factory(ui.bckFileBtn, ui.bckFile, QFileDialog.ExistingFile)
         self._file_dialog_factory(ui.malletDirBtn, ui.malletDir, QFileDialog.Directory)
 
+        ui.showAdvancedBox.clicked.connect(self._toggle_advanced)
+        self._toggle_advanced(ui.showAdvancedBox.isChecked())
+
     def _option_box_changed(self, index):
         text = self._form_ui.optionBox.currentText()
 
@@ -83,6 +93,25 @@ class PreprocessorController(VisualizerFrame):
 
         btn.clicked.connect(tmp)
 
+    def _toggle_advanced(self, checked):
+        ui = self._form_ui
+        if checked:
+            ui.outputDir.show()
+            ui.outputDirLbl.show()
+            ui.outputDirBtn.show()
+
+            ui.finalDir.show()
+            ui.finalDirLbl.show()
+            ui.finalDirBtn.show()
+        else:
+            ui.outputDir.hide()
+            ui.outputDirLbl.hide()
+            ui.outputDirBtn.hide()
+
+            ui.finalDir.hide()
+            ui.finalDirLbl.hide()
+            ui.finalDirBtn.hide()
+
     def _get_form_values(self):
         ui = self._form_ui
 
@@ -90,16 +119,27 @@ class PreprocessorController(VisualizerFrame):
 
         args["option"] = ui.optionBox.currentText()
         args["input_file"] = ui.inputFile.text()
-        args["data_output_dir"] = ui.outputDir.text()
-        args["final_output_dir"] = ui.finalDir.text()
         args["mallet_bin_dir"] = ui.malletDir.text()
         args["background_file"] = ui.bckFile.text()
         args["group_by"] = ui.groupBox.currentText()
         args["prefix"] = ui.prefix.text()
+        args["num_ideas"] = ui.numIdeas.text()
 
         args["tokenize"] = ui.tokenizeBox.isChecked()
         args["lemmatize"] = ui.lemmatizeBox.isChecked()
         args["nostopwords"] = ui.stopwordBox.isChecked()
+
+        output_dir_text = ui.outputDir.text()
+        if not output_dir_text.strip():
+            args["data_output_dir"] = DEFAULT_PROC_DIR
+        else:
+            args["data_output_dir"] = output_dir_text
+
+        final_dir_text = ui.finalDir.text()
+        if not final_dir_text.strip():
+            args["final_output_dir"] = DEFAULT_FINAL_DIR
+        else:
+            args["final_output_dir"] = final_dir_text
 
         return args
 
@@ -121,14 +161,53 @@ class PreprocessorController(VisualizerFrame):
     def _validate_params(self, args):
         valid = True
 
-        # TODO: validate the form
+        ui = self._form_ui
+
+        invalid_palette = QPalette()
+        invalid_palette.setColor(QPalette.Active, QPalette.Base, QColor("red"))
+
+        if not os.path.isfile(args["input_file"]):
+            valid = False
+            ui.inputFile.setPalette(invalid_palette)
+            self._set_text_changed_signal(ui.inputFile)
+
+        is_keywords = args["option"] == "Keywords"
+
+        if is_keywords and not os.path.isfile(args["background_file"]):
+            valid = False
+            ui.bckFile.setPalette(invalid_palette)
+            self._set_text_changed_signal(ui.bckFile)
+
+        if not is_keywords and not os.path.isdir(args["mallet_bin_dir"]):
+            valid = False
+            ui.malletDir.setPalette(invalid_palette)
+            self._set_text_changed_signal(ui.malletDir)
+
+        if not args["prefix"].strip():
+            valid = False
+            ui.prefix.setPalette(invalid_palette)
+            self._set_text_changed_signal(ui.prefix)
+
+        try:
+            _ = int(args["num_ideas"])
+        except ValueError:
+            valid = False
+            ui.numIdeas.setPalette(invalid_palette)
+            self._set_text_changed_signal(ui.numIdeas)
+
         return valid
 
-    def _run_preprocessor(self):
+    @staticmethod
+    def _set_text_changed_signal(field):
+        def unset_connection():
+            field.setPalette(DEFAULT_PALETTE)
+            field.textEdited.disconnect(unset_connection)
+        field.textChanged.connect(unset_connection)
 
+    def _run_preprocessor(self):
         values = self._get_form_values()
         if not self._validate_params(values):
-            pass
+            return
 
         args = list()
         for name, value in values.items():
