@@ -19,8 +19,6 @@ from ui import main_window
 GUI creation
 """
 
-X_VALS = [i for i in range(1980, 2015)]
-
 
 class Application(QtWidgets.QMainWindow):
 
@@ -63,7 +61,6 @@ class Application(QtWidgets.QMainWindow):
         if return_code == 0:
             data_manager = data.load_data(self._preprocess_widget.output_name)
             assert data_manager is not None
-            data_manager.x_values = X_VALS
             self.set_data(data_manager)
 
 
@@ -79,7 +76,6 @@ def main(fname):
 
     # gui(fname)
     # The actual time deltas should be pulled from the preprocessor and used here
-    x_vals = [i for i in range(1980, 2015)]
 
     data_manager = data.load_data(fname)
     # if data_manager is not None:
@@ -91,10 +87,5 @@ def main(fname):
     qApp.exec()
 
 
-def test():
-    pass
-
-
 if __name__ == "__main__":
-    # test()
     main("keywords_data.p")
