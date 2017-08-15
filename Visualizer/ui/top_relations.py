@@ -44,6 +44,7 @@ class Ui_topRelation(object):
         self.tableWidget.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, item)
+        self.tableWidget.verticalHeader().setVisible(False)
         self.verticalLayout.addWidget(self.tableWidget)
 
         self.retranslateUi(topRelation)

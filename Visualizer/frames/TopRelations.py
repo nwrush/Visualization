@@ -5,6 +5,7 @@ import PyQt5.QtWidgets as QtWidgets
 
 import numpy as np
 
+from events import event, listener
 from frames.VisualizerFrame import VisualizerFrame
 from ui import top_relations
 
@@ -17,6 +18,13 @@ class TopRelations(VisualizerFrame):
         self.ui.setupUi(self)
 
         self._index = topic_index
+
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
+        self._onselect_listener = listener.Listener()
+        self.ui.tableWidget.itemClicked.connect(self._on_select)
+
+        self.idea_index = -1
 
     def set_idea_name(self, name):
         return self.set_idea_index(self.data.idea_numbers[name])
@@ -44,6 +52,8 @@ class TopRelations(VisualizerFrame):
 
         self._clear_list()
         self._insert_list(strengths)
+
+        self.idea_index = index
 
         # Update the frame title
         self.ui.relationName.setText(self.data.idea_names[index])
@@ -86,3 +96,22 @@ class TopRelations(VisualizerFrame):
 
     def _clear_list(self):
         self.ui.tableWidget.clearContents()
+
+    def clear_selection(self):
+        self.ui.tableWidget.clearSelection()
+
+    def _on_select(self):
+        selected = self.data.idea_numbers[self.ui.tableWidget.selectedItems()[-1].text()]
+        eve = event.Event()
+        eve.selected_indexes = [self.idea_index, selected]
+        print([self.idea_index, selected])
+        self._onselect_listener.invoke(eve)
+
+    def add_select_listener(self, func):
+        self._onselect_listener.add(func)
+
+    def has_select_listener(self, func):
+        return self._onselect_listener.has_handler(func)
+
+    def remove_select_listener(self, func):
+        self._onselect_listener.remove(func)

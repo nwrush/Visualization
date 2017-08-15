@@ -47,6 +47,8 @@ class RelationTypeFrame(VisualizerFrame):
             tbl_name = "{0}Table".format(name.lower().replace('-', ''))
             tbl = self.findChild(QtWidgets.QTableWidget, tbl_name)
 
+            tbl.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
             self._tables.append(tbl)
             tbl.itemSelectionChanged.connect(self._on_select)
 
@@ -146,6 +148,8 @@ class RelationTypeFrame(VisualizerFrame):
 
         eve = event.Event()
         eve.selected_indexes = selected_indexes
+        print(selected_indexes)
+        print(type(selected_indexes))
         eve.should_select = True
         self._onselect_listener.invoke(eve)
 

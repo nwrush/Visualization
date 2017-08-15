@@ -5,6 +5,7 @@ from events import event, listener
 from frames.VisualizerFrame import VisualizerFrame
 from ui import topics_list
 
+
 class ListFrame(VisualizerFrame):
     """description of class"""
     def __init__(self, parent, data=None):

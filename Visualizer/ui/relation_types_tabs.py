@@ -11,6 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_relationTypes(object):
     def setupUi(self, relationTypes):
         relationTypes.setObjectName("relationTypes")
+        relationTypes.setEnabled(True)
         relationTypes.resize(494, 373)
         self.verticalLayout = QtWidgets.QVBoxLayout(relationTypes)
         self.verticalLayout.setObjectName("verticalLayout")
