@@ -90,7 +90,6 @@ class PMIPlot(VisualizerFrame):
         print(self._control_panel.width())
         print(self.width())
 
-    LEGEND_ROWS = 2
     def _setup_control_panel(self):
         # self._gear_icon = images.load_image("gear-2-16.gif")
         control_panel_ui = self._control_panel_ui

@@ -84,7 +84,6 @@ class VisualizerWidget(VisualizerFrame):
         def func():
             for item in self._lists:
                 if item == caller:
-                    print("same")
                     continue
                 item.clear_selection()
         return func
