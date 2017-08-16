@@ -276,5 +276,7 @@ class PreprocessorController(VisualizerFrame):
 
     def _preprocessor_done(self, *args):
         print(args)
+        self._run_ui.progressBar.setRange(0, 1)
+        self._run_ui.progressBar.setValue(1)
         if self._callback is not None:
             self._callback(*args)
