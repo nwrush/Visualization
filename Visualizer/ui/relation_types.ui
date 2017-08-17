@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
+    <width>322</width>
     <height>451</height>
    </rect>
   </property>
@@ -30,29 +30,29 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
       <widget class="QPushButton" name="friendsButton">
        <property name="text">
         <string>Friends</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="1">
       <widget class="QPushButton" name="trystButton">
        <property name="text">
         <string>Tryst</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="0">
       <widget class="QPushButton" name="headtoheadButton">
        <property name="text">
         <string>Head-To-Head</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="1">
       <widget class="QPushButton" name="armsraceButton">
        <property name="text">
         <string>Arms-Race</string>

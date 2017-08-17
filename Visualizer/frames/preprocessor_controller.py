@@ -88,8 +88,9 @@ class PreprocessorController(VisualizerFrame):
             dialog.setFileMode(selection_type)
 
             dialog.exec()
-            selected = dialog.selectedFiles()[0]
-            line.setText(selected)
+            selected_list = dialog.selectedFiles()
+            if selected_list:
+                line.setText(selected_list[0])
 
         btn.clicked.connect(tmp)
 

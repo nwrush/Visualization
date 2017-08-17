@@ -33,14 +33,35 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuTest_Me">
+   <widget class="QMenu" name="openMenu">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
-     <string>Click Me</string>
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+   </widget>
+   <widget class="QMenu" name="menuVisualization">
+    <property name="title">
+     <string>Visualization</string>
     </property>
    </widget>
-   <addaction name="menuTest_Me"/>
+   <addaction name="openMenu"/>
+   <addaction name="menuVisualization"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
