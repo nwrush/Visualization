@@ -6,7 +6,7 @@ AppPath=Application
 VisPath=Visualizer
 
 PythonPath=/opt/tools/python/3.5.1/bin/python
-VenvPath=./fake_venv.sh
+VenvPath=$(realpath ./fake_venv.sh)
 
 # Check executables for existance
 if [[ ! -f "$PythonPath" ]] || [[ ! -x "$PythonPath" ]]
@@ -45,8 +45,12 @@ cp -r idea_relations/templates $AppPath/idea_relations/templates/
 cp idea_relations/*.bat $AppPath/idea_relations/
 cp idea_relations/*.sh $AppPath/idea_relations/
 
+cp FullRequirements.txt $AppPath/FullRequirements.txt
+
 cd $AppPath
 
 $VenvPath --python=$PythonPath venv
 source venv/bin/activate
+pip install --upgrade pip
+
 pip install -r FullRequirements.txt
