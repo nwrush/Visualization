@@ -25,7 +25,7 @@ class Ui_pmi_control_panel(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.filteredList = QtWidgets.QListWidget(self.groupBox)
         self.filteredList.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.filteredList.setWordWrap(True)
+        self.filteredList.setWordWrap(False)
         self.filteredList.setObjectName("filteredList")
         self.verticalLayout_4.addWidget(self.filteredList)
         self.horizontalLayout.addWidget(self.groupBox)
