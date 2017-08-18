@@ -45,13 +45,15 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
-   <widget class="QMenu" name="menuVisualization">
+   <widget class="QMenu" name="visualizationMenu">
     <property name="title">
      <string>Visualization</string>
     </property>
+    <addaction name="actionSave_PMI"/>
+    <addaction name="actionSave_TS"/>
    </widget>
    <addaction name="openMenu"/>
-   <addaction name="menuVisualization"/>
+   <addaction name="visualizationMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -63,6 +65,16 @@
    </property>
    <property name="visible">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionSave_PMI">
+   <property name="text">
+    <string>Save PMI</string>
+   </property>
+  </action>
+  <action name="actionSave_TS">
+   <property name="text">
+    <string>Save TS</string>
    </property>
   </action>
  </widget>

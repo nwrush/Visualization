@@ -54,6 +54,8 @@ class Application(QtWidgets.QMainWindow):
 
     def _init_menu(self):
         self.ui.actionOpen.triggered.connect(self._open_visualization)
+        self.ui.tabWidget.currentChanged.connect(self._tab_changed)
+        self.ui.actionSave_PMI.triggered.connect(self._save_pmi)
 
     def _add_tab(self, tab_data, index):
         widget = VisualizerWidget(self.main_widget, tab_data)
@@ -79,6 +81,18 @@ class Application(QtWidgets.QMainWindow):
         if fnames:
             for fname in fnames:
                 self._processed_file(fname)
+
+    def _tab_changed(self, index):
+        if index >= len(self._tabs):
+            self.ui.visualizationMenu.setEnabled(False)
+        else:
+            self.ui.visualizationMenu.setEnabled(isinstance(self._tabs[index], VisualizerWidget))
+
+    def _save_pmi(self):
+        self.ui.tabWidget.currentWidget()._save_pmi()
+
+    def _save_ts(self):
+        self.ui.tabWidget.currentWidget()._save_ts()
 
 
 def is_square_matrix(a):

@@ -15,13 +15,14 @@ from events import listener
 from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
 from ui import pmi_control_panel_vert
+from frames.matplotlib_util import Utils
 
 
 def get_axis_limits(x_data, y_data):
     return
 
 
-class PMIPlot(VisualizerFrame):
+class PMIPlot(VisualizerFrame, Utils):
 
     def __init__(self, parent, data):
         super(PMIPlot, self).__init__(parent=parent, data_manager=data)

@@ -87,3 +87,11 @@ class VisualizerWidget(VisualizerFrame):
                     continue
                 item.clear_selection()
         return func
+
+    def _save_pmi(self):
+        fname = "pmi.png"
+        self._pmi.save_plot(fname)
+
+    def _save_ts(self):
+        fname = "ts.png"
+        self._ts.save_plot(fname)
