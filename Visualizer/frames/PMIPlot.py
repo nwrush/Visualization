@@ -74,7 +74,6 @@ class PMIPlot(VisualizerFrame):
         self._setup_control_panel()
 
         self._mpl.allow_redraw()
-        print(self._mpl.figure.get_size_inches())
 
     def resizeEvent(self, eve):
         super(PMIPlot, self).resizeEvent(eve)
@@ -84,11 +83,6 @@ class PMIPlot(VisualizerFrame):
 
         # self._mpl.grow_plot(self._mpl_container.width()-self._old_mpl_width)
         self._mpl.set_plot_size(self._mpl_container.width())
-
-        print(self._mpl.figure.get_size_inches()*self._mpl.figure.dpi)
-        print(self._mpl_container.width())
-        print(self._control_panel.width())
-        print(self.width())
 
     def _setup_control_panel(self):
         # self._gear_icon = images.load_image("gear-2-16.gif")

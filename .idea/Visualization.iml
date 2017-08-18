@@ -7,7 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Visualizer/venv" />
       <excludeFolder url="file://$MODULE_DIR$/idea_relations" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.5.3 virtualenv at N:\Users\Nikko\Documents\Dev\Visualizations\Visualization\Visualizer\venv" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.5.2 virtualenv at C:\Users\rushni\Documents\dev\Visualization\Visualizer\venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="idea_relations" />
   </component>

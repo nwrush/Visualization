@@ -71,13 +71,14 @@ class Application(QtWidgets.QMainWindow):
 
     def _open_visualization(self):
         dialog = QtWidgets.QFileDialog()
-        dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        dialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         dialog.setNameFilters(["Processed data file (*.p)", "All files (*)"])
         dialog.exec()
 
         fnames = dialog.selectedFiles()
         if fnames:
-            self._processed_file(fnames[0])
+            for fname in fnames:
+                self._processed_file(fname)
 
 
 def is_square_matrix(a):
