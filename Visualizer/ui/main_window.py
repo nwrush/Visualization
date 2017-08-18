@@ -17,6 +17,7 @@ class Ui_mainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.main_widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tabWidget = QtWidgets.QTabWidget(self.main_widget)
+        self.tabWidget.setTabsClosable(False)
         self.tabWidget.setObjectName("tabWidget")
         self.horizontalLayout.addWidget(self.tabWidget)
         mainWindow.setCentralWidget(self.main_widget)

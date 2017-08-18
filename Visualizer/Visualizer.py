@@ -32,14 +32,15 @@ class Application(QtWidgets.QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
-        self._data_manager = data_manager
+        self._tabs = []
 
         self._preprocess_widget = None
         self._load_preprocessor()
 
-        self._visualizer_widget = None
-        if self._data_manager is not None:
-            self._load_visualizer()
+        self._tabs.append(self._preprocess_widget)
+
+        if data_manager is not None:
+            self._add_tab(data_manager, 1)
 
         self._init_menu()
 
@@ -49,23 +50,20 @@ class Application(QtWidgets.QMainWindow):
 
     def _load_visualizer(self):
         self._visualizer_widget = VisualizerWidget(self.main_widget, self._data_manager)
-        self.ui.tabWidget.insertTab(1, self._visualizer_widget, "Visualizer")
+        self.ui.tabWidget.insertTab(1, self._visualizer_widget, self._data_manager.name)
 
     def _init_menu(self):
         self.ui.actionOpen.triggered.connect(self._open_visualization)
 
-    def set_data(self, new_data):
-        self._data_manager = new_data
-
-        if self._visualizer_widget is not None:
-            self.ui.tabWidget.removeTab(1)
-
-        self._load_visualizer()
+    def _add_tab(self, tab_data, index):
+        widget = VisualizerWidget(self.main_widget, tab_data)
+        self.ui.tabWidget.insertTab(index, widget, tab_data.name)
+        self._tabs = self._tabs[:index] + [widget] + self._tabs[index:]
 
     def _processed_file(self, fname):
         data_manager = data.load_data(fname)
-        assert data_manager is not None
-        self.set_data(data_manager)
+        if data_manager is not None:
+            self._add_tab(data_manager, len(self._tabs))
 
     def _preprocessor_callback(self, return_code):
         if return_code == 0:
@@ -79,7 +77,7 @@ class Application(QtWidgets.QMainWindow):
 
         fnames = dialog.selectedFiles()
         if fnames:
-            self._preprocess_widget.output_name(fnames[0])
+            self._processed_file(fnames[0])
 
 
 def is_square_matrix(a):
@@ -96,6 +94,7 @@ def main(fname):
     # The actual time deltas should be pulled from the preprocessor and used here
 
     data_manager = data.load_data(fname)
+    # data_manager.name = "Test"
     # if data_manager is not None:
     #     data_manager.x_values = x_vals
 

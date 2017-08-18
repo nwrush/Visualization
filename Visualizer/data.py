@@ -7,6 +7,7 @@ import pickle
 
 import numpy as np
 
+
 def reverse_dict(input):
     output = dict()
     for key, value in input.items():
@@ -15,9 +16,11 @@ def reverse_dict(input):
         output[value] = key
     return output
 
+
 def is_square(a):
     row, col = a.shape
     return row == col
+
 
 def load_data(fname):
     if not os.path.isfile(fname):
@@ -26,9 +29,11 @@ def load_data(fname):
 
     return pickle.load(open(fname, 'rb'))
 
-class Data():
 
-    def __init__(self, pmi_matrix=None, ts_correlation_matrix=None, ts_matrix=None, idea_names=None, x_vals=None):
+class Data:
+
+    def __init__(self, pmi_matrix=None, ts_correlation_matrix=None, ts_matrix=None, idea_names=None, x_vals=None,
+                 name=None):
         self.pmi = pmi_matrix
         self.ts_correlation = ts_correlation_matrix
         self.ts_matrix = ts_matrix
@@ -40,8 +45,9 @@ class Data():
 
         self.strength_matrix = self._get_strength_matrix()
 
-        self.relation_types = ("Friends", "Tryst", "Head-To-Head", "Arms-Race") # Layout the relation in quadrant order
-        pass
+        self.relation_types = ("Friends", "Tryst", "Head-To-Head", "Arms-Race")  # Layout the relation in quadrant order
+
+        self.name = name if name is not None else "Visualization"
 
     def _get_strength_matrix(self):
         assert self.pmi.shape == self.ts_correlation.shape
