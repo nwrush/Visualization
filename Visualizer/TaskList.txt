@@ -8,7 +8,6 @@
 7/28/17: Improve event handling system
 8/10/17: Updated README with note about development status, install instructions, example data files
 8/10/17: Document required file format
-8/10/17: Anaconda support
 
 --Bugfix
 7/28/17: Selecting a single relation and then a pair that contains the single causes strange behavior (behavior does not persist when rerun, could be VS lag bug)
@@ -48,3 +47,4 @@
 8/10/17: Clean up the preprocessor form to avoid showing extraneous fields | 8/10/17 (c32581e)
 8/10/17: Validate the preprocessor form | 8/10/17 (c32581e)
 8/10/17: Progress bar show incremental status | 8/11/17 (a4e7d98)
+8/10/17: Anaconda support | 8/18/17 (fa473ec)

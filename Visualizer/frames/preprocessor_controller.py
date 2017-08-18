@@ -243,7 +243,7 @@ class PreprocessorController(VisualizerFrame):
         self.output_name = os.path.join(cwd, output_name)
 
     def _preprocessor_thread_runner(self, args, cwd):
-        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
+        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
                              universal_newlines=True)
 
         for line in p.stdout:
@@ -252,6 +252,10 @@ class PreprocessorController(VisualizerFrame):
 
         print("Waiting")
         output = p.wait()
+
+        if output != 0:
+            for line in p.stderr:
+                print(line, end='')
         print(output)
         print("Done")
 
