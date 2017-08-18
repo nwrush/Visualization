@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git submodule update
+
 ROOT=$(pwd)
 
 AppPath=Application

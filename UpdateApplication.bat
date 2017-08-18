@@ -1,5 +1,7 @@
 @echo off
 
+git submodule update
+
 Set Loc=%CD%
 
 setlocal

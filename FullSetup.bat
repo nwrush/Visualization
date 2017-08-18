@@ -2,6 +2,9 @@
 
 setlocal
 
+git submodule init
+git submodule update
+
 Set ROOT=%CD%
 
 Set AppPath=Application

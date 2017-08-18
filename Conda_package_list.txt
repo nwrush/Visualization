@@ -1,0 +1,6 @@
+matplotlib
+nltk
+numpy
+scipy
+pyqt  # Version 5
+seaborn
