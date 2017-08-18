@@ -17,6 +17,10 @@ from frames.VisualizerFrame import VisualizerFrame
 from ui import pmi_control_panel_vert
 
 
+def get_axis_limits(x_data, y_data):
+    return
+
+
 class PMIPlot(VisualizerFrame):
 
     def __init__(self, parent, data):
@@ -36,6 +40,9 @@ class PMIPlot(VisualizerFrame):
 
         self.axes = self._mpl.axes
         self.canvas = self._mpl.canvas
+
+        self._x_lim = [np.amin(data.ts_correlation), np.amax(data.ts_correlation)]
+        self._y_lim = [np.amin(data.pmi), np.amax(data.pmi)]
 
         self._control_panel = QtWidgets.QWidget(self)
         self._control_panel_ui = pmi_control_panel_vert.Ui_pmi_control_panel()
@@ -108,7 +115,8 @@ class PMIPlot(VisualizerFrame):
         self.axes.set_title("PMI vs. Cooccurrence")
         self.axes.set_xlabel("Prevalence Correlation")
         self.axes.set_ylabel("Cooccurrence")
-        self.axes.set_xlim([-1.0, 1.0])
+        self.axes.set_xlim(self._x_lim)
+        self.axes.set_ylim(self._y_lim)
 
     def _update_colors(self, color_spec):
         """
