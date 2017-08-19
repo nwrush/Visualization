@@ -51,6 +51,7 @@
     </property>
     <addaction name="actionSave_PMI"/>
     <addaction name="actionSave_TS"/>
+    <addaction name="actionSave_Both"/>
    </widget>
    <addaction name="openMenu"/>
    <addaction name="visualizationMenu"/>
@@ -75,6 +76,11 @@
   <action name="actionSave_TS">
    <property name="text">
     <string>Save TS</string>
+   </property>
+  </action>
+  <action name="actionSave_Both">
+   <property name="text">
+    <string>Save Both</string>
    </property>
   </action>
  </widget>

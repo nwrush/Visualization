@@ -40,9 +40,12 @@ class Ui_mainWindow(object):
         self.actionSave_PMI.setObjectName("actionSave_PMI")
         self.actionSave_TS = QtWidgets.QAction(mainWindow)
         self.actionSave_TS.setObjectName("actionSave_TS")
+        self.actionSave_Both = QtWidgets.QAction(mainWindow)
+        self.actionSave_Both.setObjectName("actionSave_Both")
         self.openMenu.addAction(self.actionOpen)
         self.visualizationMenu.addAction(self.actionSave_PMI)
         self.visualizationMenu.addAction(self.actionSave_TS)
+        self.visualizationMenu.addAction(self.actionSave_Both)
         self.menubar.addAction(self.openMenu.menuAction())
         self.menubar.addAction(self.visualizationMenu.menuAction())
 
@@ -59,4 +62,5 @@ class Ui_mainWindow(object):
         self.actionOpen.setShortcut(_translate("mainWindow", "Ctrl+O"))
         self.actionSave_PMI.setText(_translate("mainWindow", "Save PMI"))
         self.actionSave_TS.setText(_translate("mainWindow", "Save TS"))
+        self.actionSave_Both.setText(_translate("mainWindow", "Save Both"))
 

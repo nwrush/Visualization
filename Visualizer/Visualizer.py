@@ -34,6 +34,8 @@ class Application(QtWidgets.QMainWindow):
 
         self._tabs = []
 
+        self._init_menu()
+
         self._preprocess_widget = None
         self._load_preprocessor()
 
@@ -41,8 +43,6 @@ class Application(QtWidgets.QMainWindow):
 
         if data_manager is not None:
             self._add_tab(data_manager, 1)
-
-        self._init_menu()
 
     def _load_preprocessor(self):
         self._preprocess_widget = PreprocessorController(self.main_widget, self._preprocessor_callback)
@@ -53,9 +53,14 @@ class Application(QtWidgets.QMainWindow):
         self.ui.tabWidget.insertTab(1, self._visualizer_widget, self._data_manager.name)
 
     def _init_menu(self):
+        # File Menu
         self.ui.actionOpen.triggered.connect(self._open_visualization)
+
+        # Visualization Menu
         self.ui.tabWidget.currentChanged.connect(self._tab_changed)
         self.ui.actionSave_PMI.triggered.connect(self._save_pmi)
+        self.ui.actionSave_TS.triggered.connect(self._save_ts)
+        self.ui.actionSave_Both.triggered.connect(self._save_both)
 
     def _add_tab(self, tab_data, index):
         widget = VisualizerWidget(self.main_widget, tab_data)
@@ -72,9 +77,9 @@ class Application(QtWidgets.QMainWindow):
             self._processed_file(self._preprocess_widget.output_name)
 
     def _open_visualization(self):
-        dialog = QtWidgets.QFileDialog()
+        dialog = QtWidgets.QFileDialog(self)
         dialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
-        dialog.setNameFilters(["Processed data file (*.p)", "All files (*)"])
+        dialog.setNameFilters(["Processed data file (*.p)", "All Files (*)"])
         dialog.exec()
 
         fnames = dialog.selectedFiles()
@@ -89,10 +94,13 @@ class Application(QtWidgets.QMainWindow):
             self.ui.visualizationMenu.setEnabled(isinstance(self._tabs[index], VisualizerWidget))
 
     def _save_pmi(self):
-        self.ui.tabWidget.currentWidget()._save_pmi()
+        self.ui.tabWidget.currentWidget().save_pmi()
 
     def _save_ts(self):
-        self.ui.tabWidget.currentWidget()._save_ts()
+        self.ui.tabWidget.currentWidget().save_ts()
+
+    def _save_both(self):
+        self.ui.tabWidget.currentWidget().save_both()
 
 
 def is_square_matrix(a):

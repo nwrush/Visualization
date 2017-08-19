@@ -1,7 +1,7 @@
 # Nikko Rush
 # 8/7/2017
 
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTabWidget, QSplitter
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTabWidget, QSplitter, QFileDialog
 
 from events.listener import Listener
 from frames.VisualizerFrame import VisualizerFrame
@@ -77,7 +77,9 @@ class VisualizerWidget(VisualizerFrame):
         self._lists = {self._idea_list, self._relation_types, self._top_relation_1, self._top_relation_2}
 
     def resizeEvent(self, event):
-        self.ui.tabWidget.setFixedWidth(min(300, int(self.size().width()/5)))
+        dpi = self.physicalDpiX()
+        # Make the width of the screen 3 inches or one fifth the width of the screen
+        self.ui.tabWidget.setFixedWidth(min(3*dpi, int(self.size().width()/5)))
         super(VisualizerWidget, self).resizeEvent(event)
 
     def _clear_list_selections_factory(self, caller=None):
@@ -88,10 +90,28 @@ class VisualizerWidget(VisualizerFrame):
                 item.clear_selection()
         return func
 
-    def _save_pmi(self):
-        fname = "pmi.png"
-        self._pmi.save_plot(fname)
+    def save_pmi(self):
+        self._save_plot(self._pmi)
 
-    def _save_ts(self):
-        fname = "ts.png"
-        self._ts.save_plot(fname)
+    def save_ts(self):
+        self._save_plot(self._ts)
+
+    def save_both(self):
+        self._save_plot(self._pmi)
+        self._save_plot(self._ts)
+
+    def _save_plot(self, target):
+        dialog = QFileDialog(self)
+        dialog.setAcceptMode(QFileDialog.AcceptSave)
+        dialog.setFileMode(QFileDialog.AnyFile)
+        formats = self._mpl_output_formats(self._pmi)
+        dialog.setNameFilters(["Matplotlib Formats " + formats, "All Files (*)"])
+        if dialog.exec():
+            target.save_plot(dialog.selectedFiles()[0])
+
+    @staticmethod
+    def _mpl_output_formats(widget):
+        items = []
+        for key in widget.get_supported_formats():
+            items.append("*.{0}".format(key))
+        return '(' + ', '.join(items) + ')'

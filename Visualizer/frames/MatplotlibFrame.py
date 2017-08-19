@@ -7,6 +7,7 @@ import PyQt5.QtWidgets as QtWidgets
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
+
 class QMatplotlib(FigureCanvasQTAgg):
     """Frame specifically for displaying matplotlib graphs"""
 
@@ -45,6 +46,9 @@ class QMatplotlib(FigureCanvasQTAgg):
     @property
     def canvas(self):
         return self._figure.canvas
+
+    def get_figure(self):
+        return self._figure
 
     def redraw(self):
         if self._allow_redraw:
