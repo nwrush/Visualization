@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PythonPath=/opt/tools/python/3.5.1/bin/python
+VenvPath=$(realpath ./fake_venv.sh)
+
 git submodule init
 git submodule update
 
@@ -7,9 +10,6 @@ ROOT=$(pwd)
 
 AppPath=Application
 VisPath=Visualizer
-
-PythonPath=/opt/tools/python/3.5.1/bin/python
-VenvPath=$(realpath ./fake_venv.sh)
 
 # Check executables for existance
 if [[ ! -f "$PythonPath" ]] || [[ ! -x "$PythonPath" ]]

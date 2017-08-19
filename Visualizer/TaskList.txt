@@ -19,7 +19,6 @@
 8/8/17: Interactive date range (idea_relations.idea_relations:70) has arguments
 8/10/17: Custom word list
 8/10/17: Graph based layout on PMI or KL divergence between topics
-8/10/17: Save images of graphs to file
 
 
 --Done (please mention the commit name here too)
@@ -48,3 +47,4 @@
 8/10/17: Validate the preprocessor form | 8/10/17 (c32581e)
 8/10/17: Progress bar show incremental status | 8/11/17 (a4e7d98)
 8/10/17: Anaconda support | 8/18/17 (fa473ec)
+8/10/17: Save images of graphs to file | 8/18/17 (d4c1e58)

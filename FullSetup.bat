@@ -2,6 +2,8 @@
 
 setlocal
 
+Set PythonPath="C:\Users\rushni\AppData\Local\Programs\Python\Python35\python.exe"
+
 git submodule init
 git submodule update
 
@@ -9,8 +11,6 @@ Set ROOT=%CD%
 
 Set AppPath=Application
 Set VisPath=Visualizer
-
-Set PythonPath="C:\Users\rushni\AppData\Local\Programs\Python\Python35\python.exe"
 
 IF NOT EXIST %PythonPath% (
     ECHO Python executable at %PythonPath% was not found
