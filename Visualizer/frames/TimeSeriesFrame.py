@@ -51,7 +51,7 @@ class TimeSeriesFrame(VisualizerFrame, Utils):
         index_names = []
         for index in indexes:
             self.plot_series(self.data.ts_matrix[index], redraw=False)
-            index_names.append(self.data.idea_names[index])
+            index_names.append(self.data.get_display_idea_names(index))
 
         # self.get_correlation()
 

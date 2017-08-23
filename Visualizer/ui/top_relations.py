@@ -28,6 +28,7 @@ class Ui_topRelation(object):
         font.setPointSize(12)
         self.relationName.setFont(font)
         self.relationName.setText("")
+        self.relationName.setScaledContents(True)
         self.relationName.setObjectName("relationName")
         self.horizontalLayout.addWidget(self.relationName)
         self.verticalLayout.addLayout(self.horizontalLayout)

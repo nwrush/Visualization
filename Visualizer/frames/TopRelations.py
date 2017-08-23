@@ -56,7 +56,7 @@ class TopRelations(VisualizerFrame):
         self.idea_index = index
 
         # Update the frame title
-        self.ui.relationName.setText(self.data.idea_names[index])
+        self.ui.relationName.setText(self.data.get_display_idea_names(index))
 
     @staticmethod
     def _get_point_type(point_pmi, point_cor):

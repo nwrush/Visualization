@@ -23,7 +23,6 @@ def get_axis_limits(x_data, y_data):
 
 
 class PMIPlot(VisualizerFrame, Utils):
-
     def __init__(self, parent, data):
         super(PMIPlot, self).__init__(parent=parent, data_manager=data)
 
@@ -124,7 +123,7 @@ class PMIPlot(VisualizerFrame, Utils):
         Takes a sequence of 4 color tuples, builds the color maps, if
         the plot data isn't none will modify the plot colors
         """
-        
+
         self._colors = color_spec
 
         self._color_maps = [visualizer_colors.PMIColormap("PMIFriend", color_spec[0]),
@@ -150,7 +149,7 @@ class PMIPlot(VisualizerFrame, Utils):
         self.sample_size = sample
         points = []
         for i in range(0, self.data.num_ideas):
-            for j in range(i+1, self.data.num_ideas):
+            for j in range(i + 1, self.data.num_ideas):
                 points.append((i, j))
 
         self._plot(points, sample)
@@ -185,7 +184,7 @@ class PMIPlot(VisualizerFrame, Utils):
     def _color_plot(self):
         colors = []
         for x, y in zip(self.x_values, self.y_values):
-            distance = math.sqrt(x**2 + y**2)
+            distance = math.sqrt(x ** 2 + y ** 2)
             if x >= 0 and y >= 0:  # First quadrant, someone has to select zero
                 colors.append(self.color_mappers[0].to_rgba(distance))
             elif x < 0 and y > 0:  # Second quadrant
@@ -246,7 +245,7 @@ class PMIPlot(VisualizerFrame, Utils):
         self._on_color_changed_listener.invoke_empty()
 
     def _change_selected_color(self, eve):
-        
+
         ind = self._get_point_index_from_event(eve)
 
         if self._prev_selected_ind == ind:
@@ -266,19 +265,18 @@ class PMIPlot(VisualizerFrame, Utils):
         if self._prev_annotation is not None:
             self._clear_selection()
 
-        topic_1, topic_2 = self.idea_indexes[ind]
-        topic_1_name = self.data.idea_names[topic_1]
-        topic_2_name = self.data.idea_names[topic_2]
+        topic_1_name, topic_2_name = self.data.get_display_idea_names(self.idea_indexes[ind])
 
         x_cord, y_cord = self.x_values[ind], self.y_values[ind]
-        text = "({0}, {1})".format(topic_1_name, topic_2_name)
-
+        text = "({0},\n{1})".format(topic_1_name, topic_2_name)
+        print(text)
         offset = 0
         if x_cord > 0:
             offset = self._get_text_offset(text)
 
-        self._prev_annotation = self.axes.annotate(s="({0}, {1})".format(topic_1_name, topic_2_name),
-                                                   xy=(self.x_values[ind]-offset, self.y_values[ind]))
+        self._prev_annotation = self.axes.annotate(s=text, xy=(self.x_values[ind] - offset, self.y_values[ind]),
+                                                   annotation_clip=False)
+        print((self.x_values[ind] - offset, self.y_values[ind]))
         self._mpl.redraw()
 
     def _get_text_offset(self, text):
