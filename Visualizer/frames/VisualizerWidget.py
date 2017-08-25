@@ -91,16 +91,19 @@ class VisualizerWidget(VisualizerFrame):
         return func
 
     def save_pmi(self):
-        self._save_plot(self._pmi)
+        self._save_plot(self._pmi, "PMI")
 
     def save_ts(self):
-        self._save_plot(self._ts)
+        self._save_plot(self._ts, "Time Series")
 
     def save_both(self):
-        self._save_plot(self._pmi)
-        self._save_plot(self._ts)
+        self._save_plot(self._pmi, "PMI")
+        self._save_plot(self._ts, "Time Series")
 
-    def _save_plot(self, target):
+    def _save_plot(self, target, plot_name):
+        if not target.confirm_on_empty(plot_name):
+            return None
+
         dialog = QFileDialog(self)
         dialog.setAcceptMode(QFileDialog.AcceptSave)
         dialog.setFileMode(QFileDialog.AnyFile)

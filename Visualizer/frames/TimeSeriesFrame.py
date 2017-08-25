@@ -25,9 +25,11 @@ class TimeSeriesFrame(VisualizerFrame, Utils):
         self._init_plot()
 
         self.series = None
+        self._has_data = False
 
     def _init_plot(self):
         self.axes.clear()
+        self._has_data = False
         self.axes.set_title("Time Series")
         self.axes.set_xlabel("Year")
         self.axes.set_ylabel("Frequency")
@@ -41,6 +43,8 @@ class TimeSeriesFrame(VisualizerFrame, Utils):
 
         if redraw:
             self.redraw()
+
+        self._has_data = True
 
     def plot_idea_indexes_event(self, event):
         self.plot_idea_indexes(event.selected_indexes)

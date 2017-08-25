@@ -80,6 +80,8 @@ class PMIPlot(VisualizerFrame, Utils):
 
         self._setup_control_panel()
 
+        self._has_data = False
+
         self._mpl.allow_redraw()
 
     def resizeEvent(self, eve):
@@ -112,6 +114,7 @@ class PMIPlot(VisualizerFrame, Utils):
     def _init_plot_(self):
         """Reset the axes for plotting"""
         self.axes.clear()
+        self._has_data = False
         self.axes.set_title("PMI vs. Cooccurrence")
         self.axes.set_xlabel("Prevalence Correlation")
         self.axes.set_ylabel("Cooccurrence")
@@ -178,6 +181,8 @@ class PMIPlot(VisualizerFrame, Utils):
         self.idea_indexes = points
         self.x_values = xs
         self.y_values = ys
+
+        self._has_data = True
 
         self._color_plot()
 
