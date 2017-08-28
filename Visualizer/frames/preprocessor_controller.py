@@ -5,11 +5,12 @@ import os
 import os.path
 from pathlib import Path
 import queue
+import shutil
 import subprocess
 import threading
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QFileDialog, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QFileDialog, QVBoxLayout, QWidget, QMessageBox
 from PyQt5.QtGui import QPalette, QColor
 
 from frames.VisualizerFrame import VisualizerFrame
@@ -21,8 +22,8 @@ GROUP_BY = ["Year", "Month", "Quarter"]
 
 DEFAULT_PALETTE = QPalette()
 
-DEFAULT_PROC_DIR = "./output/proc/"
-DEFAULT_FINAL_DIR = "./output/final/"
+DEFAULT_PROC_DIR = "./output/{exp_name}/proc/"
+DEFAULT_FINAL_DIR = "./output/{exp_name}/final/"
 
 
 class PreprocessorController(VisualizerFrame):
@@ -132,13 +133,13 @@ class PreprocessorController(VisualizerFrame):
 
         output_dir_text = ui.outputDir.text()
         if not output_dir_text.strip():
-            args["data_output_dir"] = DEFAULT_PROC_DIR
+            args["data_output_dir"] = DEFAULT_PROC_DIR.format(exp_name=args["prefix"])
         else:
             args["data_output_dir"] = output_dir_text
 
         final_dir_text = ui.finalDir.text()
         if not final_dir_text.strip():
-            args["final_output_dir"] = DEFAULT_FINAL_DIR
+            args["final_output_dir"] = DEFAULT_FINAL_DIR.format(exp_name=args["prefix"])
         else:
             args["final_output_dir"] = final_dir_text
 
@@ -190,11 +191,21 @@ class PreprocessorController(VisualizerFrame):
             self._set_text_changed_signal(ui.prefix)
 
         try:
-            _ = int(args["num_ideas"])
+            int(args["num_ideas"])
         except ValueError:
             valid = False
             ui.numIdeas.setPalette(invalid_palette)
             self._set_text_changed_signal(ui.numIdeas)
+
+        if is_keywords:
+            data_path = os.path.join("idea_relations", args["data_output_dir"])
+            final_path = os.path.join("idea_relations", args["final_output_dir"])
+
+            if os.path.isdir(data_path):
+                self._warn_existing_output_dir(data_path)
+
+            if os.path.isdir(final_path):
+                self._warn_existing_output_dir(final_path)
 
         return valid
 
@@ -205,6 +216,15 @@ class PreprocessorController(VisualizerFrame):
             field.textEdited.disconnect(unset_connection)
 
         field.textChanged.connect(unset_connection)
+
+    def _warn_existing_output_dir(self, path):
+        path = os.path.abspath(path)
+        reply = QMessageBox.question(self, "Reuse previous data",
+                                     "Intermediate files were found at\n{0}\nDo you want to reuse them?".format(path),
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        reuse = int(reply) == QMessageBox.Yes
+        if not reuse:
+            shutil.rmtree(path)
 
     def _run_preprocessor(self):
         values = self._get_form_values()
@@ -243,21 +263,18 @@ class PreprocessorController(VisualizerFrame):
         self.output_name = os.path.join(cwd, output_name)
 
     def _preprocessor_thread_runner(self, args, cwd):
-        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
                              universal_newlines=True)
 
         for line in p.stdout:
             if line.startswith("Status"):
                 self._message_queue.put(int(line.split(':')[1]))
 
-        print("Waiting")
         output = p.wait()
 
         if output != 0:
             for line in p.stderr:
                 print(line, end='')
-        print(output)
-        print("Done")
 
         self._message_queue.put(-1*output)
 

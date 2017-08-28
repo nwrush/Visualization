@@ -10,7 +10,7 @@ class Utils:
 
     def confirm_on_empty(self, name):
         if not self._has_data:
-            reply = QMessageBox.question(self, "Confrim Save Plot",
+            reply = QMessageBox.question(self, "Confirm Save Plot",
                                          "{0} plot is empty\nAre you sure you want to save it?".format(name),
                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             return int(reply) == QMessageBox.Yes
