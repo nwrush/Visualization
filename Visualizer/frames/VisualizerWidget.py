@@ -1,6 +1,8 @@
 # Nikko Rush
 # 8/7/2017
 
+import logging
+
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTabWidget, QSplitter, QFileDialog
 
 from events.listener import Listener
@@ -29,6 +31,7 @@ class VisualizerWidget(VisualizerFrame):
         return self.parent().size()
 
     def _load_visualizaer(self):
+        logging.error("This was not an error")
         self._pmi = PMIPlot(self, self._data)
         self._pmi.plot(sample=1000)
         self.ui.pmiWidget.layout().addWidget(self._pmi)

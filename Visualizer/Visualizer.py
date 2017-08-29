@@ -2,6 +2,9 @@
 # 6/21/2017
 
 # region Imports
+import logging
+import platform
+import signal
 import sys
 
 import PyQt5.QtWidgets as QtWidgets
@@ -14,6 +17,18 @@ from frames.preprocessor_controller import PreprocessorController
 from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
 # endregion
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename='./Visualizer.log',
+                    filemode='a')
+
+logging.info(platform.uname())
+logging.info(platform.platform())
+logging.info(platform.python_version())
+logging.info(platform.win32_ver())
+logging.info(platform.mac_ver())
 
 """
 GUI creation
@@ -110,24 +125,18 @@ class Application(QtWidgets.QMainWindow):
         del self._tabs[index]
         print(len(self._tabs))
 
+    def kill_preprocessor(self):
+        self._preprocess_widget.kill()
+
 
 def is_square_matrix(a):
     return a.shape[0] == a.shape[1]
 
 
-def main(fname):
-    # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open("data.p", 'rb'))
-    # pmi, ts_correlation, ts_matrix, idea_names = pickle.load(open(fname, 'rb'))
-    # assert is_square_matrix(pmi)
-    # assert is_square_matrix(ts_correlation)
-
-    # gui(fname)
-    # The actual time deltas should be pulled from the preprocessor and used here
-
-    data_manager = data.load_data(fname)
-    # data_manager.name = "Test"
-    # if data_manager is not None:
-    #     data_manager.x_values = x_vals
+def main(fname=None):
+    data_manager = None
+    if fname is not None:
+        data_manager = data.load_data(fname)
 
     qApp = QtWidgets.QApplication(sys.argv)
     window = Application(data_manager)

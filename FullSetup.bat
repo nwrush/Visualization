@@ -2,7 +2,7 @@
 
 setlocal
 
-Set PythonPath="C:\Users\rushni\AppData\Local\Programs\Python\Python35\python.exe"
+Set PythonPath="PATH TO PYTHON.EXE HERE"
 
 git submodule init
 git submodule update

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PythonPath=/opt/tools/python/3.5.1/bin/python
-VenvPath=$(realpath ./fake_venv.sh)
+PythonPath=PATH TO PYTHON
+VenvPath=PATH TO VENV # Ideally the same one provided by the python installation you pointed to above
 
 git submodule init
 git submodule update

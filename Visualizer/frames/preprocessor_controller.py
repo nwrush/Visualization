@@ -1,6 +1,7 @@
 # Nikko Rush
 # 7/18/17
 
+import logging
 import os
 import os.path
 from pathlib import Path
@@ -302,3 +303,8 @@ class PreprocessorController(VisualizerFrame):
         self._run_ui.progressBar.setValue(1)
         if self._callback is not None:
             self._callback(*args)
+
+    def kill(self):
+        if self._preprocessor_thread is not None:
+            logging.info("Killing preprocessor thread")
+            self._preprocessor_thread.kill()
