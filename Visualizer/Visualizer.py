@@ -28,6 +28,8 @@ class Application(QtWidgets.QMainWindow):
         self.ui = main_window.Ui_mainWindow()
         self.ui.setupUi(self)
 
+        self.ui.tabWidget.tabCloseRequested.connect(self._close_tab)
+
         self.main_widget = self.ui.main_widget
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
@@ -66,6 +68,7 @@ class Application(QtWidgets.QMainWindow):
         widget = VisualizerWidget(self.main_widget, tab_data)
         self.ui.tabWidget.insertTab(index, widget, tab_data.name)
         self._tabs = self._tabs[:index] + [widget] + self._tabs[index:]
+        self.ui.tabWidget.setCurrentIndex(index)
 
     def _processed_file(self, fname):
         data_manager = data.load_data(fname)
@@ -101,6 +104,11 @@ class Application(QtWidgets.QMainWindow):
 
     def _save_both(self):
         self.ui.tabWidget.currentWidget().save_both()
+
+    def _close_tab(self, index):
+        self.ui.tabWidget.removeTab(index)
+        del self._tabs[index]
+        print(len(self._tabs))
 
 
 def is_square_matrix(a):
