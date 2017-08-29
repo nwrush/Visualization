@@ -7,6 +7,7 @@ import platform
 import signal
 import sys
 
+import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 import matplotlib
 matplotlib.use("Qt5Agg")
@@ -18,12 +19,14 @@ from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
 # endregion
 
+FORMAT = "%(asctime)s %(levelname)8s:[%(filename)s:%(lineno)s - %(funcName)20s()] %(message)s"
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
+                    format=FORMAT,
+                    datefmt='%m-%d %H:%M:%S',
                     filename='./Visualizer.log',
                     filemode='a')
 
+logging.info("Application Startup")
 logging.info(platform.uname())
 logging.info(platform.platform())
 logging.info(platform.python_version())
@@ -139,9 +142,11 @@ def main(fname=None):
         data_manager = data.load_data(fname)
 
     qApp = QtWidgets.QApplication(sys.argv)
+    logging.info(qApp.primaryScreen().physicalSize())
     window = Application(data_manager)
     window.show()
     qApp.exec()
+    logging.info("Goodbye")
 
 
 if __name__ == "__main__":

@@ -264,26 +264,33 @@ class PreprocessorController(VisualizerFrame):
         self.output_name = os.path.join(cwd, output_name)
 
     def _preprocessor_thread_runner(self, args, cwd):
-        p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
-                             universal_newlines=True)
+        try:
+            p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
+                                 universal_newlines=True)
 
-        for line in p.stdout:
-            if line.startswith("Status"):
-                self._message_queue.put(int(line.split(':')[1]))
+            for line in p.stdout:
+                if line.startswith("Status"):
+                    self._message_queue.put(int(line.split(':')[1]))
 
-        output = p.wait()
+            output = p.wait()
 
-        if output != 0:
-            for line in p.stderr:
-                print(line, end='')
+            if output != 0:
+                for line in p.stderr:
+                    print(line, end='')
 
-        self._message_queue.put(-1*output)
+            self._message_queue.put(-1 * output)
+
+        except Exception as ex:
+            logging.error("Exception occurred while running the preprocessor")
+            p.kill()
+            self._message_queue.put(-666)
+            raise ex
 
     def _poll_queue(self):
         if not self._message_queue.empty():
             code = self._message_queue.get()
             if code <= 0:
-                self._preprocessor_done(-1*code)
+                self._preprocessor_done(-1 * code)
                 return
 
             if self._num_steps is None:
@@ -297,12 +304,15 @@ class PreprocessorController(VisualizerFrame):
         else:
             self._timer.start()
 
-    def _preprocessor_done(self, *args):
-        print(args)
+    def _preprocessor_done(self, rtn_code):
         self._run_ui.progressBar.setRange(0, 1)
-        self._run_ui.progressBar.setValue(1)
+        self._run_ui.progressBar.setValue(0)
+
+        if rtn_code != 666:
+            self._run_ui.progressBar.setValue(1)
+
         if self._callback is not None:
-            self._callback(*args)
+            self._callback(rtn_code)
 
     def kill(self):
         if self._preprocessor_thread is not None:

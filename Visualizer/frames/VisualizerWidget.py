@@ -23,15 +23,14 @@ class VisualizerWidget(VisualizerFrame):
         self.ui.setupUi(self)
 
         self._data = data_manager
-        self._load_visualizaer()
+        self._load_visualizer()
 
         self._reset_listener = Listener()
 
     def sizeHint(self):
         return self.parent().size()
 
-    def _load_visualizaer(self):
-        logging.error("This was not an error")
+    def _load_visualizer(self):
         self._pmi = PMIPlot(self, self._data)
         self._pmi.plot(sample=1000)
         self.ui.pmiWidget.layout().addWidget(self._pmi)
