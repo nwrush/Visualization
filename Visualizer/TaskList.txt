@@ -8,6 +8,7 @@
 7/28/17: Improve event handling system
 8/10/17: Updated README with note about development status, install instructions, example data files
 8/10/17: Document required file format
+8/29/17: Provide way of filtering or sorting the top relation lists
 
 --Bugfix
 7/28/17: Selecting a single relation and then a pair that contains the single causes strange behavior (behavior does not persist when rerun, could be VS lag bug)
