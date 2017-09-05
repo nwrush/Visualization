@@ -30,7 +30,13 @@ logging.info("Application Startup")
 logging.info(platform.uname())
 logging.info(platform.platform())
 logging.info(platform.python_version())
-logging.info(platform.win32_ver())
+
+version = platform.win32_ver()
+if not version[0] == '':
+    logging.info(version)
+version = platform.mac_ver()
+if not version[0] == '':
+    logging.info(version)
 logging.info(platform.mac_ver())
 
 """
@@ -150,4 +156,4 @@ def main(fname=None):
 
 
 if __name__ == "__main__":
-    main(".\processed_data\keywords_data.p")
+    main("./processed_data/keywords_data.p")

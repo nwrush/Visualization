@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PythonPath=PATH TO PYTHON
-VenvPath=PATH TO VENV # Ideally the same one provided by the python installation you pointed to above
+PythonPath=/opt/python/3.5.1/bin/python3
+VenvPath=/opt/python/3.5.1/bin/virtualenv # Ideally the same one provided by the python installation you pointed to above
 
 git submodule init
 git submodule update

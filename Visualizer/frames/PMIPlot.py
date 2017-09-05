@@ -17,9 +17,9 @@ from frames.VisualizerFrame import VisualizerFrame
 from ui import pmi_control_panel_vert
 from frames.matplotlib_util import Utils
 
-
-def get_axis_limits(x_data, y_data):
-    return
+# These values are added to the x_lim and y_lim to ensure that all points are drawn on the screen
+X_BUFFER = 0.1
+Y_BUFFER = 0.1
 
 
 class PMIPlot(VisualizerFrame, Utils):
@@ -41,8 +41,8 @@ class PMIPlot(VisualizerFrame, Utils):
         self.axes = self._mpl.axes
         self.canvas = self._mpl.canvas
 
-        self._x_lim = [np.amin(data.ts_correlation), np.amax(data.ts_correlation)]
-        self._y_lim = [np.amin(data.pmi), np.amax(data.pmi)]
+        self._x_lim = [np.amin(data.ts_correlation) - X_BUFFER, np.amax(data.ts_correlation) + X_BUFFER]
+        self._y_lim = [np.amin(data.pmi) - Y_BUFFER, np.amax(data.pmi) + Y_BUFFER]
 
         self._control_panel = QtWidgets.QWidget(self)
         self._control_panel_ui = pmi_control_panel_vert.Ui_pmi_control_panel()
@@ -273,11 +273,9 @@ class PMIPlot(VisualizerFrame, Utils):
         topic_1_name, topic_2_name = self.data.get_display_idea_names(self.idea_indexes[ind])
 
         x_cord, y_cord = self.x_values[ind], self.y_values[ind]
-        text = "({0},\n{1})".format(topic_1_name, topic_2_name)
-        print(text)
-        offset = 0
-        if x_cord > 0:
-            offset = self._get_text_offset(text)
+        text = "({0},{sep}{1})".format(topic_1_name, topic_2_name, sep=' ' if self.data._is_keywords else '\n')
+
+        offset = self._get_text_offset(text) if x_cord > 0 else 0
 
         self._prev_annotation = self.axes.annotate(s=text, xy=(self.x_values[ind] - offset, self.y_values[ind]),
                                                    annotation_clip=False)

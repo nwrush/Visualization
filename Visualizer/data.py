@@ -1,7 +1,7 @@
 # Nikko Rush
 # 7/10/2017
 
-# Last update 8/22/17
+# Last update 9/4/17
 
 import os
 import os.path
@@ -80,7 +80,7 @@ class Data:
     TOPIC_DISPLAY_WIDTH = 3
 
     def get_display_idea_names(self, indexes):
-        if False:  # if self._is_keywords and False:
+        if self._is_keywords:
             return self.get_idea_names(indexes)
 
         if isinstance(indexes, int):
