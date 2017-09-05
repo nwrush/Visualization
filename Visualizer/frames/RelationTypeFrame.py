@@ -40,7 +40,6 @@ class RelationTypeFrame(VisualizerFrame):
         self._fill_tables()
 
         self._set_active_index(0)
-        pass
 
     def _config_ui(self):
         for i, name in enumerate(self.types):
@@ -51,6 +50,8 @@ class RelationTypeFrame(VisualizerFrame):
 
             self._tables.append(tbl)
             tbl.itemSelectionChanged.connect(self._on_select)
+
+        self.ui.tabWidget.currentChanged.connect(lambda i: self._set_active_index(i))
 
     def _determine_relations(self):
         pmi = self.data.pmi
@@ -160,10 +161,8 @@ class RelationTypeFrame(VisualizerFrame):
 
     def _set_active_index(self, index):
         if self.active_index is not None:
-            self._tables[self.active_index].hide()
             self._tables[self.active_index].clearSelection()
 
-        self._tables[index].show()
         self.active_index = index
 
     def clear_selection(self):
