@@ -275,8 +275,10 @@ class PreprocessorController(VisualizerFrame):
             output = p.wait()
 
             if output != 0:
+                logging.warn("Preprocessor returned code: {0}".format(output))
                 for line in p.stderr:
-                    print(line, end='')
+                    logging.error(line)
+                logging.error("End of preprocessor STDERR")
 
             self._message_queue.put(-1 * output)
 

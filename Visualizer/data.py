@@ -3,6 +3,7 @@
 
 # Last update 9/4/17
 
+import logging
 import os
 import os.path
 import pickle
@@ -14,7 +15,7 @@ def reverse_dict(input_dict):
     output = dict()
     for key, value in input_dict.items():
         if value in output:
-            print("Warning: Duplicate key will be overwritten in new dictionary")
+            logging.warn("Warning: Duplicate key will be overwritten in new dictionary")
         output[value] = key
     return output
 
@@ -26,7 +27,7 @@ def is_square(a):
 
 def load_data(fname):
     if not os.path.isfile(fname):
-        print("Data file {0} doesn't exist".format(fname))
+        logging.info("Data file {0} doesn't exist".format(fname))
         return None
 
     return pickle.load(open(fname, 'rb'))
@@ -73,7 +74,7 @@ class Data:
                 names.append(self.idea_names[index])
             return names
         except TypeError as err:
-            print(err)
+            logging.error(err)
 
         return None
 
@@ -96,5 +97,5 @@ class Data:
                 names.append(short_name)
             return names
         except TypeError as err:
-            print(err)
+            logging.error(err)
         return None

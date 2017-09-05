@@ -104,7 +104,6 @@ class TopRelations(VisualizerFrame):
         selected = self.data.idea_numbers[self.ui.tableWidget.selectedItems()[-1].text()]
         eve = event.Event()
         eve.selected_indexes = [self.idea_index, selected]
-        print([self.idea_index, selected])
         self._onselect_listener.invoke(eve)
 
     def add_select_listener(self, func):

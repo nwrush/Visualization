@@ -148,8 +148,6 @@ class RelationTypeFrame(VisualizerFrame):
 
         eve = event.Event()
         eve.selected_indexes = selected_indexes
-        print(selected_indexes)
-        print(type(selected_indexes))
         eve.should_select = True
         self._onselect_listener.invoke(eve)
 

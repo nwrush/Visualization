@@ -1,6 +1,7 @@
 # Nikko Rush
 # 7/5/2017
 
+import logging
 import math
 
 import PyQt5.QtWidgets as QtWidgets
@@ -199,7 +200,7 @@ class PMIPlot(VisualizerFrame, Utils):
             elif x > 0 and y < 0:  # Fourth quadrant
                 colors.append(self.color_mappers[3].to_rgba(distance))
             else:
-                print("Fail")
+                logging.error("({x}, {y}) couldn't be mapped onto grid".format(x=x, y=y))
         self.plot_data.set_color(colors)
         self._point_colors = colors
 
@@ -279,7 +280,6 @@ class PMIPlot(VisualizerFrame, Utils):
 
         self._prev_annotation = self.axes.annotate(s=text, xy=(self.x_values[ind] - offset, self.y_values[ind]),
                                                    annotation_clip=False)
-        print((self.x_values[ind] - offset, self.y_values[ind]))
         self._mpl.redraw()
 
     def _get_text_offset(self, text):
@@ -309,7 +309,7 @@ class PMIPlot(VisualizerFrame, Utils):
             elif (b, a) in self.idea_indexes:
                 return self.idea_indexes.index((b, a))
             else:
-                print("Selected indexes not found on PMI graph")
+                logging.warn("Selected indexes, {0}, not found on PMI graph".format((a,b)))
                 return None
 
     def _clear_selection(self):

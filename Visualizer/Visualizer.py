@@ -132,8 +132,7 @@ class Application(QtWidgets.QMainWindow):
     def _close_tab(self, index):
         self.ui.tabWidget.removeTab(index)
         del self._tabs[index]
-        print(len(self._tabs))
-
+        
     def kill_preprocessor(self):
         self._preprocess_widget.kill()
 
