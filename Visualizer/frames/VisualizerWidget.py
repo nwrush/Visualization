@@ -40,7 +40,6 @@ class VisualizerWidget(VisualizerFrame):
 
         self._idea_list = ListFrame(self.ui.tabWidget, data=self._data)
         self.ui.tabWidget.insertTab(0, self._idea_list, "Ideas")
-        self._idea_list.add_items(self._data.idea_names.values())
 
         self._relation_types = RelationTypeFrame(self, data=self._data)
         self.ui.tabWidget.insertTab(1, self._relation_types, "Types")

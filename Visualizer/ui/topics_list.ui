@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>213</width>
-    <height>384</height>
+    <width>642</width>
+    <height>730</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,10 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QLineEdit" name="filterText"/>
+   </item>
+   <item>
+    <widget class="QListView" name="listWidget">
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
