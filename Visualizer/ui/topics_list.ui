@@ -30,7 +30,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="filterText"/>
+    <widget class="QLineEdit" name="filterText">
+     <property name="placeholderText">
+      <string>Filter Topics</string>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QListView" name="listWidget">

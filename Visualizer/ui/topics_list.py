@@ -36,4 +36,5 @@ class Ui_topicsList(object):
         _translate = QtCore.QCoreApplication.translate
         topicsList.setWindowTitle(_translate("topicsList", "Form"))
         self.label.setText(_translate("topicsList", "Topics"))
+        self.filterText.setPlaceholderText(_translate("topicsList", "Filter Topics"))
 

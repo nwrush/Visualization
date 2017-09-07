@@ -4,6 +4,7 @@
 import PyQt5.QtCore as QtCore
 from PyQt5.QtCore import Qt
 
+
 class ListModel(QtCore.QAbstractListModel):
     
     def __init__(self, data, parent=None):
@@ -11,13 +12,14 @@ class ListModel(QtCore.QAbstractListModel):
 
         self._data = sorted(list(data))
 
-    def rowCount(self, parent):
+    def rowCount(self, parent=None, *args, **kwargs):
         return len(self._data)
 
-    def data(self, index, role):
+    def data(self, index, role=None):
         if role == Qt.DisplayRole:
             return self._data[index.row()]
-        return QtCore.QVariant() # Return an invalid variant
+        return QtCore.QVariant()  # Return an invalid variant
+
 
 class ListModelFilter(QtCore.QSortFilterProxyModel):
     
