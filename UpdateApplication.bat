@@ -23,6 +23,7 @@ xcopy /Y "%VisPath%\menus\*.py" "%AppPath%\menus\"
 xcopy /Y "%VisPath%\Images\*.*" "%AppPath%\Images\"
 xcopy /Y "%VisPath%\events\*.py" "%AppPath%\events\"
 xcopy /Y "%VisPath%\ui\*.py" "%AppPath%\ui\"
+xcopy /Y "%VisPath%\models\*.py" "%AppPath%\models\"
 
 :: Update the preprocessor
 

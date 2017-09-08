@@ -265,17 +265,19 @@ class PreprocessorController(VisualizerFrame):
 
     def _preprocessor_thread_runner(self, args, cwd):
         try:
-            p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=1,
+            p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
                                  universal_newlines=True)
 
             for line in p.stdout:
                 if line.startswith("Status"):
                     self._message_queue.put(int(line.split(':')[1]))
+                else:
+                    logging.info(line)
 
             output = p.wait()
 
             if output != 0:
-                logging.warn("Preprocessor returned code: {0}".format(output))
+                logging.warning("Preprocessor returned code: {0}".format(output))
                 for line in p.stderr:
                     logging.error(line)
                 logging.error("End of preprocessor STDERR")

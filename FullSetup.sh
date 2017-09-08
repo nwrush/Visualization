@@ -31,6 +31,7 @@ mkdir $AppPath/menus
 mkdir $AppPath/Images
 mkdir $AppPath/events
 mkdir $AppPath/ui
+mkdir $AppPath/models
 
 
 cp $VisPath/*.py $AppPath
@@ -40,6 +41,7 @@ cp $VisPath/menus/*.py $AppPath/menus/
 cp $VisPath/Images/*.* $AppPath/Images/
 cp $VisPath/events/*.py $AppPath/events/
 cp $VisPath/ui/*.py $AppPath/ui
+cp $VisPath/models/*.py $AppPath/models
 
 mkdir $AppPath/idea_relations
 

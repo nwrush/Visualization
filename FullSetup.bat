@@ -2,7 +2,7 @@
 
 setlocal
 
-Set PythonPath="PATH TO PYTHON.EXE HERE"
+Set PythonPath="C:\Python36\python.exe"
 
 git submodule init
 git submodule update
@@ -29,6 +29,7 @@ xcopy "%VisPath%\menus\*.py" "%AppPath%\menus\"
 xcopy "%VisPath%\Images\*.*" "%AppPath%\Images\"
 xcopy "%VisPath%\events\*.py" "%AppPath%\events\"
 xcopy "%VisPath%\ui\*.py" "%AppPath%\ui\"
+xcopy "%VisPath%\models\*.py" "%AppPathPath%\models\"
 
 :: Install the preprocessor
 mkdir "%AppPath%\idea_relations"

@@ -4,7 +4,6 @@
 # region Imports
 import logging
 import platform
-import signal
 import sys
 
 import PyQt5.QtGui as QtGui
@@ -24,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format=FORMAT,
                     datefmt='%m-%d %H:%M:%S',
                     filename='./Visualizer.log',
-                    filemode='a')
+                    filemode='w')
 
 logging.info("Application Startup")
 logging.info(platform.uname())
@@ -34,10 +33,10 @@ logging.info(platform.python_version())
 version = platform.win32_ver()
 if not version[0] == '':
     logging.info(version)
+
 version = platform.mac_ver()
 if not version[0] == '':
     logging.info(version)
-logging.info(platform.mac_ver())
 
 """
 GUI creation
