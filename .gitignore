@@ -49,3 +49,4 @@ data/
 Visualizer/acl_example/
 
 Application/
+build/
