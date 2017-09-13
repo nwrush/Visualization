@@ -12,7 +12,6 @@ cp -u $VisPath/*.py $AppPath
 cp -u $VisPath/frames/*.py $AppPath/frames/
 cp -u $VisPath/widgets/*.py $AppPath/widgets/
 cp -u $VisPath/menus/*.py $AppPath/menus/
-cp -u $VisPath/Images/*.* $AppPath/Images/
 cp -u $VisPath/events/*.py $AppPath/events/
 cp -u $VisPath/ui/*.py $AppPath/ui
 cp -u $VisPath/models/*.py $AppPath/models

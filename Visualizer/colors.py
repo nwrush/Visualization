@@ -3,7 +3,7 @@
 
 import matplotlib.cm as cm
 import matplotlib.colors
-import tkinter as tk
+
 
 class PMIColormap(matplotlib.colors.Colormap):
 
@@ -37,7 +37,7 @@ class PMIColormap(matplotlib.colors.Colormap):
         hsv_value[1] = self._saturation_max * dist
 
         rgb = matplotlib.colors.hsv_to_rgb(hsv_value)
-        r,g,b = tuple(rgb)
+        r, g, b = tuple(rgb)
         r = int(r)
         g = int(g)
         b = int(b)
@@ -48,35 +48,3 @@ class PMIColormap(matplotlib.colors.Colormap):
             return r, g, b, 255.0
         else:
             return r / 255, g / 255, b / 255, 1.0
-
-if __name__ == "__main__":
-    colors = [(0, 68, 27,),
-              (127, 39, 4),
-              (103, 0, 12),
-              (8, 48, 107)]
-    maps = [PMIColormap("PMIMap", c) for c in colors]
-    norma = matplotlib.colors.Normalize(0, 1, clip=True)
-    color_mappers = [cm.ScalarMappable(norm=norma, cmap="Greens"),
-                     cm.ScalarMappable(norm=norma, cmap="Oranges"),
-                     cm.ScalarMappable(norm=norma, cmap="Reds"),
-                     cm.ScalarMappable(norm=norma, cmap="Blues")]
-
-    root = tk.Tk()
-    steps = [i / 256 for i in range(0, 256)]
-
-    for mapper in color_mappers:
-        box = tk.Frame(master=root)
-        box.pack(side=tk.TOP, expand=1)
-        for i in steps:
-            rgba = mapper.to_rgba(i, bytes=True)
-            hsv = matplotlib.colors.rgb_to_hsv(rgba[:3])
-            print(list(hsv))
-            sample = tk.Frame(master=box, width=10, height=10, bg="#{:02x}{:02x}{:02x}".format(*rgba))
-            sample.pack(side=tk.LEFT)
-        print("-------")
-
-    root.mainloop()
-
-    print("Green")
-    pass
-
