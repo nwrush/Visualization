@@ -9,6 +9,9 @@ from frames.MatplotlibFrame import QMatplotlib
 from frames.matplotlib_util import Utils
 
 
+import matplotlib.patches as mpatches
+
+
 class TimeSeriesFrame(VisualizerFrame, Utils):
     def __init__(self, parent, data):
         super(TimeSeriesFrame, self).__init__(parent=parent, data_manager=data)

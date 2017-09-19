@@ -9,6 +9,7 @@ import PyQt5.QtGui as QtGui
 
 import matplotlib.cm as cm
 import matplotlib.colors as colors
+import matplotlib.patches as mpatches
 import numpy as np
 
 import colors as visualizer_colors
@@ -16,6 +17,7 @@ from events import listener
 from frames.MatplotlibFrame import QMatplotlib
 from frames.VisualizerFrame import VisualizerFrame
 from ui import pmi_control_panel_vert
+from ui import pmi_control_panel_horiz
 from frames.matplotlib_util import Utils
 
 # These values are added to the x_lim and y_lim to ensure that all points are drawn on the screen
@@ -27,7 +29,8 @@ class PMIPlot(VisualizerFrame, Utils):
     def __init__(self, parent, data):
         super(PMIPlot, self).__init__(parent=parent, data_manager=data)
 
-        self.layout = QtWidgets.QHBoxLayout(self)
+        # self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout = QtWidgets.QVBoxLayout(self)
 
         self._mpl_container = QtWidgets.QWidget(self)
         self._mpl_layout = QtWidgets.QHBoxLayout(self._mpl_container)
@@ -46,7 +49,7 @@ class PMIPlot(VisualizerFrame, Utils):
         self._y_lim = [np.amin(data.pmi) - Y_BUFFER, np.amax(data.pmi) + Y_BUFFER]
 
         self._control_panel = QtWidgets.QWidget(self)
-        self._control_panel_ui = pmi_control_panel_vert.Ui_pmi_control_panel()
+        self._control_panel_ui = pmi_control_panel_horiz.Ui_pmi_control_panel()
         self._control_panel_ui.setupUi(self._control_panel)
         self.layout.addWidget(self._control_panel)
 
@@ -65,6 +68,7 @@ class PMIPlot(VisualizerFrame, Utils):
                         "Oranges",
                         "Reds",
                         "Blues"]
+        self._legend_proxies = list()
 
         self._prev_selected_ind = None
         self._prev_annotation = None
@@ -83,6 +87,8 @@ class PMIPlot(VisualizerFrame, Utils):
 
         self._has_data = False
 
+        self.axes.legend(handles=self._legend_proxies, loc="best")
+
         self._mpl.allow_redraw()
 
     def resizeEvent(self, eve):
@@ -98,19 +104,6 @@ class PMIPlot(VisualizerFrame, Utils):
         # self._gear_icon = images.load_image("gear-2-16.gif")
         control_panel_ui = self._control_panel_ui
         control_panel_ui.resetButton.clicked.connect(self._on_reset)
-
-        self._color_legend()
-
-    def _color_legend(self):
-        for name in self.data.relation_types:
-            label_name = name.lower().replace('-', '') + "Label"
-            label = self._control_panel_ui.colorLabels.findChild(QtWidgets.QLabel, label_name)
-
-            color = self.color_samples[name]
-
-            palette = QtGui.QPalette()
-            palette.setColor(QtGui.QPalette.Active, QtGui.QPalette.Window, QtGui.QColor(*color))
-            label.setPalette(palette)
 
     def _init_plot_(self):
         """Reset the axes for plotting"""
@@ -141,9 +134,11 @@ class PMIPlot(VisualizerFrame, Utils):
                               cm.ScalarMappable(norm=self._normalizer, cmap=self._color_maps[3])]
 
         self.color_samples = dict()
+        self._legend_proxies = []
         for mapper, name in zip(self.color_mappers, self.data.relation_types):
-            r, g, b, a = mapper.to_rgba(0.7, bytes=True)
-            self.color_samples[name] = (r, g, b, a)
+            rgba = mapper.to_rgba(0.7, bytes=True)
+            self.color_samples[name] = rgba
+            self._legend_proxies.append(mpatches.Patch(color=[i/255 for i in rgba], label=name))
 
         self._on_color_changed()
         self._mpl.redraw()
@@ -178,6 +173,7 @@ class PMIPlot(VisualizerFrame, Utils):
 
         self._init_plot_()
         self.plot_data = self.axes.scatter(xs, ys, picker=True)
+        self.axes.legend(handles=self._legend_proxies, loc="best")
 
         self.idea_indexes = points
         self.x_values = xs
@@ -201,8 +197,11 @@ class PMIPlot(VisualizerFrame, Utils):
                 colors.append(self.color_mappers[3].to_rgba(distance))
             else:
                 logging.error("({x}, {y}) couldn't be mapped onto grid".format(x=x, y=y))
+                colors.append((0, 0, 0, 0))
         self.plot_data.set_color(colors)
         self._point_colors = colors
+
+        self.axes.legend(handles=self._legend_proxies, loc="best")
 
     def _init_handlers(self):
         self.canvas.mpl_connect('button_press_event', self._on_click)

@@ -79,8 +79,8 @@ class VisualizerWidget(VisualizerFrame):
 
     def resizeEvent(self, event):
         dpi = self.physicalDpiX()
-        # Make the width of the screen 3 inches or one fifth the width of the screen
-        self.ui.tabWidget.setFixedWidth(min(3*dpi, int(self.size().width()/5)))
+        # Make the width of the screen 4 inches or one fifth the width of the screen
+        self.ui.tabWidget.setFixedWidth(min(4*dpi, int(self.size().width()/5)))
         super(VisualizerWidget, self).resizeEvent(event)
 
     def _clear_list_selections_factory(self, caller=None):
