@@ -47,6 +47,8 @@ output/
 data/
 *.whl
 Visualizer/acl_example/
+idea_rel_dist/
+*.log
 
 Application/
 build/
