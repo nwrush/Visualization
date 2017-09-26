@@ -253,6 +253,7 @@ class PreprocessorController(VisualizerFrame):
             args = ["python", "-u", "main.py"] + args
             cwd = "./idea_relations"
 
+        logging.info("Starting preprocessor")
         self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner, args=(args, cwd))
 
         self._run_ui.progressBar.show()
@@ -286,6 +287,7 @@ class PreprocessorController(VisualizerFrame):
 
         except Exception as ex:
             logging.error("Exception occurred while running the preprocessor")
+            logging.exception(ex)
             p.kill()
             self._message_queue.put(-666)
             raise ex
@@ -312,11 +314,14 @@ class PreprocessorController(VisualizerFrame):
         self._run_ui.progressBar.setRange(0, 1)
         self._run_ui.progressBar.setValue(0)
 
+        self._num_steps = None
+
         if rtn_code != 666:
             self._run_ui.progressBar.setValue(1)
 
         if self._callback is not None:
             self._callback(rtn_code)
+        logging.info("Finished preprocessor run with code {0}".format(rtn_code))
 
     def kill(self):
         if self._preprocessor_thread is not None:
