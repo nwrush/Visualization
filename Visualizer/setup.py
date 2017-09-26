@@ -23,17 +23,17 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
-additional_mods = ['numpy.core._methods', 'numpy.lib.format', 'scipy']
+additional_mods = ['numpy', 'numpy.core._methods', 'numpy.lib.format', 'scipy']
 
 options = {
     'build': {'build_exe': "../build"},
     'build_exe': {'includes': additional_mods,
                   'include_files': [('../idea_rel_dist', 'idea_relations'), "Vis.ico"]
-                  }
+                  },
 }
 
 setup(name="Visualizer",
-      version="0.1",
+      version="1.0",
       description="Visualizer",
       options=options,
       executables=[Executable("main.py", base=base, icon="Vis.ico")],

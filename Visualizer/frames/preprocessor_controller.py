@@ -120,11 +120,11 @@ class PreprocessorController(VisualizerFrame):
 
         args = dict()
 
-        args["option"] = ui.optionBox.currentText()
+        args["option"] = ui.optionBox.currentText().lower()
         args["input_file"] = ui.inputFile.text()
         args["mallet_bin_dir"] = ui.malletDir.text()
         args["background_file"] = ui.bckFile.text()
-        args["group_by"] = ui.groupBox.currentText()
+        args["group_by"] = ui.groupBox.currentText().lower()
         args["prefix"] = ui.prefix.text()
         args["num_ideas"] = ui.numIdeas.text()
 
@@ -174,7 +174,7 @@ class PreprocessorController(VisualizerFrame):
             ui.inputFile.setPalette(invalid_palette)
             self._set_text_changed_signal(ui.inputFile)
 
-        is_keywords = args["option"] == "Keywords"
+        is_keywords = args["option"] == "keywords"
 
         if is_keywords and not os.path.isfile(args["background_file"]):
             valid = False
@@ -237,7 +237,7 @@ class PreprocessorController(VisualizerFrame):
             if value:
                 args.append("--" + name)
                 if isinstance(value, str):
-                    args.append(value.lower())
+                    args.append(value)
 
         args.append("--no_create_graphs")
 
