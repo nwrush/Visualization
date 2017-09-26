@@ -6,6 +6,13 @@ import logging
 import platform
 import sys
 
+FORMAT = "%(asctime)s %(levelname)8s:[%(filename)s:%(lineno)s - %(funcName)20s()] %(message)s"
+logging.basicConfig(level=logging.DEBUG,
+                    format=FORMAT,
+                    datefmt='%m-%d %H:%M:%S',
+                    filename='./Visualizer.log',
+                    filemode='w')
+
 import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 import matplotlib
@@ -17,13 +24,6 @@ from frames.preprocessor_controller import PreprocessorController
 from frames.VisualizerWidget import VisualizerWidget
 from ui import main_window
 # endregion
-
-FORMAT = "%(asctime)s %(levelname)8s:[%(filename)s:%(lineno)s - %(funcName)20s()] %(message)s"
-logging.basicConfig(level=logging.DEBUG,
-                    format=FORMAT,
-                    datefmt='%m-%d %H:%M:%S',
-                    filename='./Visualizer.log',
-                    filemode='w')
 
 logging.info("Application Startup")
 logging.info(platform.uname())

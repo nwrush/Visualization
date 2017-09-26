@@ -4,11 +4,10 @@
 import logging
 import os
 import os.path
-from pathlib import Path
 import queue
 import shutil
-import subprocess
 import threading
+import sys
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog, QVBoxLayout, QWidget, QMessageBox
@@ -18,6 +17,16 @@ from frames.VisualizerFrame import VisualizerFrame
 from ui import preprocessor_form
 from ui import preprocessor_run
 
+has_preprocessor = False
+try:
+    from idea_relations import main as idea_rel_main
+    has_preprocessor = True
+except ImportError as ex:
+    logging.error("Module idea_relations not found, preprocessor will not run.")
+    logging.exception(ex)
+    idea_rel_main = None
+
+
 RUNTYPE_OPTIONS = ["Keywords", "Topics"]
 GROUP_BY = ["Year", "Month", "Quarter"]
 
@@ -25,6 +34,18 @@ DEFAULT_PALETTE = QPalette()
 
 DEFAULT_PROC_DIR = "./output/{exp_name}/proc/"
 DEFAULT_FINAL_DIR = "./output/{exp_name}/final/"
+
+
+def import_preprocessor():
+    has_preprocessor = False
+    try:
+        from idea_relations import main as idea_rel_main
+        has_preprocessor = True
+    except ImportError as ex:
+        logging.error("Module idea_relations not found, preprocessor will not run.")
+        logging.exception(ex)
+        idea_rel_main = None
+    return has_preprocessor, idea_rel_main
 
 
 class PreprocessorController(VisualizerFrame):
@@ -245,56 +266,50 @@ class PreprocessorController(VisualizerFrame):
         args.extend(["--objects_location", output_name])
 
         if os.name == 'nt':
-            args = ["python.exe", "-u", "main.py"] + args
+            # args = ["python.exe", "-u", "main.py"] + args
             # args = ["python.exe", "--version"]
-            cwd = ".\\idea_relations"
+            pass
         else:
             # args = ["python", "--version"]
-            args = ["python", "-u", "main.py"] + args
-            cwd = "./idea_relations"
+            # args = ["python", "-u", "main.py"] + args
+            pass
 
-        logging.info("Starting preprocessor")
-        self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner, args=(args, cwd))
+        # has_preprocessor, idea_rel_main = import_preprocessor()
 
-        self._run_ui.progressBar.show()
-        self._preprocessor_thread.start()
+        if has_preprocessor:
+            logging.info("Starting preprocessor")
+            self._preprocessor_thread = threading.Thread(target=self._preprocessor_thread_runner,
+                                                         args=(args, idea_rel_main.main))
 
-        self._timer.timeout.connect(self._poll_queue)
-        self._timer.start()
+            self._run_ui.progressBar.show()
+            self._preprocessor_thread.start()
 
-        self.output_name = os.path.join(cwd, output_name)
+            self._timer.timeout.connect(self._poll_queue)
+            self._timer.start()
 
-    def _preprocessor_thread_runner(self, args, cwd):
+            self.output_name = output_name
+            print(self.output_name)
+        else:
+            logging.info("Preprocessor was not found on import and won't be run.")
+
+    def _preprocessor_thread_runner(self, args, func):
         try:
-            p = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
-                                 universal_newlines=True)
-
-            for line in p.stdout:
-                if line.startswith("Status"):
-                    self._message_queue.put(int(line.split(':')[1]))
-                else:
-                    logging.info(line)
-
-            output = p.wait()
-
-            if output != 0:
-                logging.warning("Preprocessor returned code: {0}".format(output))
-                for line in p.stderr:
-                    logging.error(line)
-                logging.error("End of preprocessor STDERR")
-
-            self._message_queue.put(-1 * output)
+            func(args, self._message_queue)
+            self._message_queue.put(0)
 
         except Exception as ex:
             logging.error("Exception occurred while running the preprocessor")
             logging.exception(ex)
-            p.kill()
             self._message_queue.put(-666)
             raise ex
 
     def _poll_queue(self):
         if not self._message_queue.empty():
-            code = self._message_queue.get()
+            msg = self._message_queue.get()
+            if isinstance(msg, int):
+                code = msg
+            else:
+                code = int(msg.split(':')[1])
             if code <= 0:
                 self._preprocessor_done(-1 * code)
                 return
@@ -311,6 +326,8 @@ class PreprocessorController(VisualizerFrame):
             self._timer.start()
 
     def _preprocessor_done(self, rtn_code):
+        print(os.getcwd())
+        print("apple")
         self._run_ui.progressBar.setRange(0, 1)
         self._run_ui.progressBar.setValue(0)
 
@@ -321,6 +338,7 @@ class PreprocessorController(VisualizerFrame):
 
         if self._callback is not None:
             self._callback(rtn_code)
+        print("banana")
         logging.info("Finished preprocessor run with code {0}".format(rtn_code))
 
     def kill(self):
