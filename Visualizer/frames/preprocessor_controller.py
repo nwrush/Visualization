@@ -288,7 +288,6 @@ class PreprocessorController(VisualizerFrame):
             self._timer.start()
 
             self.output_name = output_name
-            print(self.output_name)
         else:
             logging.info("Preprocessor was not found on import and won't be run.")
 
@@ -326,8 +325,6 @@ class PreprocessorController(VisualizerFrame):
             self._timer.start()
 
     def _preprocessor_done(self, rtn_code):
-        print(os.getcwd())
-        print("apple")
         self._run_ui.progressBar.setRange(0, 1)
         self._run_ui.progressBar.setValue(0)
 
@@ -338,7 +335,6 @@ class PreprocessorController(VisualizerFrame):
 
         if self._callback is not None:
             self._callback(rtn_code)
-        print("banana")
         logging.info("Finished preprocessor run with code {0}".format(rtn_code))
 
     def kill(self):

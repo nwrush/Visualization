@@ -9,8 +9,6 @@ import os.path
 import shutil
 import sys
 
-import scipy
-
 from cx_Freeze import setup, Executable
 
 # Create a dist version of idea_relations
@@ -27,7 +25,6 @@ if sys.platform == "win32":
 
 additional_mods = ['numpy', 'numpy.core._methods', 'numpy.lib.format', 'scipy', 'nltk']
 
-scipy_path = os.path.dirname(scipy.__file__)
 
 options = {
     'build': {'build_exe': "../build"},
@@ -40,5 +37,5 @@ setup(name="Visualizer",
       version="1.0",
       description="Visualizer",
       options=options,
-      executables=[Executable("main.py", base=base, icon="Vis.ico")],
+      executables=[Executable("main.py", targetName="Visualizer", base=base, icon="Vis.ico")],
       )
