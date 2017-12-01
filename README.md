@@ -8,8 +8,10 @@ It's our hope though that the feature set will grow not shrink.
 This project builds on the work done by Chenhao Tan and Dallas Card in [this paper](https://chenhaot.com/pages/idea-relations.html). This tool provides a way to visualize text interactively using the relations outlined in the paper.
 
 # Installation
-Installing has been tested on Windows (7 and higher) (64-bit), Linux (Centos7), and some version of OSX. For convenience install scripts are provided for windows and linux.
+Installing has been tested on Windows (7 and higher) (64-bit), Linux (Centos7), and some version of OSX. For convenience install scripts are provided for Windows and Linux.
 Binaries are also provided for Windows and Linux.
+
+After running any of the installation methods, if you've never used NLTK you will need to download the NLTK stopword corpus. Activate the virtualenv for the application and run `python -m nltk.downloader stopwords`
 
 ### Requirements
 - Python3 (only tested on 3.5 and higher)
@@ -52,20 +54,22 @@ Binaries are also provided for Windows and Linux.
 
 ## Packaged Installation
 
-The application is distributed in three forms. A standalone windows binary, standalone linux binary, and the plain python files.
-Both the windows and linux binary should run without any issue, just double click on the executable (Visualizer.exe) to run.
-The linux binary should function on any linux system (including OSX), but has only been tested on Centos 7.
+The application is distributed in three forms. A standalone Windows binary, standalone Linux binary, and the plain python files.
+Both the Windows and Linux binary should run without any issue, just double click on the executable (Visualizer.exe) to run.
+The Linux binary should function on any Linux system (including OSX), but has only been tested on Centos 7.
 
 For the python files, you must have python version >3.5 available on your system. Installation is similar to the manual installation. Unpack the zip file and follow the manual installation instructions above from step 7.
 
-Because of the much larger size of the windows and linux binaries, it is probably better to use the python version, especially if you already have python 3 on your system.
+Because of the much larger size of the Windows and Linux binaries, it is probably better to use the python version, especially if you already have Python 3 on your system.
 
-## Note for windows installation
+As of right now, the prepacked installations cannot run the preprocessor due to bugs with scipy. A fix will potentially be available late December. Using a virtualenv with the raw python files works fine though.
 
-On windows, it may be difficult/impossible to install scipy using pip. To get around that we recommend downloading a prebuilt wheel for numpy and scipy from [this](https://www.lfd.uci.edu/~gohlke/pythonlibs/) website. You will need wheels for both numpy and scipy. Download the appropriate wheel for your system (matching python version and architecture).
+## Note for Windows installation
+
+On Windows, it may be difficult/impossible to install scipy using pip. To get around that we recommend downloading a prebuilt wheel for numpy and scipy from [this](https://www.lfd.uci.edu/~gohlke/pythonlibs/) website. You will need wheels for both numpy and scipy. Download the appropriate wheel for your system (matching python version and architecture).
 If you're installing the program from the repo using the installation scripts, place them in the root directory for the repo, and edit lines 52 and 53 of FullSetup.py to have the correct file names. If you're installing from the zipped python files, copy them wherever you unpacked the code and install them using pip into your virtualenv. You must install them
 before you install packages from FullRequirements.txt otherwise pip will install numpy from the web and then be unable to install scipy.
-If you're installing from the standalone windows binary, you don't need to do anything.
+If you're installing from the standalone Windows binary, you don't need to do anything.
 
 # Usage
 
