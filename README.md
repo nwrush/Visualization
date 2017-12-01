@@ -1,7 +1,10 @@
 # Visualization
 
 This project is still in active development, but is mostly stable. Various features are subject to appear or disappear with little/no notice.
-It's our hope though that the feature set will grow not shrink.
+
+## Current Release
+
+v1.0 - [Link](https://github.com/nwrush/Visualization/releases)
 
 ## About
 
