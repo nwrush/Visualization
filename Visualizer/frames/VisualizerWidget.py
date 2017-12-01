@@ -14,6 +14,8 @@ from frames.RelationTypeFrame import RelationTypeFrame
 from frames.TopRelations import TopRelations
 from ui import visualizer
 
+import data
+
 
 class VisualizerWidget(VisualizerFrame):
     def __init__(self, parent, data_manager):
@@ -100,6 +102,9 @@ class VisualizerWidget(VisualizerFrame):
     def save_both(self):
         self._save_plot(self._pmi, "PMI")
         self._save_plot(self._ts, "Time Series")
+
+    def save_data(self, fname):
+        return data.save_data(fname, self._data)
 
     def _save_plot(self, target, plot_name):
         if not target.confirm_on_empty(plot_name):

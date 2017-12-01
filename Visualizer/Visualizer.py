@@ -80,6 +80,7 @@ class Application(QtWidgets.QMainWindow):
     def _init_menu(self):
         # File Menu
         self.ui.actionOpen.triggered.connect(self._open_visualization)
+        self.ui.actionSave.triggered.connect(self._save_visualization)
 
         # Visualization Menu
         self.ui.tabWidget.currentChanged.connect(self._tab_changed)
@@ -113,6 +114,24 @@ class Application(QtWidgets.QMainWindow):
             for fname in fnames:
                 self._processed_file(fname)
 
+    def _save_visualization(self):
+        current_tab = self._tabs[self.ui.tabWidget.currentIndex()]
+        if isinstance(current_tab, PreprocessorController):
+            return
+
+        dialog = QtWidgets.QFileDialog(self)
+        dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+        dialog.setNameFilters(["Processed data file (*.p)", "All Files (*)"])
+        dialog.setAcceptMode(QtWidgets.QFileDialog.AcceptSave)
+        dialog.setDefaultSuffix(".p")
+        dialog.exec()
+
+        fname = dialog.selectedFiles()[0]
+        success = current_tab.save_data(fname)
+        if not success:
+            QtWidgets.QMessageBox.about(self, "Save Error",
+                                        "An error occured saving the file\nCheck the log for more details")
+
     def _tab_changed(self, index):
         if index >= len(self._tabs):
             self.ui.visualizationMenu.setEnabled(False)
@@ -129,6 +148,8 @@ class Application(QtWidgets.QMainWindow):
         self.ui.tabWidget.currentWidget().save_both()
 
     def _close_tab(self, index):
+        if isinstance(self._tabs[index], PreprocessorController):
+            return
         self.ui.tabWidget.removeTab(index)
         del self._tabs[index]
         
@@ -154,4 +175,4 @@ def main(fname=None):
 
 
 if __name__ == "__main__":
-    main("./processed_data/keywords_data.p")
+    main()

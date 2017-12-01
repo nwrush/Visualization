@@ -33,6 +33,19 @@ def load_data(fname):
     return pickle.load(open(fname, 'rb'))
 
 
+def save_data(fname, data):
+    try:
+        f = open(fname, 'wb')
+        pickle.dump(data, f)
+        f.flush()
+        f.close()
+    except Exception as ex:
+        logging.error("Failure while saving data")
+        logging.exception(ex)
+        return False
+    return True
+
+
 class Data:
     def __init__(self, args, pmi_matrix, ts_correlation_matrix, ts_matrix, idea_names, x_vals,
                  name="Visualization"):

@@ -2,7 +2,7 @@
 
 setlocal
 
-Set PythonPath="C:\Python36\python.exe"
+Set PythonPath=PATH TO PYTHON HERE
 
 git submodule init
 git submodule update
@@ -41,7 +41,7 @@ xcopy "idea_relations\*.sh" "%AppPath%\idea_relations\"
 
 :: Install the virtual environment
 copy FullRequirements.txt %AppPath%\FullRequirements.txt
-call GetWheels.bat %AppPath%
+copy *.whl "%AppPath%\"
 
 endlocal & Set AppPath=%AppPath% & Set PythonPath=%PythonPath%
 cd %AppPath%
@@ -49,8 +49,8 @@ cd %AppPath%
 virtualenv --python=%PythonPath% venv
 call .\venv\Scripts\activate.bat
 
-pip install "numpy-1.13.1+mkl-cp35-cp35m-win_amd64.whl"
-pip install "scipy-0.19.1-cp35-cp35m-win_amd64.whl"
+pip install "numpy-1.13.3+mkl-cp35-cp35m-win_amd64.whl"
+pip install "scipy-1.0.0-cp35-cp35m-win_amd64.whl"
 pip install -r FullRequirements.txt
 
 Set "AppPath="

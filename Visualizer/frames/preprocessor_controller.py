@@ -78,6 +78,11 @@ class PreprocessorController(VisualizerFrame):
 
         self.output_name = None
 
+        if not has_preprocessor:
+            QMessageBox.about(self, "Missing Preprocessor",
+                              "The preprocessor could not be loaded and therefore can't be run\n"
+                              "Check the log file for details")
+
     def _connect_form_ui(self):
         # Setup the option combo box
         ui = self._form_ui
@@ -174,6 +179,7 @@ class PreprocessorController(VisualizerFrame):
         ui.progressBar.setMaximum(0)
 
         ui.runPreprocessor.clicked.connect(self._run_preprocessor)
+        ui.runPreprocessor.setEnabled(has_preprocessor)
 
     def _start(self):
         valid = self._validate_params(None)
