@@ -52,3 +52,6 @@ idea_rel_dist/
 
 Application/
 build/
+
+*.tgz
+*.zip

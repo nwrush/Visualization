@@ -23,7 +23,7 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
-additional_mods = ['numpy', 'numpy.core._methods', 'numpy.lib.format', 'scipy', 'nltk']
+additional_mods = ['numpy', 'numpy.core._methods', 'numpy.lib.format', 'scipy', 'nltk', 'scipy.interpolate', 'scipy.special']
 
 
 options = {
