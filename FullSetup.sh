@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PythonPath=/opt/python/3.5.1/bin/python3
-VenvPath=/opt/python/3.5.1/bin/virtualenv # Ideally the same one provided by the python installation you pointed to above
+PythonPath="$(which python3)"
+VenvPath="$(which virtualenv)" # Ideally the same one provided by the python installation you pointed to above
 
 git submodule init
 git submodule update
@@ -16,12 +16,16 @@ if [[ ! -f "$PythonPath" ]] || [[ ! -x "$PythonPath" ]]
 then
     echo Couldn\'t locate python executable at $PythonPath
     exit 1
+else
+    echo Using python executable at $PythonPath
 fi
 
 if [[ ! -f "$VenvPath" ]] || [[ ! -x "$VenvPath" ]]
 then
     echo Couldn\'t locate virtualenv at $VenvPath
     exit 1
+else
+    echo Using virtualenv at $VenvPath
 fi
 
 mkdir $AppPath
